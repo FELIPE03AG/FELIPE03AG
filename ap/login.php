@@ -1,4 +1,5 @@
 <?php
+ob_start();
 include("config.php");
 $u=isset($_REQUEST['u']) ? $_REQUEST['u'] : NULL;
 $c=isset($_REQUEST['c']) ? $_REQUEST['c'] : NULL;
@@ -37,7 +38,7 @@ $consulta = mysqli_query($conexion, "select u from usuarios where u='$u'");
                             }
 
                         }
-    
+  ob_end_flush();  
 ?>
     
 

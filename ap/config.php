@@ -1,4 +1,5 @@
 <?php
+ob_start();
 //$host = "localhost";
 //$db_username = "root";
 //$db_password = "anayag";
@@ -9,4 +10,5 @@ $conexion=new mysqli("localhost","root","anayag","granja");
 	//die ("Ha fallado la conexion".mysqli_connect_error());
 
 
+ob_end_flush();  
 ?>

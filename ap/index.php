@@ -38,9 +38,9 @@
           <br>
           <br>
         </div>
-        <form method="post" action="login.php"
+        <form method="post" action="login.php">
         
-          <!-- Email input -->
+        <!-- Email input -->
           <div class="form-outline mb-4">
             <input type="username" name="u" id="form2Example1" class="form-control" />
             <label class="form-label" for="form2Example1">Usuario</label>
