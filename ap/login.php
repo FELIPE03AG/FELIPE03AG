@@ -15,7 +15,11 @@ $consulta = mysqli_query($conexion, "select u from usuarios where u='$u'");
                                 $us=$fila["u"];
                             }
     echo $us; 
-    if($us==NULL){header("location:index.php?valor=1");}   
+    if($us==NULL){ //header("location:index.php?valor=1");
+        echo "<script>alert('La variable \$us es NULL');</script>";
+        header("location:index.php?valor=1");
+    
+    }   
     
     else if($us!=NULL){
         $consulta = mysqli_query($conexion, "select * from usuarios where c=SHA1('$c')");
