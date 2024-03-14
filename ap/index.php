@@ -38,7 +38,8 @@
           <br>
           <br>
         </div>
-        <form method="post" action="login.php">
+        <form method="post" action="login.php"
+        
           <!-- Email input -->
           <div class="form-outline mb-4">
             <input type="username" name="u" id="form2Example1" class="form-control" />
