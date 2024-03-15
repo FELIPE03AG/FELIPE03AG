@@ -9,11 +9,14 @@
     <script src="js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-    <style>
-        body {
-          background-color: #a9f0b2; /* Cambia este valor al color que desees */
+<style>
+   body {
+            background-image: url('img/fondo3.png');
+            background-size: cover; /* para cubrir todo el fondo */
+            background-position: center; /* para centrar la imagen */
+            /* Añade más estilos si es necesario */
         }
-      </style>
+  </style>
       <button><a href="index.php">Regresar al Lobby</a></button>
 
       <div class="container text-center">
@@ -43,14 +46,14 @@
                   </div>
                 </div>
                 <div class="col-md-4">
-                  <label for="validationServer02" class="form-label">Last name</label>
+                  <label for="validationServer02" class="form-label"style="color: white;">Last name</label>
                   <input type="text" class="form-control is-valid" id="validationServer02" value="Lastname" required>
                   <div class="valid-feedback">
                     Looks good!
                   </div>
                 </div>
                 <div class="col-md-4">
-                  <label for="validationServerUsername" class="form-label">Username</label>
+                  <label for="validationServerUsername" class="form-label"style="color: white;">Username</label>
                   <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend3">@</span>
                     <input type="text" class="form-control is-invalid" id="validationServerUsername" aria-describedby="inputGroupPrepend3 validationServerUsernameFeedback" required>

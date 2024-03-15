@@ -9,11 +9,14 @@
     <script src="js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-    <style>
-      body {
-        background-color: #a9f0b2; /* Cambia este valor al color que desees */
-      }
-    </style>
+<style>
+   body {
+            background-image: url('img/fondo3.png');
+            background-size: cover; /* para cubrir todo el fondo */
+            background-position: center; /* para centrar la imagen */
+            /* Añade más estilos si es necesario */
+        }
+  </style>
     <button><a href="index.php">Regresar al Lobby</a></button>
 
     

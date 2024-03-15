@@ -6,6 +6,14 @@
     <title>Main Menu</title>
 </head>
 <body>
+<style>
+   body {
+            background-image: url('img/fondo3.png');
+            background-size: cover; /* para cubrir todo el fondo */
+            background-position: center; /* para centrar la imagen */
+            /* Añade más estilos si es necesario */
+        }
+  </style>
 <button><a href="index.php">Regresar al Lobby</a></button>
 <div class="container text-center">
     <div class="row">

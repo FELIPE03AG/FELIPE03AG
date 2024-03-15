@@ -46,13 +46,13 @@
         <!-- Email input -->
           <div class="form-outline mb-4">
             <input type="username" name="u" id="form2Example1" class="form-control" />
-            <label class="form-label" for="form2Example1">Usuario</label>
+            <label class="form-label" for="form2Example1" style="color: white;">Usuario</label>
           </div>
         
           <!-- Password input -->
           <div class="form-outline mb-4">
             <input type="password" name="c" id="form2Example2" class="form-control" />
-            <label class="form-label" for="form2Example2">Contraseña</label>
+            <label class="form-label" for="form2Example2"style="color: white;">Contraseña</label>
           </div>
 
             <?php
@@ -75,23 +75,23 @@
               <!-- Checkbox -->
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
-                <label class="form-check-label" for="form2Example31"> Recuerdame </label>
+                <label class="form-check-label" for="form2Example31"style="color: white;"> Recuerdame </label>
               </div>
             </div>
         
             <div class="col">
               <!-- Simple link -->
-              <a href="recuperar_clave.php">Olvido la contraseña?</a>
+              <a href="recuperar_clave.php"style="color: white;">Olvido la contraseña?</a>
             </div>
           </div>
         
           <!-- Submit button -->
-          <button type="submit" class="btn btn-primary btn-block mb-4">Iniciar sesión</button>
+          <button type="submit" class="btn btn-primary btn-block mb-4"style="color: white;">Iniciar sesión</button>
         
           <!-- Register buttons -->
           <div class="text-center">
-            <p>No tiene cuenta? <a href="register.php">Registrarme</a></p>
-            <p>O ingrese con:</p>
+            <p> <label style ="color: white"> No tiene cuenta? <a href="register.php"style="color: white;">Registrarme</a> </label></p>
+            <p> <a style="color: white;"> O ingrese con:</a></p>
             <button type="button" class="btn btn-link btn-floating mx-1">
               <i class="fab fa-facebook-f"></i>
             </button>
