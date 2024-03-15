@@ -11,9 +11,12 @@
 </head>
 <body>
   <style>
-    body {
-      background-color: white;
-    }
+   body {
+            background-image: url('img/fondo3.png');
+            background-size: cover; /* para cubrir todo el fondo */
+            background-position: center; /* para centrar la imagen */
+            /* Añade más estilos si es necesario */
+        }
   </style>
   
   
@@ -51,6 +54,20 @@
             <input type="password" name="c" id="form2Example2" class="form-control" />
             <label class="form-label" for="form2Example2">Contraseña</label>
           </div>
+
+            <?php
+            ob_start();
+            $valor = isset($_REQUEST['valor']) ? $_REQUEST['valor']: NULL;
+            if($valor == 1)
+            {
+              echo'<div class="alert alert-danger" role="alert" style="text-align: center;">
+             *** Usuario Vacio o Datos Incorrectos***
+              </div>';
+
+            }
+            ob_end_flush();  
+            ?>
+          
         
           <!-- 2 column grid layout for inline styling -->
           <div class="row mb-4">

@@ -15,7 +15,7 @@
           <br>
           <br>
         </div>
-        <img src="logotipo.png" width="500px"/>
+        <img src="logotipo.png" width="250px"/>
     </div>
 
     
