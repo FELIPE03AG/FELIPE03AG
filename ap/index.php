@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GESTION PORCINA AP</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <Link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
@@ -18,6 +19,15 @@
             /* Añade más estilos si es necesario */
         }
   </style>
+  
+  <h2>Formulario con reCAPTCHA</h2>
+    <form action="procesar_formulario.php" method="POST">
+        <!-- otros campos de formulario -->
+        
+        <div class="g-recaptcha" data-sitekey="TU_SITE_KEY"></div>
+        
+        <button type="submit">Enviar</button>
+    </form>
   
   
     
