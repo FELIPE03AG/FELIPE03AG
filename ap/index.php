@@ -75,7 +75,7 @@
             if($valor == 1)
             {
               echo'<div class="alert alert-danger" role="alert" style="text-align: center;">
-             *** Usuario Vacio o Datos Incorrectos***
+             ***Datos Incorrectos***
               </div>';
 
             }
@@ -102,25 +102,10 @@
           <!-- Submit button -->
           <button type="submit" class="btn btn-primary btn-block mb-4"style="color: white;">Iniciar sesión</button>
         
-          <!-- Register buttons -->
+          <!-- Register button -->
           <div class="text-center">
             <p> <label style ="color: white"> No tiene cuenta? <a href="register.php"style="color: white;">Registrarme</a> </label></p>
-            <p> <a style="color: white;"> O ingrese con:</a></p>
-            <button type="button" class="btn btn-link btn-floating mx-1">
-              <i class="fab fa-facebook-f"></i>
-            </button>
-        
-            <button type="button" class="btn btn-link btn-floating mx-1">
-              <i class="fab fa-google"></i>
-            </button>
-        
-            <button type="button" class="btn btn-link btn-floating mx-1">
-              <i class="fab fa-twitter"></i>
-            </button>
-        
-            <button type="button" class="btn btn-link btn-floating mx-1">
-              <i class="fab fa-github"></i>
-            </button>
+            
           </div>
         </form>
 
