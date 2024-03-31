@@ -11,7 +11,7 @@
 <body>
 <style>
    body {
-            background-image: url('img/fondo3.png');
+            background-image: url('img/fnd.jpeg');
             background-size: cover; /* para cubrir todo el fondo */
             background-position: center; /* para centrar la imagen */
             /* Añade más estilos si es necesario */
