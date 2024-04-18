@@ -25,14 +25,14 @@ $consulta = mysqli_query($conexion, "select u from usuarios where u='$u'");
                    
                      while ($fila=mysqli_fetch_array($consulta))
                             {
-                                $co=$fila["c"];
+                                $contra=$fila["c"];
                                 $nombre=$fila["nombre"];
 
                             }
                         
-                            echo "<br>", $co;
-                            if($co==NULL){header("location:index.php?valor=1");}
-                            if($co!=NULL){
+                            echo "<br>", $contra;
+                            if($contra==NULL){header("location:index.php?valor=1");}
+                            if($contra!=NULL){
                                 session_start();
                                 $_SESSION['nombre']=$nombre;
                                 //$_SESSION['tiempo']=time();

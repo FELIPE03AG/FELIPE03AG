@@ -27,7 +27,7 @@
 
   <style>
    body {
-            background-image: url('img/inifoto.png');
+            background-image: url('img/fondo3.png');
             background-size: cover; /* para cubrir todo el fondo */
             background-position: center; /* para centrar la imagen */
             /* Añade más estilos si es necesario */
@@ -95,7 +95,10 @@
         
             <div class="col">
               <!-- Simple link -->
-              <a href="recuperar_clave.php"style="color: white;">Olvido la contraseña?</a>
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Olvide mi Contraseña
+</button>
+
             </div>
           </div>
         
@@ -113,6 +116,32 @@
       </div>
 
 </body>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Recuperar Contraseña</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       
+       
+       
+        <form method="post" action="recon.php" id="formul">
+            <div class="form-outline mb-4">
+              <input type="email" id="form2Examplell" name="correo" class="form-control"
+              placeholder="correo electronico"/>
+              <label class="form-label" for="form2Examplell">Correo electronico</label>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <input type="submit" form="formul" class="btn btn-primary"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="js/snippets.js"></script>
 <script src="js/modals.js"></script>
 </html>
