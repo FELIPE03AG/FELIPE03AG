@@ -43,7 +43,7 @@
           <br>
           <br>
         </div>
-        <img src="logotipo.png" width="500px"/>
+        <img src="logotipo.png" width="300px"/>
     </div>
     
     <div class="col">
@@ -72,6 +72,9 @@
             <?php
             ob_start();
             $valor = isset($_REQUEST['valor']) ? $_REQUEST['valor']: NULL;
+            $codigo = isset($_REQUEST['cod']) ? $_REQUEST['cod']: NULL;
+            include("config.php");
+           
             if($valor == 1)
             {
               echo'<div class="alert alert-danger" role="alert" style="text-align: center;">
@@ -79,6 +82,39 @@
               </div>';
 
             }
+
+            if($valor == 2)
+            {
+              echo'<div class="alert alert-danger" role="alert" style="text-align: center;">
+             ***Correo invalido***
+              </div>';
+
+            }
+
+            if($codigo != NULL)
+            {
+
+              $consulta = mysqli_query($conexion, "SELECT * FROM solcon WHERE codigo = '$codigo'");
+                while ($fila=mysqli_fetch_array($consulta))
+                            {
+                                $idu=$fila["idu"];
+                            }
+
+                if($idu==null){echo"error";}
+                else{
+                  echo $idu;
+                  
+                  // aparecera el modal o pagina para cambiar la, contrase;a enviar a otro archivo que cambie la contrase;a 
+                  //segun el id u
+                }
+                
+                            
+             
+             
+             
+
+            }
+
             ob_end_flush();  
             ?>
           
@@ -96,8 +132,8 @@
             <div class="col">
               <!-- Simple link -->
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Olvide mi Contraseña
-</button>
+                Olvide mi Contraseña
+              </button>
 
             </div>
           </div>
@@ -133,7 +169,12 @@
               <input type="email" id="form2Examplell" name="correo" class="form-control"
               placeholder="correo electronico"/>
               <label class="form-label" for="form2Examplell">Correo electronico</label>
-      </div>
+            </div>
+
+
+
+            
+
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <input type="submit" form="formul" class="btn btn-primary"></button>

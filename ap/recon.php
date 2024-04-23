@@ -1,87 +1,58 @@
 <?php
+// Iniciar buffer de salida, aunque puede ser innecesario si no se está manipulando la salida
 ob_start();
-include ("config.php");
 
-$correo=isset($_REQUEST['correo']) ? $_REQUEST['correo'] : NULL;
-echo $correo, "</br>";
+// Incluir configuración para la conexión a la base de datos
+include("config.php");
 
-$consulta = mysqli_query($conexion, "select * from usuarios where correo='$correo'");
-while ($fila=mysqli_fetch_array($consulta))
-{
-$correo=$fila["co"];
-$idu=$fila["id"];
+// Recuperar el correo de la solicitud HTTP y validar que no esté vacío
+$correo = isset($_REQUEST['correo']) ? trim($_REQUEST['correo']) : NULL;
+
+
+
+// Escapar el valor del correo para evitar inyección SQL
+//$correo = mysqli_real_escape_string($conexion, $correo);
+
+// Realizar la consulta para obtener el usuario por correo
+$consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE co = '$correo'");
+
+                    while ($fila=mysqli_fetch_array($consulta))
+                            {
+                                $cor=$fila["co"];
+                                $idu=$fila["id"];
+                            }
+
+
+
+// Verificar si la consulta fue exitosa
+if ($cor==null) {
+    header("Location: index.php?valor=2");
 }
-
-
-if($correo==NULL){header("location:index.php?valor=2");}
 else{
 
-$permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-// Output: 54esmdr0qf
-$codigo= substr(str_shuffle($permitted_chars), 0, 10);
-$enlace="http://localhost:8888/p/camcon.php?cod='$codigo'";
-echo $enlace;
-$consulta = mysqli_query($conexion, "insert into solcon (idu, codigo, corr) values('$idu','$codigo', '$correo')");
-/*
-$para = $correo;
-$titulo = 'Recuperar contraeña empresa';
-$mensaje = '
-SE solicto blabla
-ingresa al siguiente enlace para recuperar:
-'.$enlace.'
-';
-$cabeceras = 'From: chido@empresa.com' . "\r\n" .
-'Reply-To: webmaster@empresa.com' . "\r\n" .
-'X-Mailer: PHP/' . phpversion();
-
-mail($para, $titulo, $mensaje, $cabeceras);
-
-*/
-}
+// Verificar si se encontraron resultados
 
 
-/*
-//tomar de la base de datos el valor de usuario guardar en$ us
+    // Generar un código aleatorio de 10 caracteres
+    $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $codigo = substr(str_shuffle($permitted_chars), 0, 10);
 
-$consulta = mysqli_query($conexion, "select u from usuarios where u='$u'");
-while ($fila=mysqli_fetch_array($consulta))
-{
-$us=$fila["u"];
-}
-echo $us;
-if($us==NULL){header("location:index.php?valor=1");}
-else if($us!=NULL){
-$consulta = mysqli_query($conexion, "select * from usuarios where c=SHA1('$c')");
-while ($fila=mysqli_fetch_array($consulta))
-{
-$co=$fila["c"];
-$nombre=$fila["nombre"];
-}
-echo "<br>", $co;
+    // Construir el enlace
+    $enlace = "http://localhost:8888/p/camcon.php?cod='$codigo'";
+    echo "Enlace: $enlace<br/>";
+echo $idu, $cor;
+    // Insertar en la base de datos
+    mysqli_query($conexion, "insert into solcon (idu, codigo, corr) values('$idu','$codigo', '$cor')");
+   // $insert_query = "INSERT INTO solcon (idu, codigo, corr) VALUES ('$idu', '$codigo', '$cor')";
+  
 
-if($co==NULL){header("location:index.php?valor=1");}
-if($co!=NULL){
-session_start();
-$_SESSION['nombre']=$nombre;
-//$_SESSION['tiempo']=time();
-header("location:principal.php");
-}
+   header("Location: index.php?cod=$codigo");
 
+} 
 
-//
+// Cerrar la conexión a la base de datos
+mysqli_close($conexion);
 
-
-
-
-}
-//si si crear sesiones y enviar a pagina principal
-
-
-
-
-
-
-*/
-
+// Limpiar el buffer de salida, si es necesario
 ob_end_flush();
-?>
+
