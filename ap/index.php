@@ -129,13 +129,15 @@
                 
                             
              
-             
+                
              
 
             }
+            
 
             ob_end_flush();  
             ?>
+
           
         
           <!-- 2 column grid layout for inline styling -->
@@ -199,11 +201,30 @@
                     <div class="form-group">
                     <label for="confirmPassword">Confirmar Contraseña</label>
                     <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" required>
+                    <form action="otro_archivo.php" method="post">
+                    <input type="hidden" name="idu" value="<?php echo htmlspecialchars($idu, ENT_QUOTES, 'UTF-8'); ?>">
+                    
+                  
+          
+     
                     </div>
                     <button type="submit" class="btn btn-primary">Guardar cambios</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 
                   </form>
+                  <script>
+document.getElementById("changePasswordForm").addEventListener("submit", function(event) {
+  const newPassword = document.getElementById("newPassword").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+
+  if (newPassword !== confirmPassword) {
+    event.preventDefault(); // Evita que el formulario se envíe
+    alert("Las contraseñas no coinciden. Por favor, inténtalo de nuevo."); // Muestra un mensaje de error
+  }
+});
+</script>
+
+
               
 
 
