@@ -11,6 +11,9 @@
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.min.js"></script>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap JS y jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
 
     <script>
@@ -185,20 +188,36 @@
                       <span aria-hidden="true">&times;</span>
                   </button>
               </div>
+
               <div class="modal-body">
-                  Aquí puedes cambiar tu contraseña.
+
+                  <form id="changePasswordForm" action="restaurar.php" method="POST">
+                    <div class="form-group">
+                    <label for="newPassword">Nueva Contraseña</label>
+                    <input type="password" class="form-control" name="newPassword" id="newPassword" required>
+                    </div>
+                    <div class="form-group">
+                    <label for="confirmPassword">Confirmar Contraseña</label>
+                    <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+
+                  </form>
+              
+
+
+              
+              
               </div>
               <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                  <button type="button" class="btn btn-primary">Guardar cambios</button>
+                  
               </div>
           </div>
       </div>
   </div>
 
-  <!-- Bootstrap JS y jQuery -->
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 
   <!-- Código para abrir el modal automáticamente -->
   <script>

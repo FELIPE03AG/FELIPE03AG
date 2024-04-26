@@ -6,6 +6,15 @@ ob_start();
 include("config.php");
 
 
+$newPassword = isset($_REQUEST['newPassword']) ? trim($_REQUEST['newPassword']) : NULL;
+$confirmPassword = isset($_REQUEST['confirmPassword']) ? trim($_REQUEST['confirmPassword']) : NULL;
+
+echo $newPassword, "</br>";
+echo $confirmPassword, "</br>";
+
+ 
+
+
 
 // Limpiar el buffer de salida, si es necesario
 ob_end_flush();
