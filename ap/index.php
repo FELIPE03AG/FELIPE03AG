@@ -10,6 +10,11 @@
     <Link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap JS y jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
 
     <script>
         function ejecutarRecaptcha() {
@@ -43,7 +48,7 @@
           <br>
           <br>
         </div>
-        <img src="logotipo.png" width="500px"/>
+        <img src="logotipo.png" width="300px"/>
     </div>
     
     <div class="col">
@@ -72,6 +77,13 @@
             <?php
             ob_start();
             $valor = isset($_REQUEST['valor']) ? $_REQUEST['valor']: NULL;
+            $codigo = isset($_REQUEST['cod']) ? $_REQUEST['cod']: NULL;
+            include("config.php");
+
+            $showModal = false;
+
+            
+           
             if($valor == 1)
             {
               echo'<div class="alert alert-danger" role="alert" style="text-align: center;">
@@ -79,8 +91,53 @@
               </div>';
 
             }
+
+            if($valor == 2)
+            {
+              echo'<div class="alert alert-danger" role="alert" style="text-align: center;">
+             ***Correo invalido***
+              </div>';
+
+            }
+
+            if($codigo != NULL)
+            {
+
+              $consulta = mysqli_query($conexion, "SELECT * FROM solcon WHERE codigo = '$codigo'");
+                while ($fila=mysqli_fetch_array($consulta))
+                            {
+                                $idu=$fila["idu"];
+                            }
+
+                if($idu==null){echo"error";}
+                else{
+                 echo $idu;
+                 $showModal = true;
+
+                 
+                 
+                  
+
+                echo'<p>  </P>';
+                
+
+                  
+                  
+                  // aparecera el modal o pagina para cambiar la, contrase;a enviar a otro archivo que cambie la contrase;a 
+                  //segun el id u
+                }
+                
+                            
+             
+                
+             
+
+            }
+            
+
             ob_end_flush();  
             ?>
+
           
         
           <!-- 2 column grid layout for inline styling -->
@@ -96,8 +153,8 @@
             <div class="col">
               <!-- Simple link -->
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Olvide mi Contraseña
-</button>
+                Olvide mi Contraseña
+              </button>
 
             </div>
           </div>
@@ -115,8 +172,90 @@
 
       </div>
 
-</body>
 
+
+ <!-- Botón oculto para abrir el modal -->
+ <button id="openModalButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#autoOpenModal" style="display: none;">
+        Abrir Modal
+    </button>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="autoOpenModal" tabindex="-1" aria-labelledby="autoOpenModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="autoOpenModalLabel">Cambio de Contraseña</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+
+              <div class="modal-body">
+
+                  <form id="changePasswordForm" action="restaurar.php" method="POST">
+                    <div class="form-group">
+                    <label for="newPassword">Nueva Contraseña</label>
+                    <input type="password" class="form-control" name="newPassword" id="newPassword" required>
+                    </div>
+                    <div class="form-group">
+                    <label for="confirmPassword">Confirmar Contraseña</label>
+                    <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" required>
+                    <form action="otro_archivo.php" method="post">
+                    <input type="hidden" name="idu" value="<?php echo htmlspecialchars($idu, ENT_QUOTES, 'UTF-8'); ?>">
+                    
+                  
+          
+     
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+
+                  </form>
+                  <script>
+document.getElementById("changePasswordForm").addEventListener("submit", function(event) {
+  const newPassword = document.getElementById("newPassword").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+
+  if (newPassword !== confirmPassword) {
+    event.preventDefault(); // Evita que el formulario se envíe
+    alert("Las contraseñas no coinciden. Por favor, inténtalo de nuevo."); // Muestra un mensaje de error
+  }
+});
+</script>
+
+
+              
+
+
+              
+              
+              </div>
+              <div class="modal-footer">
+                  
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+
+  <!-- Código para abrir el modal automáticamente -->
+  <script>
+  $(document).ready(function() {
+      var showModal = <?php echo json_encode($showModal); ?>; // Transforma el valor PHP en JavaScript
+
+      if (showModal) {
+          $('#openModalButton').click(); // Simula el clic para abrir el modal
+      }
+  });
+  </script>
+
+
+     
+
+</body>
+<!-- Modal 1 -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -133,7 +272,12 @@
               <input type="email" id="form2Examplell" name="correo" class="form-control"
               placeholder="correo electronico"/>
               <label class="form-label" for="form2Examplell">Correo electronico</label>
-      </div>
+            </div>
+
+
+
+            
+
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <input type="submit" form="formul" class="btn btn-primary"></button>
@@ -142,6 +286,16 @@
   </div>
 </div>
 
+
+
+
+
+ 
+
+
+
+
 <script src="js/snippets.js"></script>
 <script src="js/modals.js"></script>
+
 </html>

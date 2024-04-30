@@ -27,7 +27,7 @@
             <br>
             
             
-            <img src="logotipo.png" width="500px" alt="Descripción de mi SVG" />
+            <img src="logotipo.png" width="200px" alt="Descripción de mi SVG" />
           </div>
   
     
@@ -108,11 +108,9 @@
               
       
             </div>
+            
 
-            
-  
-            
-            
+        
     
           </div>
     
