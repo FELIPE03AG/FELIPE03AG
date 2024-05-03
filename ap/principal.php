@@ -11,7 +11,7 @@
 <body>
 <style>
    body {
-            background-image: url('img/fnd.jpeg');
+            background-image: url('img/f.jpeg');
             background-size: cover; /* para cubrir todo el fondo */
             background-position: center; /* para centrar la imagen */
             /* Añade más estilos si es necesario */
@@ -45,6 +45,17 @@
             
           </ul>
         </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Eliminar Cerdos
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="cerdos.php">Eliminacion por Muerte</a></li>
+            <li><a class="dropdown-item" href="alimentos.php">Eliminacion por Venta</a></li>
+           
+            
+          </ul>
+        </li>
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="index.php">Salir al Menu</a>
         </li>
@@ -58,21 +69,14 @@
   </div>
 </nav>
 
+<div> </div>
 
-<ul class="nav flex-column">
-  <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="#">Active</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="#">Link</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="#">Link</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-  </li>
-</ul>
+<table class="table table-striped">
+  ...
+</table>
+
+
+
 
 
     
