@@ -99,6 +99,13 @@
               </div>';
 
             }
+            if($valor == 3)
+            {
+              echo'<div class="alert alert-success" role="alert" style="text-align: center;">
+             Contraseña Cambiada!
+              </div>';
+
+            }
 
             if($codigo != NULL)
             {
@@ -111,7 +118,7 @@
 
                 if($idu==null){echo"error";}
                 else{
-                 echo $idu;
+                 //echo $idu;
                  $showModal = true;
 
                  

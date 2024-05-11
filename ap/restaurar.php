@@ -32,8 +32,10 @@ if ($stmt) {
 
     // Ejecutar la consulta
     if ($stmt->execute()) {
-        echo "Contraseña actualizada exitosamente.";
-        header("location:index.php");
+        echo'<div class="alert alert-danger" role="alert" style="text-align: center;">
+        ***Contraseña Cambiada con Exito***
+         </div>';
+        header("location:index.php?valor=3");
 
     } else {
         echo "Error al actualizar la contraseña: " . $stmt->error;

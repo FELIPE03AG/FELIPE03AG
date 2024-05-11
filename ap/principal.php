@@ -60,20 +60,27 @@
           <a class="nav-link active" aria-current="page" href="index.php">Salir al Menu</a>
         </li>
       </ul>
+
+      <div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Perfil
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="#">Configuracion</a></li>
+    <li><a class="dropdown-item" href="#">Cerrar Sesion</a></li>
+   
+  </ul>
+</div>
+          
      
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
-    </div>
-  </div>
+    
+   
 </nav>
 
-<div> </div>
+<div> 
+  vale manguera
+</div>
 
-<table class="table table-striped">
-  ...
-</table>
 
 
 
