@@ -98,12 +98,6 @@
     <!-- Container wrapper -->
 </nav>
 
-<div> puto push no sirve alaverga
-mamadas cabronas
-simon
-a
-</div>
-
     
     
 </body>

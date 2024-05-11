@@ -77,10 +77,6 @@
    
 </nav>
 
-<div> 
-  vale manguera
-</div>
-
 
 
 
