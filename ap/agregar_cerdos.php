@@ -1,52 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <Link href="css/bootstrap.min.css" rel="stylesheet">
-    <script src="js/bootstrap.bundle.min.js"></script>
-</head>
-<body>
-<style>
-   body {
-            background-image: url('img/fnd.jpeg');
-            background-size: cover; /* para cubrir todo el fondo */
-            background-position: center; /* para centrar la imagen */
-            /* Añade más estilos si es necesario */
-        }
-  </style>
-    <button><a href="index.php">Regresar al Lobby</a></button>
+<?php
+// Iniciar buffer de salida, aunque puede ser innecesario si no se está manipulando la salida
+ob_start();
 
-    
-    
-      
-    <div class="container text-center">
-      <div class="row">
-        <div class="col">
-          Columna 1
-          <div>
-            Imagen LOGO
-          </div>
-          <img src="logotipo.png" width="500px" alt="Descripción de mi SVG" />
-        </div>
+// Incluir configuración para la conexión a la base de datos
+include("config.php");
 
-  
-  
-  
-      <div class="col">
-          Columna 2
-          <div>
-          LOGIN    
-          </div>
-          <div>
-            En Proceso
-          </div>
-          
-  
-        
-  
-      
-  </body>
-</html>
+//estos datos los estoy agarrando del modal de cerdos.php
+$cantidad = isset($_REQUEST['num_cerdos']) ? trim($_REQUEST['num_cerdos']) : NULL;
+$caseta = isset($_REQUEST['num_caseta']) ? trim($_REQUEST['num_caseta']) : NULL;
+$fecha = isset($_REQUEST['fecha_llegada_cerdos']) ? trim($_REQUEST['fecha_llegada_cerdos']) : NULL;
+$peso = isset($_REQUEST['peso_prom']) ? trim($_REQUEST['peso_prom']) : NULL;
+$edad = isset($_REQUEST['edad_prom']) ? trim($_REQUEST['edad_prom']) : NULL;
+$etapa = isset($_REQUEST['etapa_inicial']) ? trim($_REQUEST['etapa_inicial']) : NULL;
+
+$consulta = "INSERT INTO cerdos (num_cerdos, num_caseta, fecha_llegada_cerdos, peso_prom, edad_prom, etapa_inicial) 
+VALUES (?, ?, ?, ?, ?, ?)";
+
+$intenta = $conexion->prepare($consulta);
+$intenta->bind_param("isssis", $cantidad, $caseta, $fecha, $peso, $edad, $etapa);
+
+ // Insertar en la base de datos
+if ($intenta->execute()) {
+  // La consulta se realizó con éxito
+  echo "La consulta se realizó correctamente.";
+  header("location:index.php");
+} else {
+  // Error al ejecutar la consulta
+  echo "Error al ejecutar la consulta: " . $conexion->error;
+}
+
+// Cerrar la conexión
+$conexion->close();
+
+
+
+ 
+
+
+
+// Limpiar el buffer de salida, si es necesario
+ob_end_flush();
+?>
