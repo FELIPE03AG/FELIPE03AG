@@ -10,6 +10,10 @@
     <script src="js/modals.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Script de Bootstrap JavaScript -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <title>Gestion de Cerdos</title>
 </head>
@@ -28,20 +32,17 @@
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark" style="background-color: #e3f2fd;">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Gestion Porcina AP</a>
+    <a class="navbar-brand">Gestion Porcina AP</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarScroll">
+      <li><span>   </span></li>
+      <div class="collapse navbar-collapse" id="navbarScroll">
       <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="cerdos.php">Nuevo Registro</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="alimentos.php">Eliminar Registro</a>
-        </li>
-      
-        
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregarCerdosModal">
+      Agregar Banda
+    </button>
+    <li><span>     </span></li>
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="principal.php">Salir al Menu</a>
         </li>
@@ -51,6 +52,99 @@
     </div>
   </div>
 </nav>
+<p> Registros Realizados </p>
+<div> </div>
+<div> </div>
+
+<style>
+    /* Estilos para la tabla */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px; /* Espacio entre tablas */
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2; /* Color de fondo para encabezados */
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2; /* Color de fondo para filas pares */
+    }
+</style>
+
+
+<?php
+// Iniciar buffer de salida, aunque puede ser innecesario si no se está manipulando la salida
+ob_start();
+
+// Incluir configuración para la conexión a la base de datos
+include("config.php");
+
+$resultado = mysqli_query($conexion, "SELECT * FROM cerdos");
+
+// Verificar si hay resultados
+if(mysqli_num_rows($resultado) > 0) {
+    // Iterar sobre cada fila de resultados
+    while($fila = mysqli_fetch_assoc($resultado)) {
+        // Imprimir cada registro en su propia tabla
+        echo "<table border='1'>";
+        echo "<tr><th>Numero de Caseta </th><th>Cantidad de Cerdos</th><th>Fecha de llegada</th><th>Peso Promedio</th><th>Edad Promedio</th><th>Etapa de Alimentación</th></tr>";
+        echo "<tr>";
+        echo "<td>".$fila['num_caseta']."</td>";
+        echo "<td>".$fila['num_cerdos']."</td>";
+        echo "<td>".$fila['fecha_llegada_cerdos']."</td>";
+        echo "<td>".$fila['peso_prom']."</td>";
+        echo "<td>".$fila['edad_prom']."</td>";
+        echo "<td>".$fila['etapa_inicial']."</td>";
+        echo "</tr>";
+       
+         // Agregar botones al final de cada fila
+         echo "<td>
+         <button onclick='editarRegistro(".$fila['id'].")'>Editar</button>
+         <button onclick='eliminarRegistro(".$fila['id'].")'>Eliminar</button>
+         <button onclick='detallesregistro(".$fila['id'].")'>Detalles</button></td>";
+         echo "</tr>";
+         echo "</table>";
+    }
+} else {
+    // Mostrar un mensaje si no hay resultados
+    echo "No se encontraron resultados.";
+}
+
+
+
+// Limpiar el buffer de salida, si es necesario
+ob_end_flush();
+?>
+
+<script>
+function eliminarRegistro(id) {
+    // Mostrar un mensaje de confirmación al usuario
+    if(confirm('¿Estás seguro de que deseas eliminar este registro?')) {
+        // Si el usuario confirma, enviar una solicitud AJAX al servidor para eliminar el registro
+        $.ajax({
+            url: 'eliminar_cerdos.php', // URL del script PHP que maneja la eliminación
+            type: 'POST', // Método HTTP para enviar los datos
+            data: { id: id }, // Datos a enviar al servidor (en este caso, el ID del registro a eliminar)
+            success: function(response) {
+                // Manejar la respuesta del servidor
+                console.log(response);
+                // Actualizar la página o realizar alguna acción adicional si es necesario
+                // Por ejemplo, puedes recargar la página para mostrar los cambios actualizados
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                // Manejar errores
+                console.error(error);
+            }
+        });
+    }
+}
+</script>
 
 
 
@@ -59,20 +153,10 @@
 
 
 
-<div class="container text-center">
-  <div class="row align-items-start">
-    <div class="col">
-      One of three columns
-    </div>
-    
-    <div class="col">
-      <!-- Botón para abrir el modal -->
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregarCerdosModal">
-    Agregar Cerdos
-</button>
-    </div>
-  </div>
-</div>
+
+
+
+
 
 
 

@@ -23,7 +23,7 @@ $intenta->bind_param("isssis", $cantidad, $caseta, $fecha, $peso, $edad, $etapa)
 if ($intenta->execute()) {
   // La consulta se realizó con éxito
   echo "La consulta se realizó correctamente.";
-  header("location:index.php");
+  header("location:cerdos.php");
 } else {
   // Error al ejecutar la consulta
   echo "Error al ejecutar la consulta: " . $conexion->error;
