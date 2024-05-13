@@ -8,13 +8,14 @@
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/snippets.js"></script>
     <script src="js/modals.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Script de Bootstrap JavaScript -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
+    <!-- Script de Bootstrap JavaScript -->
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     <title>Gestion de Cerdos</title>
 </head>
 <body>
@@ -39,7 +40,7 @@
       <li><span>   </span></li>
       <div class="collapse navbar-collapse" id="navbarScroll">
       <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregarCerdosModal">
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarCerdosModal">
       Agregar Banda
     </button>
     <li><span>     </span></li>
@@ -104,9 +105,9 @@ if(mysqli_num_rows($resultado) > 0) {
        
          // Agregar botones al final de cada fila
          echo "<td>
-         <button onclick='editarRegistro(".$fila['id'].")'>Editar</button>
-         <button onclick='eliminarRegistro(".$fila['id'].")'>Eliminar</button>
-         <button onclick='detallesregistro(".$fila['id'].")'>Detalles</button></td>";
+         <button onclick='editarRegistro(".$fila['id_registro'].")'>Editar</button>
+         <button onclick='eliminarRegistro(".$fila['id_registro'].")'>Eliminar</button>
+         <button onclick='detallesregistro(".$fila['id_registro'].")'>Detalles</button></td>";
          echo "</tr>";
          echo "</table>";
     }
@@ -121,21 +122,72 @@ if(mysqli_num_rows($resultado) > 0) {
 ob_end_flush();
 ?>
 
+
+<!-- Funcion para eliminar registro-->
 <script>
 function eliminarRegistro(id) {
+
+  $(function(){
+
     // Mostrar un mensaje de confirmación al usuario
     if(confirm('¿Estás seguro de que deseas eliminar este registro?')) {
-        // Si el usuario confirma, enviar una solicitud AJAX al servidor para eliminar el registro
+      console.log('Hola',id)
+
+        // Enviar una solicitud AJAX al servidor para eliminar el registro
         $.ajax({
-            url: 'eliminar_cerdos.php', // URL del script PHP que maneja la eliminación
-            type: 'POST', // Método HTTP para enviar los datos
-            data: { id: id }, // Datos a enviar al servidor (en este caso, el ID del registro a eliminar)
+            url: 'eliminar_cerdos.php',
+            type: 'POST',
+            data: { id_registro: id },
+            
             success: function(response) {
                 // Manejar la respuesta del servidor
                 console.log(response);
                 // Actualizar la página o realizar alguna acción adicional si es necesario
-                // Por ejemplo, puedes recargar la página para mostrar los cambios actualizados
-                location.reload();
+                location.reload(); // Recargar la página después de eliminar el registro
+            },
+            error: function(xhr, status, error) {
+                // Manejar errores
+                console.error(error);
+            }
+        });
+    }
+  })
+}
+</script>
+
+<!-- Funcion para editar registro-->
+
+<script>
+
+function editarRegistro(id) {
+    // Obtener los datos del registro que se desea editar (puedes hacer una solicitud AJAX para obtenerlos si es necesario)
+    var cantidad = prompt("Editar cantidad de cerdos:", "");
+    var caseta = prompt("Editar caseta destinada:", "");
+    var fecha = prompt("Editar fecha de llegada:", "");
+    var peso = prompt("Editar peso promedio:", "");
+    var edad = prompt("Editar edad promedio:", "");
+    var etapa = prompt("Editar etapa de alimentación:", "");
+
+    // Mostrar un mensaje de confirmación al usuario antes de enviar la solicitud de edición
+    if(confirm('¿Estás seguro de que deseas editar este registro?')) {
+        // Enviar una solicitud AJAX al servidor para editar el registro
+        $.ajax({
+            url: 'editar_cerdos.php',
+            type: 'POST',
+            data: {
+                id_registro: id,
+                cantidad: cantidad,
+                caseta: caseta,
+                fecha: fecha,
+                peso: peso,
+                edad: edad,
+                etapa: etapa
+            },
+            success: function(response) {
+                // Manejar la respuesta del servidor
+                console.log(response);
+                // Actualizar la página o realizar alguna acción adicional si es necesario
+                location.reload(); // Recargar la página después de editar el registro
             },
             error: function(xhr, status, error) {
                 // Manejar errores
@@ -144,6 +196,7 @@ function eliminarRegistro(id) {
         });
     }
 }
+
 </script>
 
 
@@ -166,7 +219,7 @@ function eliminarRegistro(id) {
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Agregar Cerdos</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -211,9 +264,6 @@ function eliminarRegistro(id) {
 </div>
 
 <!-- Script de Bootstrap JavaScript -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
 
