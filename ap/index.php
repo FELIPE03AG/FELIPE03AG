@@ -11,19 +11,6 @@
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.min.js"></script>
 
-    <style>
-        body {
-            background-image: url('img/fondo3.png');
-            background-size: cover; /* para cubrir todo el fondo */
-            background-position: center; /* para centrar la imagen */
-            /* Añade más estilos si es necesario */
-        }
-
-        #login-form {
-            margin-top: 100px;
-        }
-    </style>
-
     <script>
         function ejecutarRecaptcha() {
             grecaptcha.ready(function() {
@@ -63,6 +50,10 @@
             $valor = isset($_REQUEST['valor']) ? $_REQUEST['valor']: NULL;
             $codigo = isset($_REQUEST['cod']) ? $_REQUEST['cod']: NULL;
             include("config.php");
+
+            $showModal = false;
+
+            
            
             if($valor == 1) {
                 echo'<div class="alert alert-danger" role="alert" style="text-align: center;">
@@ -70,10 +61,12 @@
                 </div>';
             }
 
-            if($valor == 2) {
-                echo'<div class="alert alert-danger" role="alert" style="text-align: center;">
-                    ***Correo invalido***
-                </div>';
+            if($valor == 2)
+            {
+              echo'<div class="alert alert-danger" role="alert" style="text-align: center;">
+             ***Correo invalido***
+              </div>';
+
             }
 
             if($codigo != NULL) {
@@ -82,36 +75,44 @@
                     $idu=$fila["idu"];
                 }
 
-                if($idu==null) {
-                    echo"error";
-                } else {
-                    echo $idu;
+                if($idu==null){echo"error";}
+                else{
+                  echo $idu;
                   
                     // aparecera el modal o pagina para cambiar la, contrase;a enviar a otro archivo que cambie la contrase;a 
                     //segun el id u
                 }
+                
+                            
+             
+             
+             
+
             }
+            
 
             ob_end_flush();  
             ?>
           
-            <!-- 2 column grid layout for inline styling -->
-            <div class="row mb-4">
-                <div class="col d-flex justify-content-center">
-                    <!-- Checkbox -->
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
-                        <label class="form-check-label" for="form2Example31"style="color: white;"> Recuerdame </label>
-                    </div>
-                </div>
-            
-                <div class="col">
-                    <!-- Simple link -->
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Olvide mi Contraseña
-                    </button>
-                </div>
+        
+          <!-- 2 column grid layout for inline styling -->
+          <div class="row mb-4">
+            <div class="col d-flex justify-content-center">
+              <!-- Checkbox -->
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
+                <label class="form-check-label" for="form2Example31"style="color: white;"> Recuerdame </label>
+              </div>
             </div>
+        
+            <div class="col">
+              <!-- Simple link -->
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Olvide mi Contraseña
+              </button>
+
+            </div>
+          </div>
         
             <!-- Submit button -->
             <button type="submit" class="btn btn-primary btn-block mb-4"style="color: white;">Iniciar sesión</button>
@@ -121,9 +122,12 @@
                 <p> <label style ="color: white"> No tiene cuenta? <a href="register.php"style="color: white;">Registrarme</a> </label></p>
             </div>
         </form>
-    </div>
-</body>
 
+
+      </div>
+
+</body>
+<!-- Modal 1 -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -146,6 +150,16 @@
     </div>
 </div>
 
+
+
+
+
+ 
+
+
+
+
 <script src="js/snippets.js"></script>
 <script src="js/modals.js"></script>
+
 </html>

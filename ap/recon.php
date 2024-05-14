@@ -55,4 +55,5 @@ mysqli_close($conexion);
 
 // Limpiar el buffer de salida, si es necesario
 ob_end_flush();
+?>
 
