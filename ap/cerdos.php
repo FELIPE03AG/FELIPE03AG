@@ -176,8 +176,8 @@ function editarRegistro(id) {
             type: 'POST',
             data: {
                 id_registro: id,
-                cantidad: cantidad,
                 caseta: caseta,
+                cantidad: cantidad,
                 fecha: fecha,
                 peso: peso,
                 edad: edad,

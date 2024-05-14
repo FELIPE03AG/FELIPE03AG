@@ -17,13 +17,13 @@ if(isset($_POST['id_registro'], $_POST['cantidad'], $_POST['caseta'], $_POST['fe
     $etapa = $_POST['etapa'];
 
     // Preparar la consulta para actualizar el registro en la base de datos
-    $query = "UPDATE cerdos SET num_cerdos = ?, num_caseta = ?, fecha_llegada_cerdos = ?, peso_prom = ?, edad_prom = ?, etapa_inicial = ? WHERE id_registro = ?";
+    $query = "UPDATE cerdos SET num_caseta = ?, num_cerdos = ?, fecha_llegada_cerdos = ?, peso_prom = ?, edad_prom = ?, etapa_inicial = ? WHERE id_registro = ?";
 
     // Preparar la declaración SQL
     $stmt = $conexion->prepare($query);
 
     // Vincular parámetros
-    $stmt->bind_param("iissssi", $cantidad, $caseta, $fecha, $peso, $edad, $etapa, $id_registro);
+    $stmt->bind_param("iissssi", $caseta, $cantidad, $fecha, $peso, $edad, $etapa, $id_registro);
 
     // Ejecutar la consulta
     if($stmt->execute()) {
