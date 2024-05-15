@@ -1,3 +1,28 @@
+<?php
+// Iniciar buffer de salida, aunque puede ser innecesario si no se está manipulando la salida
+ob_start();
+
+// Incluir configuración para la conexión a la base de datos
+include("config.php");
+
+// Definir la cantidad de registros a mostrar por página
+$registros_por_pagina = 5;
+
+// Obtener el número de página actual
+if (isset($_GET['page']) && is_numeric($_GET['page'])) {
+    $pagina = $_GET['page'];
+} else {
+    $pagina = 1;
+}
+
+// Calcular el punto de inicio para la consulta
+$inicio = ($pagina - 1) * $registros_por_pagina;
+
+// Realizar la consulta para obtener los registros de la página actual
+$resultado = mysqli_query($conexion, "SELECT * FROM cerdos LIMIT $inicio, $registros_por_pagina");
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,23 +102,13 @@
     }
 </style>
 
-
 <?php
-// Iniciar buffer de salida, aunque puede ser innecesario si no se está manipulando la salida
-ob_start();
-
-// Incluir configuración para la conexión a la base de datos
-include("config.php");
-
-$resultado = mysqli_query($conexion, "SELECT * FROM cerdos");
-
 // Verificar si hay resultados
 if(mysqli_num_rows($resultado) > 0) {
-    // Iterar sobre cada fila de resultados
+    // Imprimir la tabla de registros
+    echo "<table border='1'>";
+    echo "<tr><th>Numero de Caseta </th><th>Cantidad de Cerdos</th><th>Fecha de llegada</th><th>Peso Promedio</th><th>Edad Promedio</th><th>Etapa de Alimentación</th><th>Acciones</th></tr>";
     while($fila = mysqli_fetch_assoc($resultado)) {
-        // Imprimir cada registro en su propia tabla
-        echo "<table border='1'>";
-        echo "<tr><th>Numero de Caseta </th><th>Cantidad de Cerdos</th><th>Fecha de llegada</th><th>Peso Promedio</th><th>Edad Promedio</th><th>Etapa de Alimentación</th></tr>";
         echo "<tr>";
         echo "<td>".$fila['num_caseta']."</td>";
         echo "<td>".$fila['num_cerdos']."</td>";
@@ -101,27 +116,32 @@ if(mysqli_num_rows($resultado) > 0) {
         echo "<td>".$fila['peso_prom']."</td>";
         echo "<td>".$fila['edad_prom']."</td>";
         echo "<td>".$fila['etapa_inicial']."</td>";
+        echo "<td>
+              <button onclick='editarRegistro(".$fila['id_registro'].")'>Editar</button>
+              <button onclick='eliminarRegistro(".$fila['id_registro'].")'>Eliminar</button>
+              <button onclick='detallesregistro(".$fila['id_registro'].")'>Detalles</button>
+              </td>";
         echo "</tr>";
-       
-         // Agregar botones al final de cada fila
-         echo "<td>
-         <button onclick='editarRegistro(".$fila['id_registro'].")'>Editar</button>
-         <button onclick='eliminarRegistro(".$fila['id_registro'].")'>Eliminar</button>
-         <button onclick='detallesregistro(".$fila['id_registro'].")'>Detalles</button></td>";
-         echo "</tr>";
-         echo "</table>";
     }
+    echo "</table>";
+
+    // Agregar controles de paginación
+    $total_registros = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM cerdos"));
+    $total_paginas = ceil($total_registros / $registros_por_pagina);
+
+    echo "<ul class='pagination justify-content-center'>";
+    for ($i = 1; $i <= $total_paginas; $i++) {
+        echo "<li class='page-item'><a class='page-link' href='?page=".$i."'>".$i."</a></li>";
+    }
+    echo "</ul>";
 } else {
     // Mostrar un mensaje si no hay resultados
     echo "No se encontraron resultados.";
 }
 
-
-
 // Limpiar el buffer de salida, si es necesario
 ob_end_flush();
 ?>
-
 
 <!-- Funcion para eliminar registro-->
 <script>
@@ -199,20 +219,6 @@ function editarRegistro(id) {
 
 </script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- Modal -->
 <div class="modal fade" id="agregarCerdosModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -265,12 +271,5 @@ function editarRegistro(id) {
 
 <!-- Script de Bootstrap JavaScript -->
 
-
-
-
-
-
-    
-    
 </body>
 </html>
