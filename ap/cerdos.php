@@ -19,7 +19,14 @@ if (isset($_GET['page']) && is_numeric($_GET['page'])) {
 $inicio = ($pagina - 1) * $registros_por_pagina;
 
 // Realizar la consulta para obtener los registros de la página actual
-$resultado = mysqli_query($conexion, "SELECT * FROM cerdos LIMIT $inicio, $registros_por_pagina");
+if (isset($_GET['buscar']) && !empty($_GET['buscar'])) {
+    $buscar = $_GET['buscar'];
+    $query = "SELECT * FROM cerdos WHERE num_caseta LIKE '%$buscar%' OR num_cerdos LIKE '%$buscar%' OR fecha_llegada_cerdos LIKE '%$buscar%' OR peso_prom LIKE '%$buscar%' OR edad_prom LIKE '%$buscar%' OR etapa_inicial LIKE '%$buscar%' LIMIT $inicio, $registros_por_pagina";
+} else {
+    $query = "SELECT * FROM cerdos LIMIT $inicio, $registros_por_pagina";
+}
+
+$resultado = mysqli_query($conexion, $query);
 
 ?>
 
@@ -62,22 +69,37 @@ $resultado = mysqli_query($conexion, "SELECT * FROM cerdos LIMIT $inicio, $regis
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-      <li><span>   </span></li>
-      <div class="collapse navbar-collapse" id="navbarScroll">
+    <li><span>   </span></li>
+    <div class="collapse navbar-collapse" id="navbarScroll">
       <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarCerdosModal">
-      Agregar Banda
-    </button>
-    <li><span>     </span></li>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarCerdosModal">
+          Agregar Banda
+        </button>
+        <li><span>     </span></li>
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="principal.php">Salir al Menu</a>
         </li>
       </ul>
-     
-      
+      <!-- Campo de búsqueda -->
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Buscar registros..." aria-label="Buscar" id="buscar">
+      </form>
     </div>
   </div>
 </nav>
+
+<!-- Script para búsqueda en vivo -->
+<script>
+$(document).ready(function(){
+    $("#buscar").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("table tr").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+});
+</script>
+
 <p> Registros Realizados </p>
 <div> </div>
 <div> </div>
@@ -239,6 +261,8 @@ function editarRegistro(id) {
           <div class="form-group">
             <label for="casetaDestinada">Caseta destinada:</label>
             <input type="text" class="form-control" id="num_caseta" name="num_caseta" required>
+            <!-- Mensaje de error -->
+            <div id="caseta-error" class="text-danger" style="display:none;">El número de caseta ya está ocupado.</div>
           </div>
           <div class="form-group">
             <label for="fechaLlegada">Fecha de llegada:</label>
@@ -268,6 +292,34 @@ function editarRegistro(id) {
     </div>
   </div>
 </div>
+<!-- Modal de Error -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">ERROR</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        El número de caseta ya está ocupado. Por favor, elige otro número de caseta.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<?php
+// Verificar si se recibió el parámetro de error
+if(isset($_GET['error']) && $_GET['error'] == 'caseta_existente') {
+    echo "<script>$(document).ready(function(){ $('#errorModal').modal('show'); });</script>";
+}
+?>
+
+
 
 <!-- Script de Bootstrap JavaScript -->
 
