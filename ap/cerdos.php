@@ -41,7 +41,7 @@ $resultado = mysqli_query($conexion, $query);
     <script src="js/snippets.js"></script>
     <script src="js/modals.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
+    <link rel="icon" href="cerdo.png" type="image/x-icon">
     <!-- Script de Bootstrap JavaScript -->
 
 
@@ -129,7 +129,7 @@ $(document).ready(function(){
 if(mysqli_num_rows($resultado) > 0) {
     // Imprimir la tabla de registros
     echo "<table border='1'>";
-    echo "<tr><th>Numero de Caseta </th><th>Cantidad de Cerdos</th><th>Fecha de llegada</th><th>Peso Promedio</th><th>Edad Promedio</th><th>Etapa de Alimentación</th><th>Acciones</th></tr>";
+    echo "<tr><th>Numero de Caseta </th><th>Cantidad de Cerdos</th><th>Fecha de llegada</th><th>Peso Promedio<br>(Kilogramos)</th><th>Edad Promedio<br>(Semanas)</th><th>Etapa de Alimentación</th><th>Acciones</th></tr>";
     while($fila = mysqli_fetch_assoc($resultado)) {
         echo "<tr>";
         echo "<td>".$fila['num_caseta']."</td>";
