@@ -41,7 +41,7 @@ $resultado = mysqli_query($conexion, $query);
     <script src="js/snippets.js"></script>
     <script src="js/modals.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="icon" href="cerdo.png" type="image/x-icon">
+
     <!-- Script de Bootstrap JavaScript -->
 
 
@@ -169,7 +169,7 @@ $(document).ready(function(){
             </select>
           </div>
           <!-- Botón de enviar formulario -->
-          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+          <button type="button" class="btn btn-primary" onclick="editarRegistro()">Guardar Cambios</button>
         </form>
       </div>
     </div>
@@ -190,6 +190,45 @@ function cargarDatosEdicion(id, caseta, cantidad, fecha, peso, edad, etapa) {
     // Asignar el ID del registro al formulario de edición
     $("#formEditarCerdos").attr("data-id", id);
 }
+
+function editarRegistro() {
+    // Obtener los datos del formulario de edición
+    var id = $("#formEditarCerdos").attr("data-id");
+    var cantidad = $("#edit_num_cerdos").val();
+    var caseta = $("#edit_num_caseta").val();
+    var fecha = $("#edit_fecha_llegada_cerdos").val();
+    var peso = $("#edit_peso_prom").val();
+    var edad = $("#edit_edad_prom").val();
+    var etapa = $("#edit_etapa_inicial").val();
+
+    // Mostrar un mensaje de confirmación al usuario antes de enviar la solicitud de edición
+    if(confirm('¿Estás seguro de que deseas editar este registro?')) {
+        // Enviar una solicitud AJAX al servidor para editar el registro
+        $.ajax({
+            url: 'editar_cerdos.php',
+            type: 'POST',
+            data: {
+                id_registro: id,
+                num_cerdos: cantidad,
+                num_caseta: caseta,
+                fecha_llegada_cerdos: fecha,
+                peso_prom: peso,
+                edad_prom: edad,
+                etapa_inicial: etapa
+            },
+            success: function(response) {
+                // Manejar la respuesta del servidor
+                console.log(response);
+                // Actualizar la página o realizar alguna acción adicional si es necesario
+                location.reload(); // Recargar la página después de editar el registro
+            },
+            error: function(xhr, status, error) {
+                // Manejar errores
+                console.error(error);
+            }
+        });
+    }
+}
 </script>
 
 <!-- Tabla de Registros -->
@@ -198,7 +237,7 @@ function cargarDatosEdicion(id, caseta, cantidad, fecha, peso, edad, etapa) {
 if(mysqli_num_rows($resultado) > 0) {
     // Imprimir la tabla de registros
     echo "<table border='1'>";
-    echo "<tr><th>Numero de Caseta </th><th>Cantidad de Cerdos</th><th>Fecha de llegada</th><th>Peso Promedio<br>(Kilogramos)</th><th>Edad Promedio<br>(Semanas)</th><th>Etapa de Alimentación</th><th>Acciones</th></tr>";
+    echo "<tr><th>Número de Caseta </th><th>Cantidad de Cerdos</th><th>Fecha de llegada</th><th>Peso Promedio (kg)</th><th>Edad Promedio (Semanas)</th><th>Etapa de Alimentación</th><th>Acciones</th></tr>";
     while($fila = mysqli_fetch_assoc($resultado)) {
         echo "<tr>";
         echo "<td>".$fila['num_caseta']."</td>";
@@ -340,52 +379,23 @@ if(isset($_GET['error']) && $_GET['error'] == 'caseta_existente') {
 }
 ?>
 
-<!-- Funcion para editar registro-->
-
-<script>
-
-function editarRegistro() {
-    // Obtener los datos del formulario de edición
-    var id = $("#formEditarCerdos").attr("data-id");
-    var cantidad = $("#edit_num_cerdos").val();
-    var caseta = $("#edit_num_caseta").val();
-    var fecha = $("#edit_fecha_llegada_cerdos").val();
-    var peso = $("#edit_peso_prom").val();
-    var edad = $("#edit_edad_prom").val();
-    var etapa = $("#edit_etapa_inicial").val();
-
-    // Mostrar un mensaje de confirmación al usuario antes de enviar la solicitud de edición
-    if(confirm('¿Estás seguro de que deseas editar este registro?')) {
-        // Enviar una solicitud AJAX al servidor para editar el registro
-        $.ajax({
-            url: 'editar_cerdos.php',
-            type: 'POST',
-            data: {
-                id_registro: id,
-                caseta: caseta,
-                cantidad: cantidad,
-                fecha: fecha,
-                peso: peso,
-                edad: edad,
-                etapa: etapa
-            },
-            success: function(response) {
-                // Manejar la respuesta del servidor
-                console.log(response);
-                // Actualizar la página o realizar alguna acción adicional si es necesario
-                location.reload(); // Recargar la página después de editar el registro
-            },
-            error: function(xhr, status, error) {
-                // Manejar errores
-                console.error(error);
-            }
-        });
-    }
-}
-
-</script>
-
-<!-- Script de Bootstrap JavaScript -->
+<!-- Detalles-->
+<div class="modal fade" id="DetallesCerdos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Detalles de registro</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Aquí se cargarán los detalles del registro seleccionado -->
+        <div id="detalles_registro"></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>

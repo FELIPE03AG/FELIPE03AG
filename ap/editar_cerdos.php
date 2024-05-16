@@ -1,50 +1,45 @@
 <?php
-// Iniciar buffer de salida, aunque puede ser innecesario si no se está manipulando la salida
-ob_start();
-
 // Incluir configuración para la conexión a la base de datos
 include("config.php");
 
-// Verificar si se recibieron los datos del registro a editar
-if(isset($_POST['id_registro'], $_POST['cantidad'], $_POST['caseta'], $_POST['fecha'], $_POST['peso'], $_POST['edad'], $_POST['etapa'])) {
+// Verificar si se recibieron los datos del formulario de edición
+if(isset($_POST['id_registro']) && isset($_POST['num_caseta']) && isset($_POST['num_cerdos']) && isset($_POST['fecha_llegada_cerdos']) && isset($_POST['peso_prom']) && isset($_POST['edad_prom']) && isset($_POST['etapa_inicial'])) {
     // Obtener los datos del formulario
     $id_registro = $_POST['id_registro'];
-    $cantidad = $_POST['cantidad'];
-    $caseta = $_POST['caseta'];
-    $fecha = $_POST['fecha'];
-    $peso = $_POST['peso'];
-    $edad = $_POST['edad'];
-    $etapa = $_POST['etapa'];
+    $num_caseta = $_POST['num_caseta'];
+    $num_cerdos = $_POST['num_cerdos'];
+    $fecha_llegada_cerdos = $_POST['fecha_llegada_cerdos'];
+    $peso_prom = $_POST['peso_prom'];
+    $edad_prom = $_POST['edad_prom'];
+    $etapa_inicial = $_POST['etapa_inicial'];
 
-    // Preparar la consulta para actualizar el registro en la base de datos
-    $query = "UPDATE cerdos SET num_caseta = ?, num_cerdos = ?, fecha_llegada_cerdos = ?, peso_prom = ?, edad_prom = ?, etapa_inicial = ? WHERE id_registro = ?";
+    // Verificar si la caseta ya está ocupada por otro registro
+    $query = "SELECT id_registro FROM cerdos WHERE num_caseta = '$num_caseta' AND id_registro != '$id_registro'";
+    $result = mysqli_query($conexion, $query);
+    $caseta_existente = mysqli_num_rows($result) > 0;
 
-    // Preparar la declaración SQL
-    $stmt = $conexion->prepare($query);
-
-    // Vincular parámetros
-    $stmt->bind_param("iissssi", $caseta, $cantidad, $fecha, $peso, $edad, $etapa, $id_registro);
-
-    // Ejecutar la consulta
-    if($stmt->execute()) {
-        // Si la actualización fue exitosa, enviar una respuesta de éxito
-        echo "El registro se actualizó correctamente.";
+    if ($caseta_existente) {
+        // Si el número de caseta ya está ocupado, redireccionar a la página anterior mostrando el mensaje de error
+        header("Location: cerdos.php?error=caseta_existente");
+        exit();
     } else {
-        // Si hubo un error al actualizar el registro, enviar un mensaje de error
-        echo "Error al actualizar el registro: " . $conexion->error;
+        // La caseta está disponible, actualizar el registro en la base de datos
+        $query = "UPDATE cerdos SET num_caseta='$num_caseta', num_cerdos='$num_cerdos', fecha_llegada_cerdos='$fecha_llegada_cerdos', peso_prom='$peso_prom', edad_prom='$edad_prom', etapa_inicial='$etapa_inicial' WHERE id_registro='$id_registro'";
+
+        // Ejecutar la consulta
+        if(mysqli_query($conexion, $query)) {
+            // Redirigir al usuario a la página principal con un mensaje de éxito
+            header("Location: cerdos.php?success=registro_editado");
+            exit();
+        } else {
+            // Redirigir al usuario a la página principal con un mensaje de error
+            header("Location: cerdos.php?error=edicion_fallida");
+            exit();
+        }
     }
-
-    // Cerrar la declaración preparada
-    $stmt->close();
 } else {
-    // Si no se recibieron todos los datos del formulario, enviar un mensaje de error
-    echo "Error: Todos los campos son requeridos.";
+    // Redirigir al usuario a la página principal si no se recibieron los datos del formulario
+    header("Location: cerdos.php");
+    exit();
 }
-
- 
-
-
-
-// Limpiar el buffer de salida, si es necesario
-ob_end_flush();
 ?>
