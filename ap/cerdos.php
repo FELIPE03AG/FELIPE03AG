@@ -124,6 +124,75 @@ $(document).ready(function(){
     }
 </style>
 
+<!-- Modal de Edición -->
+<div class="modal fade" id="editarCerdosModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar Cerdos</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Formulario de Edición -->
+        <form id="formEditarCerdos" method="post" action="editar_cerdos.php">
+          <div class="form-group">
+            <label for="cantidadCerdos">Cantidad de cerdos:</label>
+            <input type="number" class="form-control" id="edit_num_cerdos" name="num_cerdos" required>
+          </div>
+          <div class="form-group">
+            <label for="casetaDestinada">Caseta destinada:</label>
+            <input type="text" class="form-control" id="edit_num_caseta" name="num_caseta" required>
+            <!-- Mensaje de error -->
+            <div id="edit_caseta-error" class="text-danger" style="display:none;">El número de caseta ya está ocupado.</div>
+          </div>
+          <div class="form-group">
+            <label for="fechaLlegada">Fecha de llegada:</label>
+            <input type="date" class="form-control" id="edit_fecha_llegada_cerdos" name="fecha_llegada_cerdos" required>
+          </div>
+          <div class="form-group">
+            <label for="pesoPromedio">Peso Promedio:</label>
+            <input type="number" class="form-control" id="edit_peso_prom" name="peso_prom" required>
+          </div>
+          <div class="form-group">
+            <label for="edadPromedio">Edad Promedio:</label>
+            <input type="number" class="form-control" id="edit_edad_prom" name="edad_prom" required>
+          </div>
+          <div class="form-group">
+            <label for="etapaAlimentacion">Etapa de Alimentación:</label>
+            <select class="form-control" id="edit_etapa_inicial" name="etapa_inicial" required>
+              <option value="Iniciador">Iniciador</option>
+              <option value="Crecimiento">Crecimiento</option>
+              <option value="Desarrollo">Desarrollo</option>
+              <option value="Finalizador">Finalizador</option>
+            </select>
+          </div>
+          <!-- Botón de enviar formulario -->
+          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Script de Edición -->
+<script>
+function cargarDatosEdicion(id, caseta, cantidad, fecha, peso, edad, etapa) {
+    // Rellenar los campos del formulario con los datos del registro
+    $("#edit_num_cerdos").val(cantidad);
+    $("#edit_num_caseta").val(caseta);
+    $("#edit_fecha_llegada_cerdos").val(fecha);
+    $("#edit_peso_prom").val(peso);
+    $("#edit_edad_prom").val(edad);
+    $("#edit_etapa_inicial").val(etapa);
+    
+    // Asignar el ID del registro al formulario de edición
+    $("#formEditarCerdos").attr("data-id", id);
+}
+</script>
+
+<!-- Tabla de Registros -->
 <?php
 // Verificar si hay resultados
 if(mysqli_num_rows($resultado) > 0) {
@@ -139,9 +208,9 @@ if(mysqli_num_rows($resultado) > 0) {
         echo "<td>".$fila['edad_prom']."</td>";
         echo "<td>".$fila['etapa_inicial']."</td>";
         echo "<td>
-              <button onclick='editarRegistro(".$fila['id_registro'].")'>Editar</button>
-              <button onclick='eliminarRegistro(".$fila['id_registro'].")'>Eliminar</button>
-              <button onclick='detallesregistro(".$fila['id_registro'].")'>Detalles</button>
+              <button onclick='cargarDatosEdicion(".$fila['id_registro'].", \"".$fila['num_caseta']."\", ".$fila['num_cerdos'].", \"".$fila['fecha_llegada_cerdos']."\", ".$fila['peso_prom'].", ".$fila['edad_prom'].", \"".$fila['etapa_inicial']."\")' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#editarCerdosModal'>Editar</button>
+              <button onclick='eliminarRegistro(".$fila['id_registro'].")' class='btn btn-danger'>Eliminar</button>
+              <button onclick='detallesregistro(".$fila['id_registro'].")' class='btn btn-info'>Detalles</button>
               </td>";
         echo "</tr>";
     }
@@ -168,13 +237,9 @@ ob_end_flush();
 <!-- Funcion para eliminar registro-->
 <script>
 function eliminarRegistro(id) {
-
   $(function(){
-
     // Mostrar un mensaje de confirmación al usuario
     if(confirm('¿Estás seguro de que deseas eliminar este registro?')) {
-      console.log('Hola',id)
-
         // Enviar una solicitud AJAX al servidor para eliminar el registro
         $.ajax({
             url: 'eliminar_cerdos.php',
@@ -195,50 +260,6 @@ function eliminarRegistro(id) {
     }
   })
 }
-</script>
-
-<!-- Funcion para editar registro-->
-
-<script>
-
-function editarRegistro(id) {
-    // Obtener los datos del registro que se desea editar (puedes hacer una solicitud AJAX para obtenerlos si es necesario)
-    var cantidad = prompt("Editar cantidad de cerdos:", "");
-    var caseta = prompt("Editar caseta destinada:", "");
-    var fecha = prompt("Editar fecha de llegada:", "");
-    var peso = prompt("Editar peso promedio:", "");
-    var edad = prompt("Editar edad promedio:", "");
-    var etapa = prompt("Editar etapa de alimentación:", "");
-
-    // Mostrar un mensaje de confirmación al usuario antes de enviar la solicitud de edición
-    if(confirm('¿Estás seguro de que deseas editar este registro?')) {
-        // Enviar una solicitud AJAX al servidor para editar el registro
-        $.ajax({
-            url: 'editar_cerdos.php',
-            type: 'POST',
-            data: {
-                id_registro: id,
-                caseta: caseta,
-                cantidad: cantidad,
-                fecha: fecha,
-                peso: peso,
-                edad: edad,
-                etapa: etapa
-            },
-            success: function(response) {
-                // Manejar la respuesta del servidor
-                console.log(response);
-                // Actualizar la página o realizar alguna acción adicional si es necesario
-                location.reload(); // Recargar la página después de editar el registro
-            },
-            error: function(xhr, status, error) {
-                // Manejar errores
-                console.error(error);
-            }
-        });
-    }
-}
-
 </script>
 
 <!-- Modal -->
@@ -319,7 +340,50 @@ if(isset($_GET['error']) && $_GET['error'] == 'caseta_existente') {
 }
 ?>
 
+<!-- Funcion para editar registro-->
 
+<script>
+
+function editarRegistro() {
+    // Obtener los datos del formulario de edición
+    var id = $("#formEditarCerdos").attr("data-id");
+    var cantidad = $("#edit_num_cerdos").val();
+    var caseta = $("#edit_num_caseta").val();
+    var fecha = $("#edit_fecha_llegada_cerdos").val();
+    var peso = $("#edit_peso_prom").val();
+    var edad = $("#edit_edad_prom").val();
+    var etapa = $("#edit_etapa_inicial").val();
+
+    // Mostrar un mensaje de confirmación al usuario antes de enviar la solicitud de edición
+    if(confirm('¿Estás seguro de que deseas editar este registro?')) {
+        // Enviar una solicitud AJAX al servidor para editar el registro
+        $.ajax({
+            url: 'editar_cerdos.php',
+            type: 'POST',
+            data: {
+                id_registro: id,
+                caseta: caseta,
+                cantidad: cantidad,
+                fecha: fecha,
+                peso: peso,
+                edad: edad,
+                etapa: etapa
+            },
+            success: function(response) {
+                // Manejar la respuesta del servidor
+                console.log(response);
+                // Actualizar la página o realizar alguna acción adicional si es necesario
+                location.reload(); // Recargar la página después de editar el registro
+            },
+            error: function(xhr, status, error) {
+                // Manejar errores
+                console.error(error);
+            }
+        });
+    }
+}
+
+</script>
 
 <!-- Script de Bootstrap JavaScript -->
 
