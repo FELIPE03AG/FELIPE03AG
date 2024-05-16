@@ -189,8 +189,10 @@ function cargarDatosEdicion(id, caseta, cantidad, fecha, peso, edad, etapa) {
     
     // Asignar el ID del registro al formulario de edición
     $("#formEditarCerdos").attr("data-id", id);
-}
 
+    // Deshabilitar el campo de número de caseta
+    $("#edit_num_caseta").prop('readonly', true);
+}
 function editarRegistro() {
     // Obtener los datos del formulario de edición
     var id = $("#formEditarCerdos").attr("data-id");
@@ -414,8 +416,6 @@ function detallesregistro(id) {
 }
 </script>";
 ?>
-
-
 
 </body>
 </html>
