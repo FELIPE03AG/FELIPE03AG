@@ -380,23 +380,42 @@ if(isset($_GET['error']) && $_GET['error'] == 'caseta_existente') {
 }
 ?>
 
-<!-- Detalles-->
-<div class="modal fade" id="DetallesCerdos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Detalles de registro</h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <!-- Aquí se cargarán los detalles del registro seleccionado -->
-        <div id="detalles_registro"></div>
-      </div>
+<!-- Modal de Detalles -->
+<div class="modal fade" id="detallesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detalles del registro</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="detalles_registro">
+                <!-- Aquí se cargarán los detalles del registro -->
+            </div>
+        </div>
     </div>
-  </div>
 </div>
+
+<!-- PHP para cargar detalles del registro en el modal -->
+<?php
+echo "<script>
+function detallesregistro(id) {
+    $.ajax({
+        url: 'detalles_cerdos.php',
+        type: 'POST',
+        data: { id_registro: id },
+        success: function(response) {
+            $('#detalles_registro').html(response);
+            $('#detallesModal').modal('show');
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
+</script>";
+?>
+
+
 
 </body>
 </html>
