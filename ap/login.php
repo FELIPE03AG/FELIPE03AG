@@ -43,7 +43,3 @@ $consulta = mysqli_query($conexion, "select u from usuarios where u='$u'");
                         }
   ob_end_flush();  
 ?>
-    
-
-
-

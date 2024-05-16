@@ -6,7 +6,7 @@ ob_start();
 include("config.php");
 
 // Definir la cantidad de registros a mostrar por página
-$registros_por_pagina = 7;
+$registros_por_pagina = 10;
 
 // Obtener el número de página actual
 if (isset($_GET['page']) && is_numeric($_GET['page'])) {

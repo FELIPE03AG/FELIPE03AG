@@ -28,6 +28,14 @@ if(isset($_POST['id_registro']) && isset($_POST['num_caseta']) && isset($_POST['
 
         // Ejecutar la consulta
         if(mysqli_query($conexion, $query)) {
+            // Registro en la tabla de historial
+            session_start();
+            $usuario = $_SESSION['u'];
+            $accion = "Editó un registro en la tabla de cerdos";
+            $fecha_hora = date('Y-m-d H:i:s');
+            $registro = "INSERT INTO historial (accion, fecha_hora, usuario) VALUES ('$accion', '$fecha_hora', '$usuario')";
+            mysqli_query($conexion, $registro);
+
             // Redirigir al usuario a la página principal con un mensaje de éxito
             header("Location: cerdos.php?success=registro_editado");
             exit();

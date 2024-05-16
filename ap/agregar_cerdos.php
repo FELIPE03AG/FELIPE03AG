@@ -28,6 +28,14 @@ if ($caseta_existente) {
     $intenta->bind_param("isssis", $cantidad, $caseta, $fecha, $peso, $edad, $etapa);
 
     if ($intenta->execute()) {
+        // Registro en la tabla de historial
+        session_start();
+        $usuario = $_SESSION['u'];
+        $accion = "Agregó un nuevo registro en la tabla de cerdos";
+        $fecha_hora = date('Y-m-d H:i:s');
+        $registro = "INSERT INTO historial (accion, fecha_hora, usuario) VALUES ('$accion', '$fecha_hora', '$usuario')";
+        mysqli_query($conexion, $registro);
+
         // La consulta se realizó con éxito, redireccionar a la página de cerdos
         header("Location: cerdos.php");
         exit();
@@ -37,7 +45,6 @@ if ($caseta_existente) {
         exit();
     }
 }
-
 // Cerrar la conexión
 $conexion->close();
 ?>
