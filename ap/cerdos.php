@@ -20,10 +20,10 @@ $inicio = ($pagina - 1) * $registros_por_pagina;
 
 // Realizar la consulta para obtener los registros de la página actual
 if (isset($_GET['buscar']) && !empty($_GET['buscar'])) {
-    $buscar = $_GET['buscar'];
-    $query = "SELECT * FROM cerdos WHERE num_caseta LIKE '%$buscar%' OR num_cerdos LIKE '%$buscar%' OR fecha_llegada_cerdos LIKE '%$buscar%' OR peso_prom LIKE '%$buscar%' OR edad_prom LIKE '%$buscar%' OR etapa_inicial LIKE '%$buscar%' LIMIT $inicio, $registros_por_pagina";
+  $buscar = $_GET['buscar'];
+  $query = "SELECT * FROM cerdos WHERE num_caseta LIKE '%$buscar%' OR num_cerdos LIKE '%$buscar%' OR fecha_llegada_cerdos LIKE '%$buscar%' OR peso_prom LIKE '%$buscar%' OR edad_prom LIKE '%$buscar%' OR etapa_inicial LIKE '%$buscar%' ORDER BY id_registro DESC LIMIT $inicio, $registros_por_pagina";
 } else {
-    $query = "SELECT * FROM cerdos LIMIT $inicio, $registros_por_pagina";
+  $query = "SELECT * FROM cerdos ORDER BY id_registro DESC LIMIT $inicio, $registros_por_pagina";
 }
 
 $resultado = mysqli_query($conexion, $query);
@@ -77,7 +77,7 @@ $resultado = mysqli_query($conexion, $query);
         </button>
         <li><span>     </span></li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="principal.php">Salir al Menu</a>
+          <a class="nav-link active" aria-current="page" href="principal.php">Regresar</a>
         </li>
       </ul>
       <!-- Campo de búsqueda -->
@@ -115,6 +115,7 @@ $(document).ready(function(){
         border: 1px solid #ddd;
         padding: 8px;
         text-align: left;
+        min-width: 100px; /* Ancho mínimo para celdas */
     }
     th {
         background-color: #f2f2f2; /* Color de fondo para encabezados */
@@ -123,6 +124,8 @@ $(document).ready(function(){
         background-color: #f2f2f2; /* Color de fondo para filas pares */
     }
 </style>
+
+
 
 <!-- Modal de Edición -->
 <div class="modal fade" id="editarCerdosModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -138,14 +141,14 @@ $(document).ready(function(){
         <!-- Formulario de Edición -->
         <form id="formEditarCerdos" method="post" action="editar_cerdos.php">
           <div class="form-group">
-            <label for="cantidadCerdos">Cantidad de cerdos:</label>
-            <input type="number" class="form-control" id="edit_num_cerdos" name="num_cerdos" required>
-          </div>
-          <div class="form-group">
             <label for="casetaDestinada">Caseta destinada:</label>
             <input type="text" class="form-control" id="edit_num_caseta" name="num_caseta" required>
             <!-- Mensaje de error -->
             <div id="edit_caseta-error" class="text-danger" style="display:none;">El número de caseta ya está ocupado.</div>
+          </div>
+          <div class="form-group">
+            <label for="cantidadCerdos">Cantidad de cerdos:</label>
+            <input type="number" class="form-control" id="edit_num_cerdos" name="num_cerdos" required>
           </div>
           <div class="form-group">
             <label for="fechaLlegada">Fecha de llegada:</label>
@@ -176,6 +179,27 @@ $(document).ready(function(){
   </div>
 </div>
 
+<!-- Modal para confirmar edición -->
+<div class="modal fade" id="confirmEditModal" tabindex="-1" role="dialog" aria-labelledby="confirmEditModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmEditModalLabel">Confirmar Edición</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que deseas editar este registro?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="editarRegistro()">Editar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Script de Edición -->
 <script>
 function cargarDatosEdicion(id, caseta, cantidad, fecha, peso, edad, etapa) {
@@ -193,6 +217,7 @@ function cargarDatosEdicion(id, caseta, cantidad, fecha, peso, edad, etapa) {
     // Deshabilitar el campo de número de caseta
     $("#edit_num_caseta").prop('readonly', true);
 }
+
 function editarRegistro() {
     // Obtener los datos del formulario de edición
     var id = $("#formEditarCerdos").attr("data-id");
@@ -203,8 +228,11 @@ function editarRegistro() {
     var edad = $("#edit_edad_prom").val();
     var etapa = $("#edit_etapa_inicial").val();
 
-    // Mostrar un mensaje de confirmación al usuario antes de enviar la solicitud de edición
-    if(confirm('¿Estás seguro de que deseas editar este registro?')) {
+    // Mostrar el modal de confirmación para editar
+    $('#confirmEditModal').modal('show');
+    
+    // Al hacer clic en el botón "Editar" dentro del modal de confirmación
+    $('#confirmEditModal').on('click', '.btn-primary', function() {
         // Enviar una solicitud AJAX al servidor para editar el registro
         $.ajax({
             url: 'editar_cerdos.php',
@@ -229,10 +257,9 @@ function editarRegistro() {
                 console.error(error);
             }
         });
-    }
+    });
 }
 </script>
-
 
 <!-- Tabla de Registros -->
 <?php
@@ -276,31 +303,53 @@ if(mysqli_num_rows($resultado) > 0) {
 ob_end_flush();
 ?>
 
+<!-- Modal para confirmar si desea eliminar -->
+<div id="confirmModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmModalLabel">Confirmación</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que deseas eliminar este registro?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="confirmDelete">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Funcion para eliminar registro-->
 <script>
 function eliminarRegistro(id) {
-  $(function(){
-    // Mostrar un mensaje de confirmación al usuario
-    if(confirm('¿Estás seguro de que deseas eliminar este registro?')) {
-        // Enviar una solicitud AJAX al servidor para eliminar el registro
-        $.ajax({
-            url: 'eliminar_cerdos.php',
-            type: 'POST',
-            data: { id_registro: id },
-            
-            success: function(response) {
-                // Manejar la respuesta del servidor
-                console.log(response);
-                // Actualizar la página o realizar alguna acción adicional si es necesario
-                location.reload(); // Recargar la página después de eliminar el registro
-            },
-            error: function(xhr, status, error) {
-                // Manejar errores
-                console.error(error);
-            }
-        });
+  $('#confirmModal').modal('show'); // Mostrar el modal de confirmación
+  
+  // Capturar el ID del registro al confirmar la eliminación
+  $('#confirmDelete').click(function() {
+    eliminarRegistroAjax(id);
+    $('#confirmModal').modal('hide'); // Ocultar el modal después de confirmar la eliminación
+  });
+}
+
+function eliminarRegistroAjax(id) {
+  $.ajax({
+    url: 'eliminar_cerdos.php',
+    type: 'POST',
+    data: { id_registro: id },
+    
+    success: function(response) {
+      console.log(response);
+      location.reload(); // Recargar la página después de eliminar el registro
+    },
+    error: function(xhr, status, error) {
+      console.error(error);
     }
-  })
+  });
 }
 </script>
 
@@ -318,14 +367,14 @@ function eliminarRegistro(id) {
         <!-- Formulario -->
         <form method="post" action="agregar_cerdos.php">
           <div class="form-group">
-            <label for="cantidadCerdos">Cantidad de cerdos:</label>
-            <input type="number" class="form-control" id="num_cerdos" name="num_cerdos" required>
-          </div>
-          <div class="form-group">
             <label for="casetaDestinada">Caseta destinada:</label>
             <input type="text" class="form-control" id="num_caseta" name="num_caseta" required>
             <!-- Mensaje de error -->
             <div id="caseta-error" class="text-danger" style="display:none;">El número de caseta ya está ocupado.</div>
+          </div>
+          <div class="form-group">
+            <label for="cantidadCerdos">Cantidad de cerdos:</label>
+            <input type="number" class="form-control" id="num_cerdos" name="num_cerdos" required>
           </div>
           <div class="form-group">
             <label for="fechaLlegada">Fecha de llegada:</label>
@@ -355,6 +404,7 @@ function eliminarRegistro(id) {
     </div>
   </div>
 </div>
+
 <!-- Modal de Error -->
 <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">

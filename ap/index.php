@@ -286,7 +286,7 @@ document.getElementById("changePasswordForm").addEventListener("submit", functio
             
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         <input type="submit" form="formul" class="btn btn-primary"></button>
       </div>
     </div>

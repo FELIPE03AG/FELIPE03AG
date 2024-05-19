@@ -26,7 +26,7 @@ if(isset($_POST['id_registro'])) {
     if($stmt->execute()) {
         // Registro en la tabla de historial
         session_start();
-        $usuario = $_SESSION['u'];
+        $usuario = $_SESSION['nombre']; // Cambiar de $_SESSION['u'] a $_SESSION['nombre']
         $accion = "Eliminó un registro en la tabla de cerdos";
         $fecha_hora = date('Y-m-d H:i:s');
         $registro_historial = "INSERT INTO historial (accion, fecha_hora, usuario) VALUES (?, ?, ?)";
@@ -52,3 +52,4 @@ if(isset($_POST['id_registro'])) {
 // Cerrar la conexión
 $conexion->close();
 ?>
+

@@ -30,7 +30,7 @@ if(isset($_POST['id_registro']) && isset($_POST['num_caseta']) && isset($_POST['
         if(mysqli_query($conexion, $query)) {
             // Registro en la tabla de historial
             session_start();
-            $usuario = $_SESSION['u'];
+            $usuario = $_SESSION['nombre']; // Cambiar de $_SESSION['u'] a $_SESSION['nombre']
             $accion = "Editó un registro en la tabla de cerdos";
             $fecha_hora = date('Y-m-d H:i:s');
             $registro = "INSERT INTO historial (accion, fecha_hora, usuario) VALUES ('$accion', '$fecha_hora', '$usuario')";
