@@ -35,6 +35,7 @@ $consulta = mysqli_query($conexion, "select u from usuarios where u='$u'");
                             if($contra!=NULL){
                                 session_start();
                                 $_SESSION['nombre']=$nombre;
+                                
                                 //$_SESSION['tiempo']=time();
 
                                 header("location:principal.php");

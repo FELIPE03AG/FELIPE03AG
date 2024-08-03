@@ -35,7 +35,7 @@
         </li>
         
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" href="principal.php" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Insertar
           </a>
           <ul class="dropdown-menu">
@@ -57,7 +57,7 @@
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="index.php">Salir al Menu</a>
+          <a class="nav-link active" aria-current="page" href="index.php">Salir</a>
         </li>
       </ul>
 
@@ -67,7 +67,7 @@
   </button>
   <ul class="dropdown-menu">
     <li><a class="dropdown-item" href="#">Configuracion</a></li>
-    <li><a class="dropdown-item" href="#">Cerrar Sesion</a></li>
+    <li><a class="dropdown-item" href="index.php">Cerrar Sesion</a></li>
    
   </ul>
 </div>
