@@ -171,7 +171,7 @@
         
           <!-- Register button -->
           <div class="text-center">
-            <p> <label style ="color: white"> No tiene cuenta? <a href="register.php"style="color: white;">Registrarme</a> </label></p>
+            <p> <label style ="color: white"> No tiene cuenta?puto <a href="register.php"style="color: white;">Registrarme</a> </label></p>
             
           </div>
         </form>
