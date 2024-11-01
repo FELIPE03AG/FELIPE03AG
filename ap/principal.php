@@ -17,7 +17,7 @@
             /* Añade más estilos si es necesario */
         }
   </style>
-<!-- tab bar-->
+<!-- taab bar-->
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark" style="background-color: #e3f2fd;">
   <div class="container-fluid">
@@ -57,17 +57,17 @@
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="index.php">Salir</a>
+          <a class="nav-link active" aria-current="page" href="index.php">Salir al Menu</a>
         </li>
       </ul>
 
       <div class="dropdown">
   <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Perfil
+    Perfill
   </button>
   <ul class="dropdown-menu">
     <li><a class="dropdown-item" href="#">Configuracion</a></li>
-    <li><a class="dropdown-item" href="index.php">Cerrar Sesion</a></li>
+    <li><a class="dropdown-item" href="#">Cerrar Sesion</a></li>
    
   </ul>
 </div>

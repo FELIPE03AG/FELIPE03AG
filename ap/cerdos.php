@@ -277,9 +277,10 @@ if(mysqli_num_rows($resultado) > 0) {
         echo "<td>".$fila['edad_prom']."</td>";
         echo "<td>".$fila['etapa_inicial']."</td>";
         echo "<td>
+        
               <button onclick='cargarDatosEdicion(".$fila['id_registro'].", \"".$fila['num_caseta']."\", ".$fila['num_cerdos'].", \"".$fila['fecha_llegada_cerdos']."\", ".$fila['peso_prom'].", ".$fila['edad_prom'].", \"".$fila['etapa_inicial']."\")' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#editarCerdosModal'>Editar</button>
               <button onclick='eliminarRegistro(".$fila['id_registro'].")' class='btn btn-danger'>Eliminar</button>
-              <button onclick='detallesregistro(".$fila['id_registro'].")' class='btn btn-info'>Detalles</button>
+              <button onclick='mostrarDetalles(".$fila['id_registro'].")' class='btn btn-info' data-bs-toggle='modal' data-bs-target='#detallesModal'>Detalles</button>
               </td>";
         echo "</tr>";
     }
@@ -432,20 +433,121 @@ if(isset($_GET['error']) && $_GET['error'] == 'caseta_existente') {
 }
 ?>
 
-<!-- Modal de Detalles -->
-<div class="modal fade" id="detallesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Detalles del registro</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="detalles_registro">
-                <!-- Aquí se cargarán los detalles del registro -->
-            </div>
-        </div>
+<!-- funcion de mostrar una lista en el modal en el modal -->
+<script>
+async function mostrarDetalles(idRegistro) {
+   const response = await fetch(`detalle-caseta.php?idRegistro=${idRegistro}`);
+    const data = await response.json();
+   
+    console.log(data.length)
+
+    if( data.length == 0){
+      $('#detallesCorrales').html('No hay registros');
+      return;
+    }
+
+    let plantilla = '';
+
+    plantilla = data.map(corral =>{
+      return `<tr>
+        <td>${corral.id_corral}</td>   
+        <td>${corral.num_corral}</td>
+        <td>${corral.num_cerdos}</td>   
+      </tr>`
+    }).join('');
+
+
+    $('#detallesCorrales').html(plantilla);
+
+
+}
+
+// Función para eliminar un cerdo de un corral específico y actualizar la base de datos
+function eliminarCerdo(id_registro, numCaseta) {
+    if (window.totalCerdos > 0) {
+        window.totalCerdos--;
+
+        // Actualizar el DOM
+        document.getElementById('total-cerdos').innerText = window.totalCerdos;
+
+        // Llamada AJAX para actualizar la base de datos
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "eliminar_cerdo.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    alert(xhr.responseText);
+                } else {
+                    alert("Error al comunicarse con el servidor.");
+                }
+            }
+        };
+        xhr.send("id_registro=" + id_registro + "&numCaseta=" + numCaseta);
+    }
+}
+
+</script>
+
+
+<!-- Dividir cerdos en corrales-->
+<?php
+if (isset($_POST['detalles'])) {
+    $numCaseta = $_POST['num_caseta'];
+    $numCerdos = $_POST['num_cerdos'];
+
+    // Lógica para distribuir los cerdos entre los 30 corrales
+    $corrales_a_usar = 28;  // Corrales del 2 al 29
+    $cerdos_por_corral = floor($numCerdos / $corrales_a_usar);
+    $sobrante = $numCerdos % $corrales_a_usar;
+
+    // Crear un array de 30 corrales, con el primero y el último vacíos
+    $corrales = array_fill(0, 30, 0);
+
+    // Asignar cerdos a los corrales 2 a 29
+    for ($i = 1; $i <= 28; $i++) {
+        $corrales[$i + 1] = $cerdos_por_corral;
+        if ($sobrante > 0) {
+            $corrales[$i + 1]++;
+            $sobrante--;
+        }
+    }
+
+    // Guardar los resultados en una variable para mostrar en el modal
+    $detalles_corrales = "<h5>Caseta $numCaseta - Distribución de Cerdos</h5>";
+    $detalles_corrales .= "<table class='table table-bordered'>";
+    $detalles_corrales .= "<tr><th>Corral</th><th>Número de Cerdos</th></tr>";
+    for ($i = 0; $i < 30; $i++) {
+        $detalles_corrales .= "<tr><td>Corral ".($i + 1)."</td><td>".$corrales[$i]."</td></tr>";
+    }
+    $detalles_corrales .= "</table>";
+
+    // Almacenar los detalles en una sesión para usarlos en el modal
+    $_SESSION['detalles_corrales'] = $detalles_corrales;
+}
+?>
+
+<!-- Modal para Detalles de Corrales --><!-- Modal para Detalles de Corrales -->
+ <!-- Modal para Detalles de Corrales -->
+<div class="modal fade" id="detallesModal" tabindex="-1" aria-labelledby="detallesModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detallesModalLabel">Detalles de los Corrales</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="detallesCorrales">
+        <!-- Aquí se mostrará la lista de los corrales con los cerdos distribuidos -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
     </div>
+  </div>
 </div>
+
+
+
 
 <!-- PHP para cargar detalles del registro en el modal -->
 <?php
@@ -466,6 +568,7 @@ function detallesregistro(id) {
 }
 </script>";
 ?>
+
 
 </body>
 </html>
