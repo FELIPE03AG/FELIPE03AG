@@ -6,7 +6,7 @@
     <Link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.min.js"></script>
-    <title>Pagina Principal</title>
+    <title>Reporte de Actividades</title>
 </head>
 <body>
 
@@ -112,10 +112,7 @@
     tr:nth-child(even) {
         background-color: #f2f2f2; /* Color de fondo para filas pares */
     }
-  </style>
-
-    
-<script>
+  </style><script>
         document.addEventListener("DOMContentLoaded", function () {
             const sidebarLinks = document.querySelectorAll(".sidebar a");
             const currentPath = window.location.pathname.split("/").pop(); // Obtiene el archivo actual (home.php, services.php, etc.)
@@ -138,6 +135,9 @@
     <!-- Navbar -->
     <div class="navbar">
         <h1>GestAP</h1>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="cerdos.php">Regresar</a>
+        </li>
     </div>
 
     <!-- Sidebar -->
@@ -152,8 +152,11 @@
 
     <!-- Content -->
     <div class="content">
-        <h1>GestAP</h1>
-        <p>Tu mejor herramienta para la gestion agropecuaria en la industria</p>
+
+
+
+
+    
     </div>
     
 

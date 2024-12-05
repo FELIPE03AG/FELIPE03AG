@@ -19,6 +19,7 @@
     <title>Gestion de Cerdos</title>
 </head>
 <body>
+
 <style>
    body {
             background-image: url('img/f.jpeg');
@@ -26,33 +27,146 @@
             background-position: center; /* para centrar la imagen */
             /* Añade más estilos si es necesario */
         }
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background-color: #f0f0f0; /* Gris oscuro */
+            color: black;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 60px; /* Debajo del navbar */
+            left: 0;
+            width: 250px;
+            height: calc(100vh - 60px);
+            background-color: #f0f0f0; /* Gris medio */
+            color: black;
+            display: flex;
+            flex-direction: column;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .sidebar a {
+            color: black;
+            padding: 15px 20px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #6e6e6e; /* Gris oscuro para el hover */
+        }
+        /* Resaltar el apartado activo */
+        .sidebar a.active {
+            background-color: #4caf50; /* Verde resalte */
+            color: black;
+            font-weight: bold;
+        }
+
+        /* Content */
+        .content {
+            margin-top: 60px; /* Espacio debajo del navbar */
+            margin-left: 250px; /* Espacio para el sidebar */
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            color: #333;
+            min-height: calc(100vh - 60px); /* Asegura que el contenido llene el espacio */
+        }
+
+        /* Estilo de texto */
+        .content h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        /* Estilos para la tabla */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px; /* Espacio entre tablas */
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        min-width: 100px; /* Ancho mínimo para celdas */
+    }
+    th {
+        background-color: #f2f2f2; /* Color de fondo para encabezados */
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2; /* Color de fondo para filas pares */
+    }
   </style>
 <!-- tab bar-->
 
 <!-- tab bar-->
+<div class="navbar">
+        <h1>GestAP</h1>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarCerdosModal">
+          Agregar Tolva
+        </button>
 
-<nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark" style="background-color: #e3f2fd;">
-  <div class="container-fluid">
-    <a class="navbar-brand">Gestion Porcina AP</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-      <li><span>   </span></li>
-      <div class="collapse navbar-collapse" id="navbarScroll">
-      <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarTolva">
-      Agregar Tolva
-    </button>
-    <li><span>     </span></li>
+       
+        
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="principal.php">Salir al Menu</a>
+          <a class="nav-link active" aria-current="page" href="principal.php">Regresar</a>
         </li>
-      </ul>
-     
-      
+        <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Buscar registros..." aria-label="Buscar" id="buscar">
+      </form>
     </div>
-  </div>
-</nav>
+
+
+<!-- Sidebar -->
+<div class="sidebar">
+        <h2>Inicio</h2>
+        <a href="principal.php">Pagina Principal</a>
+        <a href="cerdos.php">Cerdos</a>
+        <a href="alimentos.php">Alimentos</a>
+        <a href="reportes_actividades.php">Reportes</a>
+        <a href="index.php">Cerrar Sesion</a>
+    </div>
+
+<!-- Script para búsqueda en vivo -->
+<script>
+$(document).ready(function(){
+    $("#buscar").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("table tr").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+});
+</script>
+
+<div class= "content">
+
+
 <p> Registros Realizados </p>
 <div> </div>
 <div> </div>
@@ -76,6 +190,24 @@
         background-color: #f2f2f2; /* Color de fondo para filas pares */
     }
 </style>
+
+
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const sidebarLinks = document.querySelectorAll(".sidebar a");
+            const currentPath = window.location.pathname.split("/").pop(); // Obtiene el archivo actual (home.php, services.php, etc.)
+
+            sidebarLinks.forEach(link => {
+                // Elimina la clase activa de todos los enlaces
+                link.classList.remove("active");
+
+                // Agrega la clase activa al enlace correspondiente
+                if (link.getAttribute("href") === currentPath) {
+                    link.classList.add("active");
+                }
+            });
+        });
+    </script>
 
 
 <?php
@@ -179,10 +311,11 @@ ob_end_flush();
   </div>
 </div>
 
-<!-- Script de Bootstrap JavaScript -->
 
 
 
+
+</div>
 
 
 

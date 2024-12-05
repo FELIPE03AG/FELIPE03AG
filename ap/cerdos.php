@@ -58,54 +58,84 @@ $resultado = mysqli_query($conexion, $query);
             background-position: center; /* para centrar la imagen */
             /* Añade más estilos si es necesario */
         }
-  </style>
-<!-- tab bar-->
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background-color: #f0f0f0; /* Gris oscuro */
+            color: black;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
 
-<!-- tab bar-->
+        .navbar h1 {
+            margin: 0;
+            font-size: 20px;
+        }
 
-<nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark" style="background-color: #e3f2fd;">
-  <div class="container-fluid">
-    <a class="navbar-brand">Gestion Porcina AP</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <li><span>   </span></li>
-    <div class="collapse navbar-collapse" id="navbarScroll">
-      <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarCerdosModal">
-          Agregar Banda
-        </button>
-        <li><span>     </span></li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="principal.php">Regresar</a>
-        </li>
-      </ul>
-      <!-- Campo de búsqueda -->
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Buscar registros..." aria-label="Buscar" id="buscar">
-      </form>
-    </div>
-  </div>
-</nav>
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 60px; /* Debajo del navbar */
+            left: 0;
+            width: 250px;
+            height: calc(100vh - 60px);
+            background-color: #f0f0f0; /* Gris medio */
+            color: black;
+            display: flex;
+            flex-direction: column;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+        }
 
-<!-- Script para búsqueda en vivo -->
-<script>
-$(document).ready(function(){
-    $("#buscar").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("table tr").filter(function() {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
-    });
-});
-</script>
+        .sidebar a {
+            color: black;
+            padding: 15px 20px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
 
-<p> Registros Realizados </p>
-<div> </div>
-<div> </div>
+        .sidebar a:hover {
+            background-color: #6e6e6e; /* Gris oscuro para el hover */
+        }
+         /* Resaltar el apartado activo */
+        .sidebar a.active {
+            background-color: #4caf50; /* Verde resalte */
+            color: black;
+            font-weight: bold;
+        }
 
-<style>
-    /* Estilos para la tabla */
+
+        /* Content */
+        .content {
+            margin-top: 60px; /* Espacio debajo del navbar */
+            margin-left: 250px; /* Espacio para el sidebar */
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            color: #333;
+            min-height: calc(100vh - 60px); /* Asegura que el contenido llene el espacio */
+        }
+
+        /* Estilo de texto */
+        .content h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        /* Estilos para la tabla */
     table {
         width: 100%;
         border-collapse: collapse;
@@ -123,7 +153,77 @@ $(document).ready(function(){
     tr:nth-child(even) {
         background-color: #f2f2f2; /* Color de fondo para filas pares */
     }
-</style>
+  </style>
+ <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const sidebarLinks = document.querySelectorAll(".sidebar a");
+            const currentPath = window.location.pathname.split("/").pop(); // Obtiene el archivo actual
+
+            // Configura las páginas relacionadas para cada enlace
+            const relatedPages = {
+                "cerdos.php": ["cerdos.php", "elim_cerdos.php"] // Páginas relacionadas con "cerdos"
+                
+            };
+
+            sidebarLinks.forEach(link => {
+                const href = link.getAttribute("href");
+
+                // Comprueba si la página actual está en las relacionadas
+                if (relatedPages[href] && relatedPages[href].includes(currentPath)) {
+                    link.classList.add("active");
+                } else {
+                    link.classList.remove("active");
+                }
+            });
+        });
+    </script><!-- tab bar-->
+<div class="navbar">
+        <h1>GestAP</h1>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarCerdosModal">
+          Agregar Banda
+        </button>
+
+       
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="elim_cerdos.php">Eliminar Cerdos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="principal.php">Regresar</a>
+        </li>
+        <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Buscar registros..." aria-label="Buscar" id="buscar">
+      </form>
+    </div>
+
+
+<!-- Sidebar -->
+<div class="sidebar">
+        <h2>Inicio</h2>
+        <a href="principal.php">Pagina Principal</a>
+        <a href="cerdos.php">Cerdos</a>
+        <a href="alimentos.php">Alimentos</a>
+        <a href="reportes_actividades.php">Reportes</a>
+        <a href="index.php">Cerrar Sesion</a>
+    </div>
+
+<!-- Script para búsqueda en vivo -->
+<script>
+$(document).ready(function(){
+    $("#buscar").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("table tr").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+});
+</script>
+
+<div class= "content">
+  
+
+<p> Registros Realizados </p>
+<div> </div>
+<div> </div>
 
 
 
@@ -426,14 +526,36 @@ function eliminarRegistroAjax(id) {
   </div>
 </div>
 
+<!-- borrar posiblemente -->
+
+<!-- Modal eliminar por muerte -->
+<div class="modal fade" id="elim_por_muerte" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Eliminar Cerdo Por Muerte</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <?php
-// Verificar si se recibió el parámetro de error
+// Verificar si se recibió el parámetro de error 
+// echo <tr> <th>Numero de Corral</th><th>Numero de Cerdos</th> </tr>
 if(isset($_GET['error']) && $_GET['error'] == 'caseta_existente') {
     echo "<script>$(document).ready(function(){ $('#errorModal').modal('show'); });</script>";
 }
 ?>
 
-<!-- funcion de mostrar una lista en el modal en el modal -->
+
 <script>
 async function mostrarDetalles(idRegistro) {
    const response = await fetch(`detalle-caseta.php?idRegistro=${idRegistro}`);
@@ -441,24 +563,34 @@ async function mostrarDetalles(idRegistro) {
    
     console.log(data.length)
 
+    $('#btnEliminarCerdo').off('click');
+
     if( data.length == 0){
       $('#detallesCorrales').html('No hay registros');
       return;
     }
 
-    let plantilla = '';
+    let plantilla = ``;
 
     plantilla = data.map(corral =>{
       return `<tr>
-        <td>${corral.id_corral}</td>   
+      
         <td>${corral.num_corral}</td>
-        <td>${corral.num_cerdos}</td>   
+        <td>${corral.num_cerdos}</td>
+        
+          
+        
       </tr>`
     }).join('');
 
 
     $('#detallesCorrales').html(plantilla);
 
+    const closeModal = ()=> {
+      $('#detallesModal').modal('hide')
+    }
+    
+    $('#btnEliminarCerdo').on('click', closeModal);
 
 }
 
@@ -536,7 +668,19 @@ if (isset($_POST['detalles'])) {
         <h5 class="modal-title" id="detallesModalLabel">Detalles de los Corrales</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body" id="detallesCorrales">
+      <div class="modal-body" >
+        <table>
+          <thead>
+            <th>Numero de corral</th>
+            <th>Numero de cerdos</th>
+            
+            
+
+          </thead>
+          <tbody id="detallesCorrales">
+
+          </tbody>
+        </table>
         <!-- Aquí se mostrará la lista de los corrales con los cerdos distribuidos -->
       </div>
       <div class="modal-footer">
@@ -568,6 +712,14 @@ function detallesregistro(id) {
 }
 </script>";
 ?>
+
+
+
+
+
+
+</div>
+
 
 
 </body>
