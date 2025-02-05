@@ -1,4 +1,19 @@
 <?php
+ob_start();
+
+session_start();
+if (!isset($_SESSION['nombre'])) {
+    header('location:index.php');
+}
+
+$nombre = $_SESSION['nombre'];
+$rol = $_SESSION['rol'];
+
+echo $rol;
+
+?>
+
+<?php
 // Iniciar buffer de salida, aunque puede ser innecesario si no se está manipulando la salida
 ob_start();
 

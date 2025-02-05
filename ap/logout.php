@@ -4,6 +4,6 @@ ob_start();
     unset ($SESSION['usuario']);
     session_destroy();
 
-    header('location:login.php');
+    header('location:index.php');
     ob_end_flush();  
 ?>

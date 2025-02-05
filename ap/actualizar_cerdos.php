@@ -1,4 +1,19 @@
 <?php
+ob_start();
+
+session_start();
+if (!isset($_SESSION['nombre'])) {
+    header('location:index.php');
+}
+
+$nombre = $_SESSION['nombre'];
+$rol = $_SESSION['rol'];
+
+echo $rol;
+
+?>
+
+<?php
 // Conexión a la base de datos
 include 'conexion.php'; // Archivo que conecta con la base de datos
 

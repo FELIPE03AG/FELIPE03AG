@@ -1,4 +1,18 @@
 <?php
+ob_start();
+
+session_start();
+if (!isset($_SESSION['nombre'])) {
+    header('location:index.php');
+}
+
+$nombre = $_SESSION['nombre'];
+$rol = $_SESSION['rol'];
+
+echo $rol;
+
+?>
+<?php
 include("config.php");
 
 if (isset($_POST['id_registro']) && isset($_POST['numCaseta'])) {

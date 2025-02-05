@@ -27,6 +27,7 @@ $consulta = mysqli_query($conexion, "select u from usuarios where u='$u'");
                             {
                                 $contra=$fila["c"];
                                 $nombre=$fila["nombre"];
+                                $rol=$fila["rol"];
 
                             }
                         
@@ -35,6 +36,7 @@ $consulta = mysqli_query($conexion, "select u from usuarios where u='$u'");
                             if($contra!=NULL){
                                 session_start();
                                 $_SESSION['nombre']=$nombre;
+                                $_SESSION['rol']=$rol;
                                 
                                 //$_SESSION['tiempo']=time();
 

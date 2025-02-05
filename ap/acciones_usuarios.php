@@ -12,7 +12,6 @@ $rol = $_SESSION['rol'];
 echo $rol;
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

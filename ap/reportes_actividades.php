@@ -1,3 +1,18 @@
+<?php
+ob_start();
+
+session_start();
+if (!isset($_SESSION['nombre'])) {
+    header('location:index.php');
+}
+
+$nombre = $_SESSION['nombre'];
+$rol = $_SESSION['rol'];
+
+echo $rol;
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
