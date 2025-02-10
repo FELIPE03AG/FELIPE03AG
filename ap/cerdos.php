@@ -68,12 +68,15 @@ $resultado = mysqli_query($conexion, $query);
 </head>
 <body>
 <style>
-   body {
+        body {
             background-image: url('img/f.jpeg');
-            background-size: cover; /* para cubrir todo el fondo */
-            background-position: center; /* para centrar la imagen */
+            background-size: cover;
+            /* para cubrir todo el fondo */
+            background-position: center;
+            /* para centrar la imagen */
             /* Añade más estilos si es necesario */
         }
+
         /* Navbar */
         .navbar {
             position: fixed;
@@ -81,9 +84,11 @@ $resultado = mysqli_query($conexion, $query);
             left: 0;
             width: 100%;
             height: 60px;
-            background-color: #f0f0f0; /* Gris oscuro */
+            background-color: #f0f0f0;
+            /* Gris oscuro */
             color: black;
             display: flex;
+            justify-content: 'between';
             align-items: center;
             padding: 0 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -98,11 +103,13 @@ $resultado = mysqli_query($conexion, $query);
         /* Sidebar */
         .sidebar {
             position: fixed;
-            top: 60px; /* Debajo del navbar */
+            top: 60px;
+            /* Debajo del navbar */
             left: 0;
             width: 250px;
             height: calc(100vh - 60px);
-            background-color: #f0f0f0; /* Gris medio */
+            background-color: #f0f0f0;
+            /* Gris medio */
             color: black;
             display: flex;
             flex-direction: column;
@@ -118,11 +125,14 @@ $resultado = mysqli_query($conexion, $query);
         }
 
         .sidebar a:hover {
-            background-color: #6e6e6e; /* Gris oscuro para el hover */
+            background-color: #6e6e6e;
+            /* Gris oscuro para el hover */
         }
-         /* Resaltar el apartado activo */
+
+        /* Resaltar el apartado activo */
         .sidebar a.active {
-            background-color: #4caf50; /* Verde resalte */
+            background-color: #4caf50;
+            /* Verde resalte */
             color: black;
             font-weight: bold;
         }
@@ -130,14 +140,17 @@ $resultado = mysqli_query($conexion, $query);
 
         /* Content */
         .content {
-            margin-top: 60px; /* Espacio debajo del navbar */
-            margin-left: 250px; /* Espacio para el sidebar */
+            margin-top: 60px;
+            /* Espacio debajo del navbar */
+            margin-left: 250px;
+            /* Espacio para el sidebar */
             padding: 20px;
             background-color: white;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             color: #333;
-            min-height: calc(100vh - 60px); /* Asegura que el contenido llene el espacio */
+            min-height: calc(100vh - 60px);
+            /* Asegura que el contenido llene el espacio */
         }
 
         /* Estilo de texto */
@@ -152,24 +165,32 @@ $resultado = mysqli_query($conexion, $query);
         }
 
         /* Estilos para la tabla */
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px; /* Espacio entre tablas */
-    }
-    th, td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-        min-width: 100px; /* Ancho mínimo para celdas */
-    }
-    th {
-        background-color: #f2f2f2; /* Color de fondo para encabezados */
-    }
-    tr:nth-child(even) {
-        background-color: #f2f2f2; /* Color de fondo para filas pares */
-    }
-  </style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            /* Espacio entre tablas */
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            min-width: 100px;
+            /* Ancho mínimo para celdas */
+        }
+
+        th {
+            background-color: #f2f2f2;
+            /* Color de fondo para encabezados */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+            /* Color de fondo para filas pares */
+        }
+    </style>
  <script>
         document.addEventListener("DOMContentLoaded", function () {
             const sidebarLinks = document.querySelectorAll(".sidebar a");
@@ -198,8 +219,7 @@ $resultado = mysqli_query($conexion, $query);
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarCerdosModal">
           Agregar Banda
         </button>
-
-       
+        
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="elim_cerdos.php">Eliminar Cerdos</a>
         </li>
@@ -209,18 +229,16 @@ $resultado = mysqli_query($conexion, $query);
         <form class="d-flex">
         <input class="form-control me-2" type="search" placeholder="Buscar registros..." aria-label="Buscar" id="buscar">
       </form>
+      <div>
+         <div class="user-name">
+    <?= htmlspecialchars($nombre) ?>
+</div>
+         </div>
     </div>
 
 
 <!-- Sidebar -->
-<div class="sidebar">
-        <h2>Inicio</h2>
-        <a href="principal.php">Pagina Principal</a>
-        <a href="cerdos.php">Cerdos</a>
-        <a href="alimentos.php">Alimentos</a>
-        <a href="reportes_actividades.php">Reportes</a>
-        <a href="index.php">Cerrar Sesion</a>
-    </div>
+<?php include 'sidebar.php'; ?>
 
 <!-- Script para búsqueda en vivo -->
 <script>

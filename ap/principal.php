@@ -179,42 +179,14 @@ echo $rol;
         <div class="navbar">
             <h1>GestAP</h1>
             <div>
-                <div class="dropstart">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <?= $nombre ?>
-
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
-                </div>
+            <div class="user-name">
+    <?= htmlspecialchars($nombre) ?>
+</div>
             </div>
         </div>
-
+        
         <!-- Sidebar -->
-        <div class="sidebar">
-            <h2>Inicio</h2>
-            <a href="principal.php">Pagina Principal</a>
-            <a href="cerdos.php">Cerdos</a>
-            <a href="alimentos.php">Alimentos</a>
-            <a href="reportes_actividades.php">Reportes</a>
-            <?php
-            if ($rol == 'admin') {
-            ?>
-
-                <a href="crear_usuarios.php">Crear Usuarios</a>
-                <a href="acciones_usuarios.php">Acciones de Usuarios</a>
-            <?php
-            }
-            ?>
-
-
-
-
-            <a href="logout.php">Cerrar Sesion</a>
-        </div>
+        <?php include 'sidebar.php'; ?>
 
         <!-- Content -->
         <div class="content">
