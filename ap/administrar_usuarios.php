@@ -11,6 +11,12 @@ $rol = $_SESSION['rol'];
 
 echo $rol;
 
+// Incluir configuración para la conexión a la base de datos
+include("config.php");
+$sql = "SELECT id, u, nombre, co, rol FROM usuarios";
+$result = $conexion->query($sql);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -185,9 +191,104 @@ echo $rol;
 
         <!-- Content -->
         <div class="content">
-            <h1>GestAP</h1>
-            <p>Aqui se van a administrar los usuarios</p>
+            
+            <h2>Usuarios Registrados</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Usuario</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Rol</th>
+        </tr>
+        
+        <?php
+        // 3️⃣ Verificar si hay datos en la tabla
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>
+                        <td>{$row['id']}</td>
+                        <td>{$row['u']}</td>
+                        <td>{$row['nombre']}</td>
+                        <td>{$row['co']}</td>
+                        <td>{$row['rol']}</td>
+                      </tr>";
+            }
+        } else {
+            echo "<tr><td colspan='5'>No hay usuarios registrados</td></tr>";
+        }
+        $conexion->close();
+        ?>
+    </table>
+
         </div>
+
+
+    <h2 class="text-center">Gestión de Usuarios</h2>
+
+<!-- Botón para abrir modal de agregar usuario -->
+<button class="btn btn-success my-3" data-bs-toggle="modal" data-bs-target="#modalAgregar">Agregar Usuario</button>
+
+<table class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Usuario</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $sql = "SELECT id, u, nombre, co, rol FROM usuarios";
+        $result = $conn->query($sql);
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>
+                    <td>{$row['id']}</td>
+                    <td>{$row['u']}</td>
+                    <td>{$row['nombre']}</td>
+                    <td>{$row['co']}</td>
+                    <td>{$row['rol']}</td>
+                    <td>
+                        <button class='btn btn-warning' data-bs-toggle='modal' data-bs-target='#modalEditar'
+                            data-id='{$row['id']}' data-usuario='{$row['u']}'
+                            data-nombre='{$row['nombre']}' data-correo='{$row['co']}'
+                            data-rol='{$row['rol']}'>Editar</button>
+                        
+                        <button class='btn btn-danger' data-bs-toggle='modal' data-bs-target='#modalEliminar'
+                            data-id='{$row['id']}'>Eliminar</button>
+                    </td>
+                  </tr>";
+        }
+        ?>
+    </tbody>
+</table>
+
+<?php $conn->close(); ?>
+
+<!-- Modales -->
+<?php include 'modales.php'; ?>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Llenar modal de edición con los datos del usuario
+    document.getElementById('modalEditar').addEventListener('show.bs.modal', function (event) {
+        let button = event.relatedTarget;
+        document.getElementById('editId').value = button.getAttribute('data-id');
+        document.getElementById('editUsuario').value = button.getAttribute('data-usuario');
+        document.getElementById('editNombre').value = button.getAttribute('data-nombre');
+        document.getElementById('editCorreo').value = button.getAttribute('data-correo');
+        document.getElementById('editRol').value = button.getAttribute('data-rol');
+    });
+
+    // Llenar modal de eliminación con el ID del usuario
+    document.getElementById('modalEliminar').addEventListener('show.bs.modal', function (event) {
+        let button = event.relatedTarget;
+        document.getElementById('deleteId').value = button.getAttribute('data-id');
+    });
+</script>
 
 
 

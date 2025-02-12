@@ -163,15 +163,8 @@ echo $rol;
         </li>
     </div>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h2>Inicio</h2>
-        <a href="principal.php">Pagina Principal</a>
-        <a href="cerdos.php">Cerdos</a>
-        <a href="alimentos.php">Alimentos</a>
-        <a href="reportes_actividades.php">Reportes</a>
-        <a href="index.php">Cerrar Sesion</a>
-    </div>
+     <!-- Sidebar -->
+     <?php include 'sidebar.php'; ?>
 
     <!-- Content -->
     <div class="content">
