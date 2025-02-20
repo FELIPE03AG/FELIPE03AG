@@ -13,25 +13,32 @@ echo $rol;
 
 // Incluir configuración para la conexión a la base de datos
 include("config.php");
-$sql = "SELECT id, u, nombre, co, rol FROM usuarios";
-$result = $conexion->query($sql);
+
 
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <Link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <title>Perfil de Usuario</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap JS (requiere Popper.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <title>Perfil de Usuarios</title>
 </head>
+
 <body>
 
-<style>
+    <style>
         body {
             background-image: url('img/f.jpeg');
             background-size: cover;
@@ -56,7 +63,7 @@ $result = $conexion->query($sql);
             align-items: center;
             padding: 0 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
+            z-index: 1;
         }
 
         .navbar h1 {
@@ -155,7 +162,7 @@ $result = $conexion->query($sql);
             /* Color de fondo para filas pares */
         }
     </style>
-</head>
+    </head>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -174,130 +181,126 @@ $result = $conexion->query($sql);
         });
     </script>
 
-<body>
+    <body>
 
-    <!-- Navbar -->
-    <div class="navbar">
+        <!-- Navbar -->
+        <div class="navbar">
             <h1>GestAP</h1>
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                Agregar usuario
+            </button>
+
+
+
             <div>
-         <div class="user-name">
-    <?= htmlspecialchars($nombre) ?>
-</div>
-         </div>
+                <div class="user-name">
+                    <?= htmlspecialchars($nombre) ?>
+                </div>
+            </div>
         </div>
+
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Agregar Usuario</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="crear_usuarios.php" method="POST">
+                    <div class="mb-3">
+                        <label for="usuario" class="form-label">Usuario</label>
+                        <input type="text" class="form-control" id="usuario" name="usuario" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="correo" class="form-label">Correo</label>
+                        <input type="email" class="form-control" id="correo" name="correo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="rol" class="form-label">Rol</label>
+                        <select class="form-select" id="rol" name="rol" required>
+                            <option value="admin">Administrador</option>
+                            <option value="usuario">Usuario</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar Usuario</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
         <!-- Sidebar -->
         <?php include 'sidebar.php'; ?>
 
         <!-- Content -->
+
+
+
         <div class="content">
-            
+
             <h2>Usuarios Registrados</h2>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Usuario</th>
-            <th>Nombre</th>
-            <th>Correo</th>
-            <th>Rol</th>
-        </tr>
-        
-        <?php
-        // 3️⃣ Verificar si hay datos en la tabla
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>
-                        <td>{$row['id']}</td>
-                        <td>{$row['u']}</td>
-                        <td>{$row['nombre']}</td>
-                        <td>{$row['co']}</td>
-                        <td>{$row['rol']}</td>
-                      </tr>";
-            }
-        } else {
-            echo "<tr><td colspan='5'>No hay usuarios registrados</td></tr>";
-        }
-        $conexion->close();
-        ?>
-    </table>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $sql = "SELECT id, u, nombre, co, rol FROM usuarios";
+                    $result = $conexion->query($sql);
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>
+                            <td>{$row['id']}</td>
+                            <td>{$row['u']}</td>
+                            <td>{$row['nombre']}</td>
+                            <td>{$row['co']}</td>
+                            <td>{$row['rol']}</td>
+                            <td>
+                                <button class='btn btn-primary' >Editar</button>
+                                <button class='btn btn-danger' >Eliminar</button>
+                            </td>
+                        </tr>";
+                    }
+                    ?>
+                </tbody>
+
+
+            </table>
 
         </div>
 
 
-    <h2 class="text-center">Gestión de Usuarios</h2>
 
-<!-- Botón para abrir modal de agregar usuario -->
-<button class="btn btn-success my-3" data-bs-toggle="modal" data-bs-target="#modalAgregar">Agregar Usuario</button>
-
-<table class="table table-bordered">
-    <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Usuario</th>
-            <th>Nombre</th>
-            <th>Correo</th>
-            <th>Rol</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        $sql = "SELECT id, u, nombre, co, rol FROM usuarios";
-        $result = $conn->query($sql);
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr>
-                    <td>{$row['id']}</td>
-                    <td>{$row['u']}</td>
-                    <td>{$row['nombre']}</td>
-                    <td>{$row['co']}</td>
-                    <td>{$row['rol']}</td>
-                    <td>
-                        <button class='btn btn-warning' data-bs-toggle='modal' data-bs-target='#modalEditar'
-                            data-id='{$row['id']}' data-usuario='{$row['u']}'
-                            data-nombre='{$row['nombre']}' data-correo='{$row['co']}'
-                            data-rol='{$row['rol']}'>Editar</button>
-                        
-                        <button class='btn btn-danger' data-bs-toggle='modal' data-bs-target='#modalEliminar'
-                            data-id='{$row['id']}'>Eliminar</button>
-                    </td>
-                  </tr>";
-        }
-        ?>
-    </tbody>
-</table>
-
-<?php $conn->close(); ?>
-
-<!-- Modales -->
-<?php include 'modales.php'; ?>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // Llenar modal de edición con los datos del usuario
-    document.getElementById('modalEditar').addEventListener('show.bs.modal', function (event) {
-        let button = event.relatedTarget;
-        document.getElementById('editId').value = button.getAttribute('data-id');
-        document.getElementById('editUsuario').value = button.getAttribute('data-usuario');
-        document.getElementById('editNombre').value = button.getAttribute('data-nombre');
-        document.getElementById('editCorreo').value = button.getAttribute('data-correo');
-        document.getElementById('editRol').value = button.getAttribute('data-rol');
-    });
-
-    // Llenar modal de eliminación con el ID del usuario
-    document.getElementById('modalEliminar').addEventListener('show.bs.modal', function (event) {
-        let button = event.relatedTarget;
-        document.getElementById('deleteId').value = button.getAttribute('data-id');
-    });
-</script>
+        <?php $conn->close(); ?>
 
 
 
+        <!-- Modal de prueba -->
+        <!-- Modal -->
+        
 
+    </body>
 
-
-
-
-    
-    
-</body>
 </html>
