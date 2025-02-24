@@ -1,24 +1,22 @@
 <?php
-// Iniciar sesión para verificar si el usuario está autenticado
 session_start();
 if (!isset($_SESSION['nombre'])) {
     header('location:index.php');
 }
+include("config.php"); // Conexión a la base de datos
 
+// Verificar si se ha enviado el ID del usuario a eliminar
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
+    $id = intval($_POST['id']); // Convertir a entero para evitar inyecciones SQL
 
-// Incluir la configuración de la base de datos
-include("config.php");
+    // Verificar que el ID no sea vacío o 0
+    if ($id > 0) {
+        // Preparar la consulta SQL para eliminar el usuario
+        $sql = "DELETE FROM usuarios WHERE id = ?";
+        $stmt = $conexion->prepare($sql);
+        $stmt->bind_param("i", $id);
 
-// Verificar si se ha recibido el ID por POST
-if (isset($_POST['id'])) {
-    $id = intval($_POST['id']); // Asegurar que el ID sea un número entero
-
-    // Preparar la consulta para eliminar el usuario
-    $sql = "DELETE FROM usuarios WHERE id = ?";
-    $stmt = $conexion->prepare($sql);
-
-    if ($stmt) {
-        $stmt->bind_param("i", $id); // "i" indica que el parámetro es un entero
+        // Ejecutar la consulta y verificar si fue exitosa
         if ($stmt->execute()) {
             $_SESSION['mensaje'] = "Usuario eliminado correctamente.";
             $_SESSION['tipo_mensaje'] = "success";
@@ -26,19 +24,20 @@ if (isset($_POST['id'])) {
             $_SESSION['mensaje'] = "Error al eliminar el usuario.";
             $_SESSION['tipo_mensaje'] = "danger";
         }
-        $stmt->close();
-    } else {
-        $_SESSION['mensaje'] = "Error en la preparación de la consulta.";
-        $_SESSION['tipo_mensaje'] = "danger";
-    }
 
-    // Redirigir de nuevo a la página de usuarios
-    header("Location: administrar_usuarios.php");
-    exit();
+        // Cerrar la conexión
+        $stmt->close();
+        $conexion->close();
+    } else {
+        $_SESSION['mensaje'] = "ID de usuario inválido.";
+        $_SESSION['tipo_mensaje'] = "warning";
+    }
 } else {
-    $_SESSION['mensaje'] = "ID no recibido.";
+    $_SESSION['mensaje'] = "Acceso no autorizado.";
     $_SESSION['tipo_mensaje'] = "danger";
-    header("Location: administrar_usuarios.php");
-    exit();
 }
+
+// Redirigir a la página de usuarios después de la operación
+header("Location: administrar_usuarios.php");
+exit();
 ?>

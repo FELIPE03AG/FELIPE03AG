@@ -188,9 +188,15 @@ include("config.php");
             <h1>GestAP</h1>
 
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                Agregar usuario
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserModal">
+            Agregar Usuario
             </button>
+
+    
+            <button type="button" class="btn btn-danger btn-delete" data-bs-toggle="modal" data-bs-target="#deleteUserModal">
+            Eliminar Usuario
+            </button>
+
 
 
 
@@ -201,36 +207,37 @@ include("config.php");
             </div>
         </div>
 
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <!-- Modal para agregar usuario -->
+<div class="modal fade" id="addUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Agregar Usuario</h1>
+                <h5 class="modal-title" id="addUserModalLabel">Agregar Usuario</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="crear_usuarios.php" method="POST">
                     <div class="mb-3">
-                        <label for="usuario" class="form-label">Usuario</label>
+                        <label for="usuario" class="form-label">Usuario:</label>
                         <input type="text" class="form-control" id="usuario" name="usuario" required>
                     </div>
                     <div class="mb-3">
-                        <label for="nombre" class="form-label">Nombre</label>
+                        <label for="nombre" class="form-label">Nombre Completo:</label>
                         <input type="text" class="form-control" id="nombre" name="nombre" required>
                     </div>
                     <div class="mb-3">
-                        <label for="correo" class="form-label">Correo</label>
+                        <label for="correo" class="form-label">Correo Electrónico:</label>
                         <input type="email" class="form-control" id="correo" name="correo" required>
                     </div>
                     <div class="mb-3">
-                        <label for="rol" class="form-label">Rol</label>
-                        <select class="form-select" id="rol" name="rol" required>
-                            <option value="admin">Administrador</option>
-                            <option value="usuario">Usuario</option>
+                        <label for="rol" class="form-label">Rol:</label>
+                        <select class="form-control" id="rol" name="rol" required>
+                            <option value="Admin">Admin</option>
+                            <option value="Usuario">Usuario</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">Contraseña</label>
+                        <label for="password" class="form-label">Contraseña:</label>
                         <input type="password" class="form-control" id="password" name="password" required>
                     </div>
                     <div class="modal-footer">
@@ -242,6 +249,72 @@ include("config.php");
         </div>
     </div>
 </div>
+      
+
+
+<!-- Script para cargar datos del usuario -->
+<script>
+function cargarUsuario(id) {
+    // Hacer una solicitud AJAX para obtener los datos del usuario
+    fetch(`obtener_usuario.php?id=${id}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('id_usuario').value = data.id;
+            document.getElementById('usuario').value = data.u;
+            document.getElementById('nombre').value = data.nombre;
+            document.getElementById('correo').value = data.co;
+            document.getElementById('rol').value = data.rol;
+        })
+        .catch(error => console.error('Error al cargar usuario:', error));
+}
+
+// Manejar el envío del formulario
+document.getElementById('formEditarUsuario').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(this);
+
+    fetch('editar_usuario.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(result => {
+        alert(result);
+        location.reload(); // Recargar la página tras la edición
+    })
+    .catch(error => console.error('Error en la actualización:', error));
+});
+</script>
+
+
+<!-- Modal de Eliminación -->
+<div class="modal fade" id="deleteUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteUserModalLabel">Eliminar Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Ingrese el <strong>ID del usuario</strong> que desea eliminar:</p>
+                <form action="eliminar_usuario.php" method="POST">
+                    <div class="mb-3">
+                        <label for="deleteUserId" class="form-label">ID de Usuario</label>
+                        <input type="number" class="form-control" id="deleteUserId" name="id" required>
+                    </div>
+                    <p class="text-danger"><strong>⚠ Esta acción no se puede deshacer.</strong></p>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Eliminar Usuario</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 
 
@@ -263,7 +336,7 @@ include("config.php");
                         <th>Nombre</th>
                         <th>Correo</th>
                         <th>Rol</th>
-                        <th>Acciones</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -277,10 +350,7 @@ include("config.php");
                             <td>{$row['nombre']}</td>
                             <td>{$row['co']}</td>
                             <td>{$row['rol']}</td>
-                            <td>
-                                <button class='btn btn-primary' >Editar</button>
-                                <button class='btn btn-danger' >Eliminar</button>
-                            </td>
+                            
                         </tr>";
                     }
                     ?>

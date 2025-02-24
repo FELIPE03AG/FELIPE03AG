@@ -1,41 +1,46 @@
 <?php
-session_start();
-if (!isset($_SESSION['nombre'])) {
-    header('location:index.php');
-}
-include("config.php");
+include("config.php"); // Conexión a la base de datos
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Obtener los valores del formulario
     $usuario = trim($_POST['usuario']);
     $nombre = trim($_POST['nombre']);
     $correo = trim($_POST['correo']);
     $rol = trim($_POST['rol']);
-    $password = sha1($_POST['password']); // Encripta la contraseña con SHA-1
+    $password = trim($_POST['password']);
 
-    if (empty($usuario) || empty($nombre) || empty($correo) || empty($rol) || empty($_POST['password'])) {
-        $_SESSION['mensaje'] = "Todos los campos son obligatorios.";
-        $_SESSION['tipo_mensaje'] = "danger";
-    } else {
-        $sql = "INSERT INTO usuarios (u, nombre, co, rol, password) VALUES (?, ?, ?, ?, ?)";
-        $stmt = $conexion->prepare($sql);
-
-        if ($stmt) {
-            $stmt->bind_param("sssss", $usuario, $nombre, $correo, $rol, $password);
-            if ($stmt->execute()) {
-                $_SESSION['mensaje'] = "Usuario creado correctamente.";
-                $_SESSION['tipo_mensaje'] = "success";
-            } else {
-                $_SESSION['mensaje'] = "Error al crear el usuario.";
-                $_SESSION['tipo_mensaje'] = "danger";
-            }
-            $stmt->close();
-        } else {
-            $_SESSION['mensaje'] = "Error en la consulta.";
-            $_SESSION['tipo_mensaje'] = "danger";
-        }
+    // Validar que no haya campos vacíos
+    if (empty($usuario) || empty($nombre) || empty($correo) || empty($rol) || empty($password)) {
+        echo "Todos los campos son obligatorios.";
+        exit();
     }
-}
 
-header("Location: administrar_usuarios.php");
-exit();
+    // Encriptar la contraseña con SHA1
+    $password_encriptada = sha1($password);
+
+    // Preparar la consulta SQL para insertar el nuevo usuario
+    $sql = "INSERT INTO usuarios (u, nombre, co, rol, c) VALUES (?, ?, ?, ?, ?)";
+
+    // Usar prepared statements para evitar SQL Injection
+    if ($stmt = $conexion->prepare($sql)) {
+        $stmt->bind_param("sssss", $usuario, $nombre, $correo, $rol, $password_encriptada);
+
+        if ($stmt->execute()) {
+            echo "<script>alert('Usuario agregado correctamente'); window.location.href='administrar_usuarios.php';</script>";
+        } else {
+            echo "Error al agregar usuario: " . $stmt->error;
+        }
+
+        // Cerrar la consulta
+        $stmt->close();
+    } else {
+        echo "Error en la consulta SQL.";
+    }
+
+    // Cerrar la conexión
+    $conexion->close();
+} else {
+    echo "Acceso no autorizado.";
+}
 ?>
+
