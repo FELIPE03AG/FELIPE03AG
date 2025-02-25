@@ -233,7 +233,7 @@ include("config.php");
                         <label for="rol" class="form-label">Rol:</label>
                         <select class="form-control" id="rol" name="rol" required>
                             <option value="Admin">Admin</option>
-                            <option value="Usuario">Usuario</option>
+                            <option value="Usuario">User</option>
                         </select>
                     </div>
                     <div class="mb-3">

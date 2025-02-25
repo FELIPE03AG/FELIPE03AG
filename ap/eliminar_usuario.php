@@ -6,13 +6,13 @@ if (!isset($_SESSION['nombre'])) {
 include("config.php"); // Conexión a la base de datos
 
 // Verificar si se ha enviado el ID del usuario a eliminar
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
-    $id = intval($_POST['id']); // Convertir a entero para evitar inyecciones SQL
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['u'])) {
+    $id = intval($_POST['u']); // Convertir a entero para evitar inyecciones SQL
 
     // Verificar que el ID no sea vacío o 0
     if ($id > 0) {
         // Preparar la consulta SQL para eliminar el usuario
-        $sql = "DELETE FROM usuarios WHERE id = ?";
+        $sql = "DELETE FROM usuarios WHERE u = ?";
         $stmt = $conexion->prepare($sql);
         $stmt->bind_param("i", $id);
 
@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
         $stmt->close();
         $conexion->close();
     } else {
-        $_SESSION['mensaje'] = "ID de usuario inválido.";
+        $_SESSION['mensaje'] = "Nombre de Usuario Valido.";
         $_SESSION['tipo_mensaje'] = "warning";
     }
 } else {

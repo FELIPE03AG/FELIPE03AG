@@ -15,8 +15,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
+
+    // Verificar que el rol sea válido ('admin' o 'user')
+    if ($rol !== 'admin' && $rol !== 'user') {
+        $rol = 'user'; // Seguridad adicional en caso de valores inválidos
+    }
+
     // Encriptar la contraseña con SHA1
     $password_encriptada = sha1($password);
+
+    //Validacion de que no se repita usuario ni correo
 
     // Preparar la consulta SQL para insertar el nuevo usuario
     $sql = "INSERT INTO usuarios (u, nombre, co, rol, c) VALUES (?, ?, ?, ?, ?)";
