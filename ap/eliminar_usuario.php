@@ -6,13 +6,13 @@ if (!isset($_SESSION['nombre'])) {
 include("config.php"); // Conexión a la base de datos
 
 // Verificar si se ha enviado el ID del usuario a eliminar
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['u'])) {
-    $id = intval($_POST['u']); // Convertir a entero para evitar inyecciones SQL
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
+    $id = intval($_POST['id']); // Convertir a entero para evitar inyecciones SQL
 
     // Verificar que el ID no sea vacío o 0
     if ($id > 0) {
         // Preparar la consulta SQL para eliminar el usuario
-        $sql = "DELETE FROM usuarios WHERE u = ?";
+        $sql = "DELETE FROM usuarios WHERE id = ?";
         $stmt = $conexion->prepare($sql);
         $stmt->bind_param("i", $id);
 

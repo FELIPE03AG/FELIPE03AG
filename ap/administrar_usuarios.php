@@ -232,8 +232,8 @@ include("config.php");
                     <div class="mb-3">
                         <label for="rol" class="form-label">Rol:</label>
                         <select class="form-control" id="rol" name="rol" required>
-                            <option value="Admin">Admin</option>
-                            <option value="Usuario">User</option>
+                            <option value="admin">admin</option>
+                            <option value="user">user</option>
                         </select>
                     </div>
                     <div class="mb-3">
