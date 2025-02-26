@@ -289,7 +289,7 @@ document.getElementById('formEditarUsuario').addEventListener('submit', function
 
 
 <!-- Modal de Eliminación -->
-<div class="modal fade" id="deleteUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -297,16 +297,45 @@ document.getElementById('formEditarUsuario').addEventListener('submit', function
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Ingrese el <strong>ID del usuario</strong> que desea eliminar:</p>
+                <p>Seleccione el <strong>nombre de usuario</strong> que desea eliminar:</p>
+                <div class="mb-3">
+                    <label for="deleteUserName" class="form-label">Usuario:</label>
+                    <select class="form-control" id="deleteUserName" required>
+                        <option value="" disabled selected>Seleccione un usuario</option>
+                        <?php
+                        $sql = "SELECT u FROM usuarios";
+                        $result = $conexion->query($sql);
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<option value='{$row['u']}'>{$row['u']}</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" onclick="abrirConfirmacion()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal de Confirmación de Eliminación -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar al usuario <strong id="usuarioAEliminar"></strong>?</p>
                 <form action="eliminar_usuario.php" method="POST">
-                    <div class="mb-3">
-                        <label for="deleteUserId" class="form-label">ID de Usuario</label>
-                        <input type="number" class="form-control" id="deleteUserId" name="id" required>
-                    </div>
-                    <p class="text-danger"><strong>⚠ Esta acción no se puede deshacer.</strong></p>
+                    <input type="hidden" id="usuarioInput" name="u">
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-danger">Eliminar Usuario</button>
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
                     </div>
                 </form>
             </div>
@@ -314,6 +343,24 @@ document.getElementById('formEditarUsuario').addEventListener('submit', function
     </div>
 </div>
 
+<script>
+function abrirConfirmacion() {
+    let usuarioSeleccionado = document.getElementById("deleteUserName").value;
+
+    if (!usuarioSeleccionado) {
+        alert("Por favor, seleccione un usuario.");
+        return;
+    }
+
+    console.log("Usuario seleccionado para eliminar:", usuarioSeleccionado); // 🔍 Depuración
+
+    document.getElementById("usuarioAEliminar").textContent = usuarioSeleccionado;
+    document.getElementById("usuarioInput").value = usuarioSeleccionado;
+
+    let confirmModal = new bootstrap.Modal(document.getElementById("confirmDeleteModal"));
+    confirmModal.show();
+}
+</script>
 
 
 
