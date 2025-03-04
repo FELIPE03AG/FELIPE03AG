@@ -352,7 +352,7 @@ function abrirConfirmacion() {
         return;
     }
 
-    console.log("Usuario seleccionado para eliminar:", usuarioSeleccionado); // 🔍 Depuración
+    console.log("Usuario seleccionado para eliminar:", usuarioSeleccionado); // Depuración
 
     document.getElementById("usuarioAEliminar").textContent = usuarioSeleccionado;
     document.getElementById("usuarioInput").value = usuarioSeleccionado;
