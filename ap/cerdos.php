@@ -213,7 +213,8 @@ $resultado = mysqli_query($conexion, $query);
                 }
             });
         });
-    </script><!-- tab bar-->
+    </script>
+    <!-- tab bar-->
 <div class="navbar">
         <h1>GestAP</h1>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarCerdosModal">

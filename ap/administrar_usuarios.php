@@ -249,8 +249,6 @@ include("config.php");
         </div>
     </div>
 </div>
-      
-
 
 <!-- Script para cargar datos del usuario -->
 <script>
@@ -344,26 +342,28 @@ document.getElementById('formEditarUsuario').addEventListener('submit', function
 </div>
 
 <script>
-function abrirConfirmacion() {
-    let usuarioSeleccionado = document.getElementById("deleteUserName").value;
+        document.addEventListener("DOMContentLoaded", function () {
+            const sidebarLinks = document.querySelectorAll(".sidebar a");
+            const currentPath = window.location.pathname.split("/").pop(); // Obtiene el archivo actual
 
-    if (!usuarioSeleccionado) {
-        alert("Por favor, seleccione un usuario.");
-        return;
-    }
+            // Configura las páginas relacionadas para cada enlace
+            const relatedPages = {
+                "administrar_usuarios.php": ["administrar_usuarios.php", "editar_usuario.php"] // Páginas relacionadas con "cerdos"
+                
+            };
 
-    console.log("Usuario seleccionado para eliminar:", usuarioSeleccionado); // Depuración
+            sidebarLinks.forEach(link => {
+                const href = link.getAttribute("href");
 
-    document.getElementById("usuarioAEliminar").textContent = usuarioSeleccionado;
-    document.getElementById("usuarioInput").value = usuarioSeleccionado;
-
-    let confirmModal = new bootstrap.Modal(document.getElementById("confirmDeleteModal"));
-    confirmModal.show();
-}
-</script>
-
-
-
+                // Comprueba si la página actual está en las relacionadas
+                if (relatedPages[href] && relatedPages[href].includes(currentPath)) {
+                    link.classList.add("active");
+                } else {
+                    link.classList.remove("active");
+                }
+            });
+        });
+    </script>
 
         <!-- Sidebar -->
         <?php include 'sidebar.php'; ?>
@@ -383,7 +383,7 @@ function abrirConfirmacion() {
                         <th>Nombre</th>
                         <th>Correo</th>
                         <th>Rol</th>
-                        
+                        <th>Modificar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -397,27 +397,21 @@ function abrirConfirmacion() {
                             <td>{$row['nombre']}</td>
                             <td>{$row['co']}</td>
                             <td>{$row['rol']}</td>
-                            
+                            <td>
+                                <a href='editar_usuario.php?id={$row['id']}' class='btn btn-primary'>
+                                    <i class='fas fa-edit'></i> Editar
+                                </a>
+                            </td>
                         </tr>";
                     }
                     ?>
                 </tbody>
 
-
             </table>
-
         </div>
-
-
-
         <?php $conn->close(); ?>
-
-
-
         <!-- Modal de prueba -->
         <!-- Modal -->
-        
-
     </body>
 
 </html>

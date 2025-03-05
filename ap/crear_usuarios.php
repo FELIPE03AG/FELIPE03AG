@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt_insert->bind_param("sssss", $usuario, $nombre, $correo, $rol, $password_encriptada);
 
         if ($stmt_insert->execute()) {
-            echo "<script>alert('Usuario agregado correctamente'); window.location.href='administrar_usuarios.php';</script>";
+            echo "<script> window.location.href='administrar_usuarios.php';</script>";
         } else {
             echo "Error al agregar usuario: " . $stmt_insert->error;
         }
