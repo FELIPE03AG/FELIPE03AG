@@ -342,27 +342,21 @@ document.getElementById('formEditarUsuario').addEventListener('submit', function
 </div>
 
 <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const sidebarLinks = document.querySelectorAll(".sidebar a");
-            const currentPath = window.location.pathname.split("/").pop(); // Obtiene el archivo actual
+    function abrirConfirmacion() {
+        var usuarioSeleccionado = document.getElementById("deleteUserName").value;
+        if (!usuarioSeleccionado) {
+            alert("Por favor, selecciona un usuario para eliminar.");
+            return;
+        }
+        
+        document.getElementById("usuarioAEliminar").textContent = usuarioSeleccionado;
+        document.getElementById("usuarioInput").value = usuarioSeleccionado;
 
-            // Configura las páginas relacionadas para cada enlace
-            const relatedPages = {
-                "administrar_usuarios.php": ["administrar_usuarios.php", "editar_usuario.php"] // Páginas relacionadas con "cerdos"
-                
-            };
+        // Mostrar el modal de confirmación
+        var confirmModal = new bootstrap.Modal(document.getElementById("confirmDeleteModal"));
+        confirmModal.show();
+}
 
-            sidebarLinks.forEach(link => {
-                const href = link.getAttribute("href");
-
-                // Comprueba si la página actual está en las relacionadas
-                if (relatedPages[href] && relatedPages[href].includes(currentPath)) {
-                    link.classList.add("active");
-                } else {
-                    link.classList.remove("active");
-                }
-            });
-        });
     </script>
 
         <!-- Sidebar -->

@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Ejecutar la consulta
         if ($stmt->execute()) {
             // Si la eliminación fue exitosa, redirigir a la página de administrar usuarios
-            echo "<script> window.location.href='administrar_usuarios.php';</script>";
+            echo "<script>window.location.href='administrar_usuarios.php';</script>";
         } else {
             echo "Error al eliminar el usuario: " . $stmt->error;
         }
