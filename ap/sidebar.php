@@ -17,6 +17,6 @@
 
 
 
-     <a href="notificaciones.php">Notificaciones</a>
+     <a href="admin_cerdos.php">Modificacion Cerdos Proceso</a>
      <a href="logout.php">Cerrar Sesion</a>
  </div>
