@@ -253,10 +253,10 @@ $totalCasetas = 6;
         }
 
         .boton-amarillo {
-            background-color:rgb(215, 223, 112);
+            background-color:rgb(255, 187, 0);
         }
         .boton-amarillo:hover {
-            background-color:rgb(215, 223, 112);
+            background-color:rgb(223, 163, 0);
         }
 
         .boton-rojo {

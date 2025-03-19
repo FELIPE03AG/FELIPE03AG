@@ -277,32 +277,108 @@ $resultado = mysqli_query($conexion, $query);
     </script>
 
 <div class= "content">
-
 <h2>Agregar Registro - Caseta <?php echo $caseta; ?></h2>
-    <form action="save_cerdos.php" method="POST">
-        <input type="hidden" name="caseta" value="<?php echo $caseta; ?>">
-        <label for="num_cerdos">Número de Cerdos:</label>
-        <input type="number" name="num_cerdos" required>
+<form action="save_cerdos.php" method="POST">
+    <input type="hidden" name="caseta" value="<?php echo $caseta; ?>">
 
-        <label for="peso_prom">Peso Promedio (kg):</label>
-        <input type="number" name="peso_prom" step="0.01" required>
+    <label for="num_cerdos">Cantidad Inicial de Cerdos:</label>
+    <input type="number" name="num_cerdos" required>
 
-        <label for="edad_prom">Edad Promedio (días):</label>
-        <input type="number" name="edad_prom" required>
+    <label for="peso_prom">Peso Promedio (kg):</label>
+    <input type="number" name="peso_prom" step="0.01" required>
 
-        <label for="fecha_llegada">Fecha de Llegada:</label>
-        <input type="date" name="fecha_llegada" required>
+    <label for="edad_prom">Edad Promedio (días):</label>
+    <input type="number" name="edad_prom" required>
 
-        <label for="etapa">Etapa de Alimentación:</label>
-        <select name="etapa" required>
-            <option value="Iniciador">Iniciador</option>
-            <option value="Crecimiento">Crecimiento</option>
-            <option value="Desarrollo">Desarrollo</option>
-            <option value="Finalizador">Finalizador</option>
-        </select>
+    <label for="fecha_llegada">Fecha de Llegada:</label>
+    <input type="date" name="fecha_llegada" required>
 
-        <button type="submit">Guardar</button>
-    </form>
+    <label for="etapa">Etapa de Alimentación:</label>
+    <select name="etapa" required>
+        <option value="Iniciador">Iniciador</option>
+        <option value="Crecimiento">Crecimiento</option>
+        <option value="Desarrollo">Desarrollo</option>
+        <option value="Finalizador">Finalizador</option>
+    </select>
+
+    <h3>Distribución de Cerdos por Corral</h3>
+    <div class="corrales-grid">
+        <?php for ($i = 1; $i <= 30; $i++) { ?>
+            <div class="corral-item">
+                <label for="corral_<?php echo $i; ?>">Corral <?php echo $i; ?>:</label>
+                <input type="number" name="corral_<?php echo $i; ?>" min="0" placeholder="Cerdos" required>
+            </div>
+        <?php } ?>
+    </div>
+
+    <button type="submit">Guardar</button>
+</form>
+
+<style>
+    form {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #f7f7f7;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+        font-weight: bold;
+        margin-top: 10px;
+        display: block;
+    }
+
+    input, select, button {
+        width: 100%;
+        padding: 8px;
+        margin: 5px 0 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    .corrales-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .corral-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #e9e9e9;
+        padding: 8px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .corral-item label {
+        margin-bottom: 5px;
+    }
+
+    .corral-item input {
+        width: 90%;
+        text-align: center;
+    }
+</style>
+
+
 
 
 
