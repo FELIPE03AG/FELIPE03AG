@@ -9,40 +9,20 @@ if (!isset($_SESSION['nombre'])) {
 $nombre = $_SESSION['nombre'];
 $rol = $_SESSION['rol'];
 
-echo $rol;
-
 
 
 // Incluir configuración para la conexión a la base de datos
 include("config.php");
 
-// Definir la cantidad de registros a mostrar por página
-$registros_por_pagina = 10;
+$totalCasetas = 6;
 
-// Obtener el número de página actual
-if (isset($_GET['page']) && is_numeric($_GET['page'])) {
-    $pagina = $_GET['page'];
-} else {
-    $pagina = 1;
-}
 
-// Calcular el punto de inicio para la consulta
-$inicio = ($pagina - 1) * $registros_por_pagina;
-
-// Realizar la consulta para obtener los registros de la página actual
-if (isset($_GET['buscar']) && !empty($_GET['buscar'])) {
-  $buscar = $_GET['buscar'];
-  $query = "SELECT * FROM cerdos WHERE num_caseta LIKE '%$buscar%' OR num_cerdos LIKE '%$buscar%' OR fecha_llegada_cerdos LIKE '%$buscar%' OR peso_prom LIKE '%$buscar%' OR edad_prom LIKE '%$buscar%' OR etapa_inicial LIKE '%$buscar%' ORDER BY id_registro DESC LIMIT $inicio, $registros_por_pagina";
-} else {
-  $query = "SELECT * FROM cerdos ORDER BY id_registro DESC LIMIT $inicio, $registros_por_pagina";
-}
-
-$resultado = mysqli_query($conexion, $query);
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,19 +30,20 @@ $resultado = mysqli_query($conexion, $query);
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/snippets.js"></script>
-    <script src="js/modals.js"></script>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <!-- Script de Bootstrap JavaScript -->
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     <title>Gestion de Cerdos</title>
 </head>
+
 <body>
-<style>
+    <style>
         body {
             background-image: url('img/f.jpeg');
             background-size: cover;
@@ -186,177 +167,246 @@ $resultado = mysqli_query($conexion, $query);
             /* Color de fondo para filas pares */
         }
     </style>
-     <style>
+
+<style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 20px;
         }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #contenedor-casetas {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
         .caseta {
-            margin: 20px 0;
-            padding: 15px;
             background-color: #fff;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-        .caseta:hover {
-            transform: scale(1.02);
-        }
-        .detalle-caseta {
-            display: none;
-            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 15px;
-            background-color: #eaeaea;
-            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            margin: 10px;
         }
-        .boton {
+
+        .titulo-caseta {
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #333;
+        }
+
+        .atributos {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button {
             margin: 5px;
-            padding: 8px 12px;
-            background-color: #4CAF50;
-            color: white;
+            padding: 8px 15px;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
+            color: white;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            font-size: 16px;
         }
-        .boton:hover {
-            background-color: #45a049;
+
+        .boton-verde {
+            background-color: #28a745;
         }
-        .boton-vaciar {
-            background-color: #f44336;
+
+
+        .boton-verde:hover {
+            background-color: #218838;
         }
-        .boton-vaciar:hover {
-            background-color: #e53935;
+
+        .boton-amarillo {
+            background-color:rgb(215, 223, 112);
+        }
+        .boton-amarillo:hover {
+            background-color:rgb(215, 223, 112);
+        }
+
+        .boton-rojo {
+            background-color: #dc3545;
+        }
+
+        .boton-rojo:hover {
+            background-color: #c82333;
         }
     </style>
-    
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const sidebarLinks = document.querySelectorAll(".sidebar a");
-            const currentPath = window.location.pathname.split("/").pop(); // Obtiene el archivo actual (home.php, services.php, etc.)
-
-            sidebarLinks.forEach(link => {
-                // Elimina la clase activa de todos los enlaces
-                link.classList.remove("active");
-
-                // Agrega la clase activa al enlace correspondiente
-                if (link.getAttribute("href") === currentPath) {
-                    link.classList.add("active");
-                }
-            });
-        });
-    </script>
+   
 
     <!-- tab bar-->
-<div class="navbar">
+    <div class="navbar">
         <h1>GestAP</h1>
-      
-        
+
+
         <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Buscar registros..." aria-label="Buscar" id="buscar">
-      </form>
-      <div>
-         <div class="user-name">
-    <?= htmlspecialchars($nombre) ?>
-</div>
-         </div>
+            <input class="form-control me-2" type="search" placeholder="Buscar registros..." aria-label="Buscar" id="buscar">
+        </form>
+        <div>
+            <div class="user-name">
+                <?= htmlspecialchars($nombre) ?>
+            </div>
+        </div>
     </div>
 
 
-<!-- Sidebar -->
-<?php include 'sidebar.php'; ?>
+    <!-- Sidebar -->
+    <?php include 'sidebar.php'; ?>
 
-<!-- Script para búsqueda en vivo -->
+   
+
+    <div class="content">
+    <h1>Gestión de Granjas Porcinas</h1>
+<div id="contenedor-casetas">
+    <?php
+    for ($i = 1; $i <= $totalCasetas; $i++) {
+        // Consulta de datos de la caseta
+        $query = "SELECT num_cerdos, fecha_llegada_cerdos, peso_prom, edad_prom, etapa_inicial 
+                  FROM corrales WHERE num_caseta = $i";
+        $resultado = $conexion->query($query);
+
+        $cantidad_cerdos = $fecha_llegada = $peso_promedio = $edad_promedio = $etapa_alimentacion = "N/A";
+        if ($resultado && $fila = $resultado->fetch_assoc()) {
+            $cantidad_cerdos = $fila['num_cerdos'];
+            $fecha_llegada = $fila['fecha_llegada_cerdos'];
+            $peso_promedio = $fila['peso_prom'];
+            $edad_promedio = $fila['edad_prom'];
+            $etapa_alimentacion = $fila['etapa_inicial'];
+        }
+    ?>
+        <div class="caseta">
+            <div class="titulo-caseta" onclick="toggleCorrales(<?php echo $i; ?>)">
+                Caseta <?php echo $i; ?> <span id="flecha-<?php echo $i; ?>">▼</span>
+            </div>
+            <div class="atributos">
+                <span><strong>Cerdos:</strong> <?php echo $cantidad_cerdos; ?></span>
+                <span><strong>Fecha:</strong> <?php echo $fecha_llegada; ?></span>
+                <span><strong>Peso Promedio:</strong> <?php echo $peso_promedio; ?> kg</span>
+                <span><strong>Edad Promedio:</strong> <?php echo $edad_promedio; ?> meses</span>
+                <span><strong>Etapa:</strong> <?php echo $etapa_alimentacion; ?></span>
+            </div>
+            <div>
+                <button class="boton-verde" onclick="location.href='add_cerdos.php?caseta=<?php echo $i; ?>'">Agregar Registro</button>
+                <button class="boton-verde" onclick="location.href='edit_cerdos.php?caseta=<?php echo $i; ?>'">Editar Registro</button>
+                <button class="boton-amarillo" onclick="location.href='muerte_cerdos.php?caseta=<?php echo $i; ?>'">Eliminar Cerdos</button>
+                <button class="boton-rojo" onclick="vaciarCaseta(<?php echo $i; ?>)">Vaciar Caseta</button>
+            </div>
+            <div id="corrales-<?php echo $i; ?>" class="corrales" style="display: none;">
+                <table>
+                    <tr>
+                        <th>Corral</th>
+                        <th>Número de Cerdos</th>
+                    </tr>
+                    <?php
+                    $query_corrales = "SELECT id, num_cerdos FROM corrales WHERE caseta_id = $i";
+                    $resultado_corrales = $conexion->query($query_corrales);
+                    while ($corral = $resultado_corrales->fetch_assoc()) {
+                        echo "<tr><td>Corral " . $corral['id'] . "</td><td>" . $corral['num_cerdos'] . "</td></tr>";
+                    }
+                    ?>
+                </table>
+            </div>
+        </div>
+    <?php } ?>
+</div>
+
 <script>
-$(document).ready(function(){
-    $("#buscar").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("table tr").filter(function() {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
-    });
-});
+    function vaciarCaseta(id) {
+        if (confirm(`¿Está seguro de que desea vaciar la Caseta ${id}?`)) {
+            window.location.href = `vaciar_caseta.php?caseta=${id}`;
+        }
+    }
+
+    function toggleCorrales(id) {
+        const corrales = document.getElementById(`corrales-${id}`);
+        const flecha = document.getElementById(`flecha-${id}`);
+        if (corrales.style.display === 'none' || corrales.style.display === '') {
+            corrales.style.display = 'block';
+            flecha.textContent = '▲';  // Flecha hacia arriba
+        } else {
+            corrales.style.display = 'none';
+            flecha.textContent = '▼';  // Flecha hacia abajo
+        }
+    }
 </script>
 
-<div class= "content">
-<h1>Gestión de Granjas Porcinas</h1>
-    <div id="contenedor-casetas"></div>
+<style>
+    .titulo-caseta {
+        font-size: 24px;
+        font-weight: bold;
+        background-color:rgb(255, 255, 255);
+        color: black;
+        padding: 10px;
+        margin: 5px 0;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 5px;
+    }
 
-    <script>
-        const totalCasetas = 6;
-        const corralesPorCaseta = 30;
-        const contenedor = document.getElementById("contenedor-casetas");
+    .titulo-caseta:hover {
+        background-color:rgb(148, 238, 152);
+    }
 
-        function mostrarDetalle(id) {
-            const detalle = document.getElementById(`detalle-${id}`);
-            detalle.style.display = detalle.style.display === 'none' ? 'block' : 'none';
-        }
+    .corrales {
+        margin: 10px 0;
+        padding: 10px;
+        background-color: #f1f1f1;
+        border-radius: 5px;
+    }
 
-        function agregarRegistro(id) {
-            window.location.href = `add_cerdos.php?caseta=${id}`;
-        }
+    .caseta {
+        margin-bottom: 20px;
+    }
 
-        function editarRegistro(id) {
-            window.location.href = `edit_cerdos.php?caseta=${id}`;
-        }
-
-        function vaciarCaseta(id) {
-            if (confirm(`¿Está seguro de que desea vaciar la Caseta ${id}?`)) {
-                // Llamada a la API o petición para vaciar la caseta en la base de datos
-                alert(`Caseta ${id} vaciada correctamente.`);
-            }
-        }
-
-        for (let i = 1; i <= totalCasetas; i++) {
-            const caseta = document.createElement("div");
-            caseta.classList.add("caseta");
-            caseta.onclick = () => mostrarDetalle(i);
-            caseta.innerHTML = `<h2>Caseta ${i}</h2><p>Cantidad de Cerdos:[ ]  Fecha de Llegada: [ ]   Peso Promedio: [ ]  Edad Promedio: [ ]  Etapa de Alimentacion: [ ]</p>`;
-
-            const botonAgregar = document.createElement("button");
-            botonAgregar.classList.add("boton");
-            botonAgregar.textContent = "Agregar Registro";
-            botonAgregar.onclick = (e) => {
-                e.stopPropagation();
-                agregarRegistro(i);
-            };
-            caseta.appendChild(botonAgregar);
-
-            const botonEditar = document.createElement("button");
-            botonEditar.classList.add("boton");
-            botonEditar.textContent = "Editar Registro";
-            botonEditar.onclick = (e) => {
-                e.stopPropagation();
-                editarRegistro(i);
-            };
-            caseta.appendChild(botonEditar);
-
-            const botonVaciar = document.createElement("button");
-            botonVaciar.classList.add("boton", "boton-vaciar");
-            botonVaciar.textContent = "Vaciar Caseta";
-            botonVaciar.onclick = (e) => {
-                e.stopPropagation();
-                vaciarCaseta(i);
-            };
-            caseta.appendChild(botonVaciar);
-
-            const detalle = document.createElement("div");
-            detalle.id = `detalle-${i}`;
-            detalle.classList.add("detalle-caseta");
-            detalle.innerHTML = `<h3>Opciones de gestión de Caseta ${i}</h3><p>Más detalles aquí...</p>`;
-
-            contenedor.appendChild(caseta);
-            contenedor.appendChild(detalle);
-        }
-    </script>
+    .flecha {
+        margin-left: 10px;
+    }
+</style>
 
 
-</div>
+
+
+    </div>
 
 
 
 </body>
+
 </html>
