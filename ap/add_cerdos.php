@@ -302,14 +302,10 @@ $resultado = mysqli_query($conexion, $query);
     </select>
 
     <h3>Distribución de Cerdos por Corral</h3>
-    <div class="corrales-grid">
-        <?php for ($i = 1; $i <= 30; $i++) { ?>
-            <div class="corral-item">
-                <label for="corral_<?php echo $i; ?>">Corral <?php echo $i; ?>:</label>
-                <input type="number" name="corral_<?php echo $i; ?>" min="0" placeholder="Cerdos" required>
-            </div>
-        <?php } ?>
-    </div>
+    <?php for ($i = 1; $i <= 30; $i++) { ?>
+        <label for="corral_<?php echo $i; ?>">Corral <?php echo $i; ?>:</label>
+        <input type="number" name="corral_<?php echo $i; ?>" required>
+    <?php } ?>
 
     <button type="submit">Guardar</button>
 </form>

@@ -297,7 +297,7 @@ $totalCasetas = 6;
     for ($i = 1; $i <= $totalCasetas; $i++) {
         // Consulta de datos de la caseta
         $query = "SELECT num_cerdos, fecha_llegada_cerdos, peso_prom, edad_prom, etapa_inicial 
-                  FROM corrales WHERE num_caseta = $i";
+                  FROM casetas WHERE num_caseta = $i";
         $resultado = $conexion->query($query);
 
         $cantidad_cerdos = $fecha_llegada = $peso_promedio = $edad_promedio = $etapa_alimentacion = "N/A";
@@ -336,7 +336,7 @@ $totalCasetas = 6;
                     $query_corrales = "SELECT id, num_cerdos FROM corrales WHERE caseta_id = $i";
                     $resultado_corrales = $conexion->query($query_corrales);
                     while ($corral = $resultado_corrales->fetch_assoc()) {
-                        echo "<tr><td>Corral " . $corral['id'] . "</td><td>" . $corral['num_cerdos'] . "</td></tr>";
+                        echo "<tr><td>Corral " . $corral['corrales'] . "</td><td>" . $corral['num_cerdos'] . "</td></tr>";
                     }
                     ?>
                 </table>

@@ -1,13 +1,5 @@
 <?php
-// Conexión a la base de datos
 include("config.php");
-
-$conexion = new mysqli($servername, $username, $password, $database);
-
-// Verificar la conexión
-if ($conexion->connect_error) {
-    die("Error de conexión: " . $conexion->connect_error);
-}
 
 // Obtener los datos del formulario
 $caseta = $_POST['caseta'];
@@ -17,32 +9,58 @@ $edad_prom = $_POST['edad_prom'];
 $fecha_llegada = $_POST['fecha_llegada'];
 $etapa = $_POST['etapa'];
 
-// Insertar en la tabla "casetas"
-$sql_caseta = "INSERT INTO casetas (nombre, num_cerdos, peso_promedio, edad_promedio, fecha_llegada, etapa_alimentacion) 
-               VALUES ('Caseta $caseta', $num_cerdos, $peso_prom, $edad_prom, '$fecha_llegada', '$etapa')";
+// Verificar si la caseta ya existe en la base de datos
+$query_verificar = "SELECT id FROM casetas WHERE nombre = 'Caseta $caseta'";
+$resultado = $conexion->query($query_verificar);
 
-if ($conexion->query($sql_caseta) === TRUE) {
-    // Obtener el ID de la caseta recién creada
-    $caseta_id = $conexion->insert_id;
+if ($resultado->num_rows > 0) {
+    // Si ya existe, obtenemos el ID de la caseta
+    $fila = $resultado->fetch_assoc();
+    $caseta_id = $fila['id'];
 
-    // Insertar los corrales relacionados
-    for ($i = 1; $i <= 30; $i++) {
-        $num_cerdos_corral = isset($_POST["corral_$i"]) ? (int)$_POST["corral_$i"] : 0;
-
-        $sql_corral = "INSERT INTO corrales (numero_corral, num_cerdos, caseta_id) 
-                       VALUES ($i, $num_cerdos_corral, $caseta_id)";
-        
-        if (!$conexion->query($sql_corral)) {
-            echo "Error al insertar el corral $i: " . $conexion->error . "<br>";
-        }
-    }
-
-    echo "Registro guardado correctamente.";
-    header("Location: admin_cerdos.php"); // Redirigir a la página principal o lista de casetas
-    exit;
+    // Actualizar la caseta existente
+    $query_actualizar = "UPDATE casetas 
+                         SET num_cerdos = $num_cerdos, peso_promedio = $peso_prom, edad_promedio = $edad_prom, fecha_llegada = '$fecha_llegada', etapa_alimentacion = '$etapa'
+                         WHERE id = $caseta_id";
+    $conexion->query($query_actualizar);
 } else {
-    echo "Error al guardar la caseta: " . $conexion->error;
+    // Si no existe, la insertamos y obtenemos el ID
+    $query_insertar = "INSERT INTO casetas (nombre, num_cerdos, peso_promedio, edad_promedio, fecha_llegada, etapa_alimentacion) 
+                       VALUES ('Caseta $caseta', $num_cerdos, $peso_prom, $edad_prom, '$fecha_llegada', '$etapa')";
+    if ($conexion->query($query_insertar) === TRUE) {
+        $caseta_id = $conexion->insert_id;
+    } else {
+        echo "Error al insertar la caseta: " . $conexion->error;
+        exit();
+    }
 }
 
+// Insertar los corrales asociados
+for ($i = 1; $i <= 30; $i++) {
+    $num_cerdos_corral = $_POST["corral_$i"];
+
+    // Verificar si ya existe el corral
+    $query_verificar_corral = "SELECT id FROM corrales WHERE numero_corral = $i AND caseta_id = $caseta_id";
+    $resultado_corral = $conexion->query($query_verificar_corral);
+
+    if ($resultado_corral->num_rows > 0) {
+        // Actualizar el corral existente
+        $query_actualizar_corral = "UPDATE corrales 
+                                    SET num_cerdos = $num_cerdos_corral 
+                                    WHERE numero_corral = $i AND caseta_id = $caseta_id";
+        $conexion->query($query_actualizar_corral);
+
+
+    } else {
+        // Insertar un nuevo corral
+        $query_corral = "INSERT INTO corrales (numero_corral, num_cerdos, caseta_id) 
+                         VALUES ($i, $num_cerdos_corral, $caseta_id)";
+        $conexion->query($query_corral);
+    }
+}
+
+  // Redirigir a la página de agregar cerdos
+  header("Location: admin_cerdos.php");
+  exit(); // Importante para asegurar que no se ejecute nada después
 $conexion->close();
 ?>
