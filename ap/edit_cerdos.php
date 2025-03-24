@@ -233,22 +233,6 @@ $resultado = mysqli_query($conexion, $query);
         }
     </style>
     
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const sidebarLinks = document.querySelectorAll(".sidebar a");
-            const currentPath = window.location.pathname.split("/").pop(); // Obtiene el archivo actual (home.php, services.php, etc.)
-
-            sidebarLinks.forEach(link => {
-                // Elimina la clase activa de todos los enlaces
-                link.classList.remove("active");
-
-                // Agrega la clase activa al enlace correspondiente
-                if (link.getAttribute("href") === currentPath) {
-                    link.classList.add("active");
-                }
-            });
-        });
-    </script>
 
     <!-- tab bar-->
 <div class="navbar">
@@ -278,7 +262,7 @@ $resultado = mysqli_query($conexion, $query);
 
             // Configura las páginas relacionadas para cada enlace
             const relatedPages = {
-                "admin_cerdos.php": ["add_cerdos.php", "edit_cerdos.php"] // Páginas relacionadas con "cerdos"
+                "cerdos.php": ["add_cerdos.php", "edit_cerdos.php"] // Páginas relacionadas con "cerdos"
                 
             };
 

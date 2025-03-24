@@ -19,29 +19,6 @@ echo $rol;
 // Incluir configuración para la conexión a la base de datos
 include("config.php");
 
-// Definir la cantidad de registros a mostrar por página
-$registros_por_pagina = 10;
-
-// Obtener el número de página actual
-if (isset($_GET['page']) && is_numeric($_GET['page'])) {
-    $pagina = $_GET['page'];
-} else {
-    $pagina = 1;
-}
-
-// Calcular el punto de inicio para la consulta
-$inicio = ($pagina - 1) * $registros_por_pagina;
-
-// Realizar la consulta para obtener los registros de la página actual
-if (isset($_GET['buscar']) && !empty($_GET['buscar'])) {
-  $buscar = $_GET['buscar'];
-  $query = "SELECT * FROM cerdos WHERE num_caseta LIKE '%$buscar%' OR num_cerdos LIKE '%$buscar%' OR fecha_llegada_cerdos LIKE '%$buscar%' OR peso_prom LIKE '%$buscar%' OR edad_prom LIKE '%$buscar%' OR etapa_inicial LIKE '%$buscar%' ORDER BY id_registro DESC LIMIT $inicio, $registros_por_pagina";
-} else {
-  $query = "SELECT * FROM cerdos ORDER BY id_registro DESC LIMIT $inicio, $registros_por_pagina";
-}
-
-$resultado = mysqli_query($conexion, $query);
-
 ?>
 
 <!DOCTYPE html>
@@ -217,22 +194,7 @@ $resultado = mysqli_query($conexion, $query);
     </style>
      
     
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const sidebarLinks = document.querySelectorAll(".sidebar a");
-            const currentPath = window.location.pathname.split("/").pop(); // Obtiene el archivo actual (home.php, services.php, etc.)
-
-            sidebarLinks.forEach(link => {
-                // Elimina la clase activa de todos los enlaces
-                link.classList.remove("active");
-
-                // Agrega la clase activa al enlace correspondiente
-                if (link.getAttribute("href") === currentPath) {
-                    link.classList.add("active");
-                }
-            });
-        });
-    </script>
+  
 
     <!-- tab bar-->
 <div class="navbar">
@@ -259,7 +221,7 @@ $resultado = mysqli_query($conexion, $query);
 
             // Configura las páginas relacionadas para cada enlace
             const relatedPages = {
-                "admin_cerdos.php": ["add_cerdos.php", "edit_cerdos.php"] // Páginas relacionadas con "cerdos"
+                "cerdos.php": ["add_cerdos.php", "edit_cerdos.php"] // Páginas relacionadas con "cerdos"
                 
             };
 

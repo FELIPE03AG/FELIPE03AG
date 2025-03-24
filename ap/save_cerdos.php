@@ -1,5 +1,9 @@
 <?php
+session_start();
+
 include("config.php");
+$usuario = $_SESSION['nombre'];
+$rol = $_SESSION['rol'];
 
 // Obtener los datos del formulario
 $caseta = $_POST['caseta'];
@@ -59,8 +63,14 @@ for ($i = 1; $i <= 30; $i++) {
     }
 }
 
+   // Guardar el registro en el historial
+   $accion = "Agregó un nuevo registro en el Area de cerdos";
+   $fecha_hora = date('Y-m-d H:i:s');
+   $registro = "INSERT INTO historial (accion, fecha_hora, usuario) VALUES ('$accion', '$fecha_hora', '$usuario')";
+   mysqli_query($conexion, $registro);
   // Redirigir a la página de agregar cerdos
-  header("Location: admin_cerdos.php");
+  header("Location: cerdos.php");
+  
   exit(); // Importante para asegurar que no se ejecute nada después
 $conexion->close();
 ?>

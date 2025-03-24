@@ -191,7 +191,7 @@ echo $rol;
         <!-- Content -->
         <div class="content">
             <h1>GestAP</h1>
-            <p>Tu mejor herramienta para la gestion agropecuaria en la industria</p>
+            <p>El zavala es joto</p>
         </div>
 
 
