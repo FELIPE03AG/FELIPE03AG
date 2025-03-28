@@ -1,88 +1,82 @@
 <?php
-ob_start();
-
 session_start();
-if (!isset($_SESSION['nombre'])) {
-    header('location:index.php');
-}
-
-$nombre = $_SESSION['nombre'];
-$rol = $_SESSION['rol'];
-
-echo $rol;
-
-?>
-
-<?php
-// Incluir configuración para la conexión a la base de datos
 include("config.php");
 
-// Verificar si se recibió el identificador del registro a eliminar
-if (isset($_POST['id_registro'])) {
-    // Obtener el identificador del registro desde la solicitud POST
-    $id_registro = $_POST['id_registro'];
+$usuario = $_SESSION['nombre'];
+$fecha_hora = date('Y-m-d H:i:s');
 
-    // Obtener los detalles del registro de cerdos antes de eliminarlo
-    $query_registro = "SELECT num_caseta FROM cerdos WHERE id_registro = ?";
-    $stmt_registro = $conexion->prepare($query_registro);
-    $stmt_registro->bind_param("i", $id_registro);
-    $stmt_registro->execute();
-    $registro = $stmt_registro->get_result()->fetch_assoc();
-    $num_caseta = $registro['num_caseta'];
-    $stmt_registro->close();
+if ($_POST['tipo_eliminacion'] == 'muerte') {
+    // Eliminación por Muerte
+    $fecha_muerte = $_POST['fecha_muerte'];
+    $num_caseta = $_POST['num_caseta_muerte'];
+    $num_corral = $_POST['num_corral_muerte'];
+    $causa_muerte = $_POST['causa_muerte'];
 
-    // Iniciar la transacción
-    mysqli_begin_transaction($conexion);
+    // Consultar cuántos cerdos hay en el corral
+    $query_verificar = "SELECT num_cerdos FROM corrales WHERE numero_corral = $num_corral AND caseta_id = $num_caseta";
+    $resultado = $conexion->query($query_verificar);
+    $fila = $resultado->fetch_assoc();
+    $num_cerdos_actual = $fila['num_cerdos'] ?? 0;
 
-    try {
-        // Preparar la consulta para eliminar los corrales de esa caseta
-        $queryCorrales = "DELETE FROM corrales WHERE num_caseta = ?";
-        $stmtCorrales = $conexion->prepare($queryCorrales);
-        $stmtCorrales->bind_param("i", $num_caseta);
-        $stmtCorrales->execute();
-        $stmtCorrales->close();
+    if ($num_cerdos_actual > 0) {
+        // Eliminar un cerdo
+        $query_eliminar = "UPDATE corrales SET num_cerdos = num_cerdos - 1 WHERE numero_corral = $num_corral AND caseta_id = $num_caseta";
+        if ($conexion->query($query_eliminar) === TRUE) {
+            // Registrar en eliminacion_muerte
+            $query_insertar_muerte = "INSERT INTO eliminacion_muerte (fecha_muerte, num_caseta, num_corral, causa_muerte, usuario) 
+                                      VALUES ('$fecha_muerte', $num_caseta, $num_corral, '$causa_muerte', '$usuario')";
+            $conexion->query($query_insertar_muerte);
 
-        // Preparar la consulta para eliminar el registro de cerdos
-        $queryCerdos = "DELETE FROM cerdos WHERE id_registro = ?";
-        $stmtCerdos = $conexion->prepare($queryCerdos);
-        $stmtCerdos->bind_param("i", $id_registro);
-
-        // Ejecutar la consulta para eliminar cerdos
-        if ($stmtCerdos->execute()) {
-            // Confirmar la transacción
-            mysqli_commit($conexion);
-
-            // Registro en la tabla de historial
-            session_start();
-            $usuario = $_SESSION['nombre']; // Cambiar de $_SESSION['u'] a $_SESSION['nombre']
-            $accion = "Eliminó un registro en la tabla de cerdos y sus corrales asociados.";
-            $fecha_hora = date('Y-m-d H:i:s');
-            $registro_historial = "INSERT INTO historial (accion, fecha_hora, usuario) VALUES (?, ?, ?)";
-            $stmt_historial = $conexion->prepare($registro_historial);
-            $stmt_historial->bind_param("sss", $accion, $fecha_hora, $usuario);
-            $stmt_historial->execute();
-            $stmt_historial->close();
-
-            // Si la eliminación fue exitosa, enviar una respuesta de éxito
-            echo "El registro y sus corrales se eliminaron correctamente.";
-        } else {
-            // Si hubo un error al eliminar el registro de cerdos, revertir la transacción
-            mysqli_rollback($conexion);
-            echo "Error al eliminar el registro de cerdos: " . $conexion->error;
+            // Registrar en historial
+            $accion = "Eliminó un cerdo por muerte en la caseta $num_caseta, corral $num_corral. Causa: $causa_muerte";
+            $query_historial = "INSERT INTO historial (accion, fecha_hora, usuario) VALUES ('$accion', '$fecha_hora', '$usuario')";
+            $conexion->query($query_historial);
         }
-
-        // Cerrar la declaración preparada
-        $stmtCerdos->close();
-    } catch (Exception $e) {
-        // Si hay un error, revertir la transacción
-        mysqli_rollback($conexion);
-        echo "Error: " . $e->getMessage();
+    } else {
+        echo "<script>alert('No hay cerdos en el corral seleccionado.'); window.location.href='cerdos.php';</script>";
+        exit();
     }
-} else {
-    // Si no se recibió el identificador del registro a eliminar, enviar un mensaje de error
-    echo "Error: Identificador de registro no recibido.";
+
+} elseif ($_POST['tipo_eliminacion'] == 'venta') {
+    // Eliminación por Venta
+    $fecha_venta = $_POST['fecha_venta'];
+    $cantidad = $_POST['cantidad'];
+    $num_caseta = $_POST['num_caseta_venta'];
+    $num_corral = $_POST['num_corral_venta'];
+
+    // Consultar cuántos cerdos hay en el corral
+    $query_verificar = "SELECT num_cerdos FROM corrales WHERE numero_corral = $num_corral AND caseta_id = $num_caseta";
+    $resultado = $conexion->query($query_verificar);
+    $fila = $resultado->fetch_assoc();
+    $num_cerdos_actual = $fila['num_cerdos'] ?? 0;
+
+    if ($cantidad > $num_cerdos_actual) {
+        echo "<script>alert('No puedes vender más cerdos de los que hay en el corral.'); window.location.href='cerdos.php';</script>";
+        exit();
+    } elseif ($num_cerdos_actual == 0) {
+        echo "<script>alert('No hay cerdos en el corral seleccionado.'); window.location.href='cerdos.php';</script>";
+        exit();
+    } else {
+        // Restar la cantidad de cerdos en el corral
+        $query_eliminar = "UPDATE corrales SET num_cerdos = num_cerdos - $cantidad WHERE numero_corral = $num_corral AND caseta_id = $num_caseta";
+        
+        if ($conexion->query($query_eliminar) === TRUE) {
+            // Registrar en eliminacion_venta
+            $query_insertar_venta = "INSERT INTO eliminacion_venta (fecha_venta, cantidad, num_caseta, num_corral, usuario) 
+                                     VALUES ('$fecha_venta', $cantidad, $num_caseta, $num_corral, '$usuario')";
+            $conexion->query($query_insertar_venta);
+
+            // Registrar en historial
+            $accion = "Vendió $cantidad cerdos en la caseta $num_caseta, corral $num_corral el $fecha_venta.";
+            $query_historial = "INSERT INTO historial (accion, fecha_hora, usuario) VALUES ('$accion', '$fecha_hora', '$usuario')";
+            $conexion->query($query_historial);
+        }
+    }
 }
 
-// Cerrar la conexión
+// Redirigir a la página de cerdos
+header("Location: cerdos.php");
+exit();
+
 $conexion->close();
 ?>

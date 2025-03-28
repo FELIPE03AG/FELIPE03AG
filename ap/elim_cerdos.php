@@ -167,100 +167,125 @@ echo $rol;
      <?php include 'sidebar.php'; ?>
 
     <!-- Content -->
-    <div class="content">
+    <?php
+session_start();
+include("config.php");
+?>
 
-    <p>
-        Eliminacion de Cerdos
-    </p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Eliminar Cerdos</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .form-container {
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 400px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #d9534f;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #c9302c;
+        }
+    </style>
 
-    <div class="accordion" id="accordionExample">
-  <div class="accordion-item">
-    <h2 class="accordion-header">
-      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-        Eliminar Por Muerte
-      </button>
-    </h2>
-    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        
-    <div class="form-container">
-        <h2>Eliminar Cerdo</h2>
-        <p>Solo puede eliminar 1 cerdo a la vez</p>
-        <form action="/eliminar_cerdo" method="POST">
-            <!-- Número de caseta -->
+</head>
+<body>
+
+
+<div class="form-container">
+    <h2>Eliminar Cerdos</h2>
+    <form action="eliminar_cerdos.php" method="POST">
+        <div class="form-group">
+            <label for="tipo_eliminacion">Tipo de Eliminación:</label>
+            <select name="tipo_eliminacion" id="tipo_eliminacion" onchange="toggleForm()" required>
+                <option value="" disabled selected>Seleccione una opción</option>
+                <option value="venta">Venta</option>
+                <option value="muerte">Muerte</option>
+            </select>
+        </div>
+
+        <!-- Opciones para Muerte -->
+        <div id="form_muerte" style="display: none;">
             <div class="form-group">
-                <label for="num_caseta">Número de caseta</label>
-                <input type="number" id="num_caseta" name="num_caseta" required min="1" placeholder="Ingrese el número de caseta">
+                <label for="fecha_muerte">Fecha de Muerte:</label>
+                <input type="datetime-local" name="fecha_muerte" id="fecha_muerte">
             </div>
-
-            <!-- Número de corral -->
             <div class="form-group">
-                <label for="num_corral">Número de corral</label>
-                <input type="number" id="num_corral" name="num_corral" required min="1" placeholder="Ingrese el número de corral">
+                <label for="num_caseta_muerte">Número de Caseta:</label>
+                <input type="number" name="num_caseta_muerte" id="num_caseta_muerte">
             </div>
-
-            <!-- Causa de muerte -->
             <div class="form-group">
-                <label for="causa_muerte">Causa de muerte</label>
-                <select id="causa_muerte" name="causa_muerte" required>
-                    <option value="">Seleccione una causa</option>
-                    <option value="Pulmonar">Problemas Pulmonares</option>
-                    <option value="Troja">Tripa Roja</option>
+                <label for="num_corral_muerte">Número de Corral:</label>
+                <input type="number" name="num_corral_muerte" id="num_corral_muerte">
+            </div>
+            <div class="form-group">
+                <label for="causa_muerte">Causa de Muerte:</label>
+                <select name="causa_muerte" id="causa_muerte">
+                    <option value="Tripa Roja">Tripa Roja</option>
+                    <option value="Problemas Pulmonares">Problemas Pulmonares</option>
+                    <option value="Agresion">Agresion</option>
                     <option value="Prolapso">Prolapso</option>
-                    <option value="Agresion">Agresion de otro cerdo</option>
+                    <option value="Desnutrición">Desnutrición</option>
                     <option value="Otra">Otra</option>
                 </select>
             </div>
+        </div>
 
-            <!-- Botón de envío -->
-            <button type="submit">Eliminar Cerdos</button>
-        </form>
-    </div>
-    
-      </div>
-    </div>
-  </div>
-  <div class="accordion-item">
-    <h2 class="accordion-header">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-        Eliminar Por Venta
-      </button>
-    </h2>
-    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-      <div class="form-container">
-        <h2>Eliminar Cerdos</h2>
-        <p>Solo elimina cerdos de un solo Corral</p>
-        <form action="/eliminar_cerdo" method="POST">
-            <!-- Número de caseta -->
+        <!-- Opciones para Venta -->
+        <div id="form_venta" style="display: none;">
             <div class="form-group">
-                <label for="num_caseta">Número de caseta</label>
-                <input type="number" id="num_caseta" name="num_caseta" required min="1" placeholder="Ingrese el número de caseta">
+                <label for="fecha_venta">Fecha de Venta:</label>
+                <input type="datetime-local" name="fecha_venta" id="fecha_venta">
             </div>
-
-            <!-- Número de corral -->
             <div class="form-group">
-                <label for="num_corral">Número de corral</label>
-                <input type="number" id="num_corral" name="num_corral" required min="1" placeholder="Ingrese el número de corral">
+                <label for="num_caseta_venta">Número de Caseta:</label>
+                <input type="number" name="num_caseta_venta" id="num_caseta_venta">
             </div>
-            <!-- Número de corral -->
             <div class="form-group">
-                <label for="num_corral">Número de Cerdos</label>
-                <input type="number" id="num_corral" name="num_corral" required min="1" placeholder="Ingrese el número de corral">
+                <label for="num_corral_venta">Número de Corral:</label>
+                <input type="number" name="num_corral_venta" id="num_corral_venta">
             </div>
+            <div class="form-group">
+                <label for="cantidad">Cantidad de Cerdos a Eliminar:</label>
+                <input type="number" name="cantidad" id="cantidad">
+            </div>
+        </div>
 
-           
-
-            <!-- Botón de envío -->
-            <button type="submit">Eliminar Cerdo</button>
-        </form>
-    </div>
-        
-      </div>
-    </div>
-  </div>
+        <button type="submit">Eliminar</button>
+    </form>
 </div>
-        
+
+<script>
+    function toggleForm() {
+        const tipo = document.getElementById('tipo_eliminacion').value;
+        document.getElementById('form_muerte').style.display = tipo === 'muerte' ? 'block' : 'none';
+        document.getElementById('form_venta').style.display = tipo === 'venta' ? 'block' : 'none';
+    }
+</script>
+</body>
+</html>
 
 
 

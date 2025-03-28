@@ -11,7 +11,18 @@ $rol = $_SESSION['rol'];
 
 echo $rol;
 
+include("config.php"); // Conexión a la base de datos
+
+// Obtener eliminaciones por venta
+$query_ventas = "SELECT fecha_venta, cantidad, num_caseta, num_corral, usuario FROM eliminacion_venta ORDER BY fecha_venta DESC";
+$result_ventas = $conexion->query($query_ventas);
+
+// Obtener eliminaciones por muerte
+$query_muertes = "SELECT fecha_muerte, num_caseta, num_corral, causa_muerte, usuario FROM eliminacion_muerte ORDER BY fecha_muerte DESC";
+$result_muertes = $conexion->query($query_muertes);
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -128,7 +139,48 @@ echo $rol;
         background-color: #f2f2f2; /* Color de fondo para filas pares */
     }
   </style>
-  
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+        canvas {
+            margin-top: 20px;
+            max-width: 100%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        .hidden {
+            display: none;
+        }
+        button {
+            margin: 10px;
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
   <script>
         document.addEventListener("DOMContentLoaded", function () {
             const sidebarLinks = document.querySelectorAll(".sidebar a");
@@ -165,6 +217,106 @@ echo $rol;
     <!-- Content -->
     <div class="content">
 
+  
+<div class="container">
+    <h2>Reportes de Eliminación</h2>
+
+    <button onclick="toggleSection('tablaVentas')">📋 Ver Tabla de Ventas</button>
+    <button onclick="toggleSection('tablaMuertes')">📋 Ver Tabla de Muertes</button>
+    <button onclick="toggleSection('graficas')">📊 Ver Gráficos</button>
+    <button onclick="generarPDF()">📝 Descargar Reporte</button>
+
+    <!-- Tabla de ventas -->
+    <div id="tablaVentas" class="hidden">
+        <h3>Eliminaciones por Venta</h3>
+        <table>
+            <tr>
+                <th>Fecha</th>
+                <th>Caseta</th>
+                <th>Corral</th>
+                <th>Cantidad</th>
+            </tr>
+            <?php while ($fila = $result_ventas->fetch_assoc()) { ?>
+                <tr>
+                    <td><?php echo $fila['fecha_venta']; ?></td>
+                    <td><?php echo $fila['num_caseta']; ?></td>
+                    <td><?php echo $fila['num_corral']; ?></td>
+                    <td><?php echo $fila['cantidad']; ?></td>
+                </tr>
+            <?php } ?>
+        </table>
+    </div>
+
+    <!-- Tabla de muertes -->
+    <div id="tablaMuertes" class="hidden">
+        <h3>Eliminaciones por Muerte</h3>
+        <table>
+            <tr>
+                <th>Fecha</th>
+                <th>Caseta</th>
+                <th>Corral</th>
+                <th>Causa</th>
+            </tr>
+            <?php while ($fila = $result_muertes->fetch_assoc()) { ?>
+                <tr>
+                    <td><?php echo $fila['fecha_muerte']; ?></td>
+                    <td><?php echo $fila['num_caseta']; ?></td>
+                    <td><?php echo $fila['num_corral']; ?></td>
+                    <td><?php echo $fila['causa_muerte']; ?></td>
+                </tr>
+            <?php } ?>
+        </table>
+    </div>
+
+    <!-- Gráficos -->
+    <div id="graficas" class="hidden">
+        <h3>Eliminaciones por Caseta</h3>
+        <canvas id="eliminacionesCaseta"></canvas>
+        
+        <h3>Eliminaciones en el Tiempo</h3>
+        <canvas id="eliminacionesFecha"></canvas>
+    </div>
+</div>
+
+<script>
+    function toggleSection(id) {
+        let section = document.getElementById(id);
+        section.classList.toggle("hidden");
+    }
+
+    function generarPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        doc.text("Reporte de Eliminaciones", 10, 10);
+
+        let y = 20;
+        doc.text("📋 Eliminaciones por Venta", 10, y);
+        y += 10;
+
+        <?php
+        $result_ventas->data_seek(0); // Reiniciar el puntero
+        while ($fila = $result_ventas->fetch_assoc()) {
+            echo "doc.text('Fecha: " . $fila['fecha_venta'] . " | Caseta: " . $fila['num_caseta'] . " | Corral: " . $fila['num_corral'] . " | Cantidad: " . $fila['cantidad'] . "', 10, y);\n";
+            echo "y += 10;\n";
+        }
+        ?>
+
+        y += 10;
+        doc.text("📋 Eliminaciones por Muerte", 10, y);
+        y += 10;
+
+        <?php
+        $result_muertes->data_seek(0);
+        while ($fila = $result_muertes->fetch_assoc()) {
+            echo "doc.text('Fecha: " . $fila['fecha_muerte'] . " | Caseta: " . $fila['num_caseta'] . " | Corral: " . $fila['num_corral'] . " | Causa: " . $fila['causa_muerte'] . "', 10, y);\n";
+            echo "y += 10;\n";
+        }
+        ?>
+
+        doc.save("Reporte_Eliminaciones.pdf");
+    }
+</script>
 
 
 

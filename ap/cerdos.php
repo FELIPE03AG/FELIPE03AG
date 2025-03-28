@@ -339,10 +339,10 @@ $totalCasetas = 6;
                 Caseta <?php echo $i; ?> <span id="flecha-<?php echo $i; ?>">▼</span>
             </div>
             <div class="atributos">
-                <span><strong>Cerdos:</strong> <?php echo $cantidad_cerdos; ?></span>
+                <span><strong>Cantidad Inicial:</strong> <?php echo $cantidad_cerdos; ?></span>
                 <span><strong>Fecha:</strong> <?php echo $fecha_llegada; ?></span>
                 <span><strong>Peso Promedio:</strong> <?php echo $peso_promedio; ?> kg</span>
-                <span><strong>Edad Promedio:</strong> <?php echo $edad_promedio; ?> meses</span>
+                <span><strong>Edad Promedio:</strong> <?php echo $edad_promedio; ?> semanas</span>
                 <span><strong>Etapa:</strong> <?php echo $etapa_alimentacion; ?></span>
             </div>
             <div>
@@ -352,22 +352,38 @@ $totalCasetas = 6;
                 <button class="boton-rojo" onclick="vaciarCaseta(<?php echo $i; ?>)">Vaciar Caseta</button>
             </div>
             <div id="corrales-<?php echo $i; ?>" class="corrales" style="display: none;">
-                <table>
-                    <tr>
-                        <th>Corral</th>
-                        <th>Número de Cerdos</th>
-                    </tr>
-                    <?php
-                    // Consulta para obtener los corrales de la caseta actual
-                    $query_corrales = "SELECT id, num_cerdos FROM corrales WHERE caseta_id = $i";
-                    $resultado_corrales = $conexion->query($query_corrales);
+    <?php
+    // Obtener el total de cerdos en la caseta
+    $query_total_cerdos = "SELECT SUM(num_cerdos) AS total_cerdos FROM corrales WHERE caseta_id = $i";
+    $resultado_total = $conexion->query($query_total_cerdos);
+    $fila_total = $resultado_total->fetch_assoc();
+    $total_cerdos = $fila_total['total_cerdos'] ?? 0; // Si no hay cerdos, mostrar 0
+    ?>
+    
+    <!-- Mostrar total de cerdos fuera de la tabla -->
+    <div style="margin-bottom: 10px; font-size: 18px; font-weight: bold; color: #333;">
+        🐷 Total de Cerdos en la Caseta: <span style="color: #28a745;"><?php echo $total_cerdos; ?></span>
+    </div>
 
-                    while ($corral = $resultado_corrales->fetch_assoc()) {
-                        echo "<tr><td>Corral " . $corral['id'] . "</td><td>" . $corral['num_cerdos'] . "</td></tr>";
-                    }
-                    ?>
-                </table>
-            </div>
+    <table>
+        <tr>
+            <th>Corral</th>
+            <th>Número de Cerdos</th>
+        </tr>
+        <?php
+        // Consulta para obtener los corrales de la caseta actual ordenados del 1 al 30
+        $query_corrales = "SELECT numero_corral, num_cerdos FROM corrales WHERE caseta_id = $i ORDER BY numero_corral ASC";
+        $resultado_corrales = $conexion->query($query_corrales);
+
+        while ($corral = $resultado_corrales->fetch_assoc()) {
+            echo "<tr><td>Corral " . $corral['numero_corral'] . "</td><td>" . $corral['num_cerdos'] . "</td></tr>";
+        }
+        ?>
+    </table>
+</div>
+
+
+
         </div>
     <?php } ?>
 </div>
