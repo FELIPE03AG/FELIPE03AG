@@ -1,48 +1,34 @@
 <?php
 ob_start();
 include("config.php");
-$u=isset($_REQUEST['u']) ? $_REQUEST['u'] : NULL;
-$c=isset($_REQUEST['c']) ? $_REQUEST['c'] : NULL;
 
-echo $c,"</br>";
-echo $u,"</br>";
+$u = isset($_REQUEST['u']) ? $_REQUEST['u'] : NULL;
+$c = isset($_REQUEST['c']) ? $_REQUEST['c'] : NULL;
 
-//tomar valores de la base de datos
+echo $c, "</br>";
+echo $u, "</br>";
 
-$consulta = mysqli_query($conexion, "select u from usuarios where u='$u'");
-                    while ($fila=mysqli_fetch_array($consulta))
-                            {
-                                $us=$fila["u"];
-                            }
-    echo $us; 
-    if($us==NULL){header("location:index.php?valor=1");
-        
+session_start(); // Iniciar sesión al comienzo
 
-    }
-    
-    else if($us!=NULL){
-        $consulta = mysqli_query($conexion, "select * from usuarios where c=SHA1('$c')");
-                   
-                     while ($fila=mysqli_fetch_array($consulta))
-                            {
-                                $contra=$fila["c"];
-                                $nombre=$fila["nombre"];
-                                $rol=$fila["rol"];
+// Verificar si el usuario existe
+$consulta = mysqli_prepare($conexion, "SELECT * FROM usuarios WHERE u = ? AND c = SHA1(?)");
+mysqli_stmt_bind_param($consulta, "ss", $u, $c);
+mysqli_stmt_execute($consulta);
+$resultado = mysqli_stmt_get_result($consulta);
 
-                            }
-                        
-                            echo "<br>", $contra;
-                            if($contra==NULL){header("location:index.php?valor=1");}
-                            if($contra!=NULL){
-                                session_start();
-                                $_SESSION['nombre']=$nombre;
-                                $_SESSION['rol']=$rol;
-                                
-                                //$_SESSION['tiempo']=time();
+if ($fila = mysqli_fetch_assoc($resultado)) {
+    // Usuario y contraseña correctos
+    $_SESSION['id'] = $fila['id'];
+    $_SESSION['nombre'] = $fila['nombre'];
+    $_SESSION['rol'] = $fila['rol'];
 
-                                header("location:principal.php");
-                            }
+    header("Location: principal.php");
+    exit();
+} else {
+    // Usuario o contraseña incorrectos
+    header("Location: index.php?valor=1");
+    exit();
+}
 
-                        }
-  ob_end_flush();  
+ob_end_flush();
 ?>

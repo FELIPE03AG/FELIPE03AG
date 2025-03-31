@@ -21,6 +21,7 @@ if(isset($_SESSION['nombre'])){
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="styles2.css">
 
     <style>
         body {
@@ -64,7 +65,7 @@ if(isset($_SESSION['nombre'])){
 <body onload="ejecutarRecaptcha()">
 
     <div class="login-container">
-        <img src="logotipo.png" width="200px" class="mb-3" />
+        <h1 class ="logo-text">GestAP</h1>
         <form method="post" action="login.php">
             <!-- Usuario -->
             <div class="input-group mb-3">
