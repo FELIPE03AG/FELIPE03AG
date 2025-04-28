@@ -139,48 +139,7 @@ $result_muertes = $conexion->query($query_muertes);
         background-color: #f2f2f2; /* Color de fondo para filas pares */
     }
   </style>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            padding: 20px;
-        }
-        .container {
-            width: 90%;
-            max-width: 900px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-        }
-        canvas {
-            margin-top: 20px;
-            max-width: 100%;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-        th {
-            background-color: #007bff;
-            color: white;
-        }
-        .hidden {
-            display: none;
-        }
-        button {
-            margin: 10px;
-            padding: 10px;
-            cursor: pointer;
-        }
-    </style>
+    
   <script>
         document.addEventListener("DOMContentLoaded", function () {
             const sidebarLinks = document.querySelectorAll(".sidebar a");
