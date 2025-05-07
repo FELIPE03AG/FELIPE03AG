@@ -104,16 +104,7 @@ if(isset($_SESSION['nombre'])){
                           </div>';
                 }
             ?>
-
-
-            <!-- Recordarme y Olvidé mi contraseña -->
-            <div class="d-flex justify-content-between mb-3">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="rememberMe" checked />
-                    <label class="form-check-label" for="rememberMe">Recuérdame</label>
-                </div>
-                <button type="button" class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#exampleModal">Olvidé mi contraseña</button>
-            </div>
+           
 
             <!-- Botón de inicio de sesión -->
             <button type="submit" class="btn btn-primary">Iniciar sesión</button>

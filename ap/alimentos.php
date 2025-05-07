@@ -297,9 +297,7 @@ $totalCasetas = 6;
         <h1>GestAP</h1>
 
 
-        <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Buscar registros..." aria-label="Buscar" id="buscar">
-        </form>
+       
         <div>
             <div class="user-name">
                 <?= htmlspecialchars($nombre) ?>
@@ -318,18 +316,18 @@ $totalCasetas = 6;
     <div id="contenedor-tolvas">
         <?php
         for ($i = 1; $i <= 6; $i++) { // Se generan 6 tolvas
-            $query = "SELECT capacidad_total, alimento_actual, tipo_alimento, fecha_ultimo_relleno 
+            $query = "SELECT num_alim, fecha_alim, etapa_alim 
                       FROM tolvas WHERE id = $i";
             $resultado = $conexion->query($query);
 
             // Inicializar valores en caso de que no haya datos
-            $capacidad_total = $alimento_actual = $tipo_alimento = $fecha_ultimo_relleno = "N/A";
+            $alimento_actual = $llegada_alimento = $tipo_alimento = "N/A";
 
             if ($resultado && $fila = $resultado->fetch_assoc()) {
-                $capacidad_total = $fila['capacidad_total'] . " kg";
-                $alimento_actual = $fila['alimento_actual'] . " kg";
-                $tipo_alimento = $fila['tipo_alimento'];
-                $fecha_ultimo_relleno = $fila['fecha_ultimo_relleno'];
+                $alimento_actual = $fila['num_alim'] . " Toneladas";
+                $llegada_alimento = $fila['fecha_alim'];
+                $tipo_alimento = $fila['etapa_alim'];
+                
             }
         ?>
             <div class="tolva">
@@ -338,14 +336,37 @@ $totalCasetas = 6;
                 </div>
                 <div class="atributos">
                     <span><strong>Capacidad Total:</strong> 5 Toneladas </span>
-                    <span><strong>Alimento Disponible:</strong> <?php echo $alimento_actual; ?> Toneladas</span>
+                    <span><strong>Alimento Disponible:</strong> <?php echo $alimento_actual; ?> </span>
                     <span><strong>Tipo de Alimento:</strong> <?php echo $tipo_alimento; ?></span>
-                    <span><strong>Último Relleno:</strong> <?php echo $fecha_ultimo_relleno; ?></span>
+                    <span><strong>Último Relleno:</strong> <?php echo $llegada_alimento; ?></span>
                 </div>
                 <div>
-                    <button class="boton-verde" onclick="location.href='add_alimento.php?tolva=<?php echo $i; ?>'">Agregar Alimento</button>
+                    <button class="boton-verde" onclick="location.href='add_alimentos.php?tolva=<?php echo $i; ?>'">Agregar Alimento</button>
                     <button class="boton-verde" onclick="location.href='edit_tolva.php?tolva=<?php echo $i; ?>'">Editar Tolva</button>
                     <button class="boton-rojo" onclick="vaciarTolva(<?php echo $i; ?>)">Vaciar Tolva</button>
+                    <div class="atributos" id="detalles-<?php echo $i; ?>" style="display: none;">
+                        
+    <h4>Historial de Rellenos:</h4>
+    <ul>
+        <?php
+        $historial_query = "SELECT cantidad_alim, etapa_alim, fecha_llegada_alim 
+                            FROM tolvas 
+                            WHERE num_tolva = $i 
+                            ORDER BY fecha_llegada_alim DESC";
+
+        $historial_result = $conexion->query($historial_query);
+
+        if ($historial_result && $historial_result->num_rows > 0) {
+            while ($registro = $historial_result->fetch_assoc()) {
+                echo "<li><strong>{$registro['fecha_llegada_alim']}</strong> - {$registro['cantidad_alim']} kg - {$registro['etapa_alim']}</li>";
+            }
+        } else {
+            echo "<li>No hay historial de alimentos para esta tolva.</li>";
+        }
+        ?>
+    </ul>
+</div>
+
                 </div>
             </div>
         <?php } ?>
@@ -404,7 +425,12 @@ $totalCasetas = 6;
     }
 
     .tolva {
-        margin-bottom: 20px;
+        background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;  
+            width: 100%;
+            margin-bottom: 30px;
     }
 </style>
 
