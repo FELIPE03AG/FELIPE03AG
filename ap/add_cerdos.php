@@ -32,7 +32,7 @@ include("config.php");
     <script src="js/snippets.js"></script>
     <script src="js/modals.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
+    <link rel="icon" href="img/cerdo.png" type="image/x-icon">
     <!-- Script de Bootstrap JavaScript -->
 
 
@@ -237,39 +237,58 @@ include("config.php");
             });
         });
     </script>
+<div class="content">
+    <h2>Agregar Registro - Caseta <?php echo $caseta; ?></h2>
+    <form id="form-cerdos" action="save_cerdos.php" method="POST">
+        <input type="hidden" name="caseta" value="<?php echo $caseta; ?>">
 
-<div class= "content">
-<h2>Agregar Registro - Caseta <?php echo $caseta; ?></h2>
-<form action="save_cerdos.php" method="POST">
-    <input type="hidden" name="caseta" value="<?php echo $caseta; ?>">
+        <label for="num_cerdos">Cantidad Inicial de Cerdos:</label>
+        <input type="number" name="num_cerdos" id="num_cerdos" required>
 
-    <label for="num_cerdos">Cantidad Inicial de Cerdos:</label>
-    <input type="number" name="num_cerdos" required>
+        <label for="peso_prom">Peso Promedio (kg):</label>
+        <input type="number" name="peso_prom" step="0.01" required>
 
-    <label for="peso_prom">Peso Promedio (kg):</label>
-    <input type="number" name="peso_prom" step="0.01" required>
+        <label for="edad_prom">Edad Promedio (días):</label>
+        <input type="number" name="edad_prom" required>
 
-    <label for="edad_prom">Edad Promedio (días):</label>
-    <input type="number" name="edad_prom" required>
+        <label for="fecha_llegada">Fecha de Llegada:</label>
+        <input type="date" name="fecha_llegada" required>
 
-    <label for="fecha_llegada">Fecha de Llegada:</label>
-    <input type="date" name="fecha_llegada" required>
+        <label for="etapa">Etapa de Alimentación:</label>
+        <select name="etapa" required>
+            <option value="Iniciador">Iniciador</option>
+            <option value="Crecimiento">Crecimiento</option>
+            <option value="Desarrollo">Desarrollo</option>
+            <option value="Finalizador">Finalizador</option>
+        </select>
 
-    <label for="etapa">Etapa de Alimentación:</label>
-    <select name="etapa" required>
-        <option value="Iniciador">Iniciador</option>
-        <option value="Crecimiento">Crecimiento</option>
-        <option value="Desarrollo">Desarrollo</option>
-        <option value="Finalizador">Finalizador</option>
-    </select>
+        <h3>Distribución de Cerdos por Corral</h3>
+        <?php for ($i = 1; $i <= 30; $i++) { ?>
+            <label for="corral_<?php echo $i; ?>">Corral <?php echo $i; ?>:</label>
+            <input type="number" name="corral_<?php echo $i; ?>" id="corral_<?php echo $i; ?>" required>
+        <?php } ?>
 
-    <h3>Distribución de Cerdos por Corral</h3>
-    <?php for ($i = 1; $i <= 30; $i++) { ?>
-        <label for="corral_<?php echo $i; ?>">Corral <?php echo $i; ?>:</label>
-        <input type="number" name="corral_<?php echo $i; ?>" required>
-    <?php } ?>
+        <button type="submit">Guardar</button>
+    </form>
 
-    <button type="submit">Guardar</button>
+    <script>
+        document.getElementById('form-cerdos').addEventListener('submit', function(e) {
+            const cantidadInicial = parseInt(document.getElementById('num_cerdos').value);
+            let sumaCorrales = 0;
+
+            for (let i = 1; i <= 30; i++) {
+                const valor = parseInt(document.getElementById('corral_' + i).value) || 0;
+                sumaCorrales += valor;
+            }
+
+            if (sumaCorrales !== cantidadInicial) {
+                e.preventDefault();
+                alert('⚠️ La suma de los cerdos en los corrales (' + sumaCorrales + ') no coincide con la cantidad inicial (' + cantidadInicial + ').');
+            }
+        });
+    </script>
+</div>
+
 </form>
 
 <style>

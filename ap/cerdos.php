@@ -295,7 +295,7 @@ function calcularEtapa($fecha_llegada) {
 
             // Configura las páginas relacionadas para cada enlace
             const relatedPages = {
-                "cerdos.php": ["cerdos.php", "add_cerdos.php, elim_cerdos.php"] // Páginas relacionadas con "cerdos"
+                "cerdos.php": ["cerdos.php", "add_cerdos.php", "elim_cerdosVenta.php", "elim_cerdosMuerte.php"] // Páginas relacionadas con "cerdos"
 
             };
 
@@ -377,7 +377,8 @@ $etapa_alimentacion = $etapa_calculada; // Mostrar la nueva etapa
                     </div>
                     <div>
                         <button class="boton-verde" onclick="location.href='add_cerdos.php?caseta=<?php echo $i; ?>'">Agregar Registro</button>
-                        <button class="boton-amarillo" onclick="location.href='elim_cerdos.php?caseta=<?php echo $i; ?>'">Eliminar Cerdos</button>
+                        <button class="boton-amarillo" onclick="location.href='elim_cerdosVenta.php?caseta=<?php echo $i; ?>'">Venta de Cerdos</button>
+                        <button class="boton-amarillo" onclick="location.href='elim_cerdosMuerte.php?caseta=<?php echo $i; ?>'">Muerte de Cerdos</button>
                         <button class="boton-rojo" onclick="vaciarCaseta(<?php echo $i; ?>)">Vaciar Caseta</button>
                     </div>
                     <div id="corrales-<?php echo $i; ?>" class="corrales" style="display: none;">

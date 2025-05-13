@@ -2,6 +2,13 @@
 session_start();
 
 include("config.php");
+
+
+
+   
+
+
+
 $usuario = $_SESSION['nombre'];
 $rol = $_SESSION['rol'];
 

@@ -17,6 +17,6 @@
 
 
 
-     <a href="notificaciones.php">Notificaciones</a>
+   
      <a href="logout.php">Cerrar Sesion</a>
  </div>
