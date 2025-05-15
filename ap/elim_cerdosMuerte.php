@@ -34,7 +34,7 @@ echo $rol;
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.min.js"></script>
     <title>Eliminacion de Cerdos</title>
-
+<link rel="icon" href="cerdo.ico" type="image/x-icon">
 
     <style>
     body {

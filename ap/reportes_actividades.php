@@ -47,6 +47,16 @@ function getEliminacionesPorFecha($conexion) {
     return $data;
 }
 
+function getCausasDeMuerte($conexion) {
+    $data = [];
+    $query = "SELECT causa_muerte, COUNT(*) as total FROM eliminacion_muerte GROUP BY causa_muerte";
+    $result = $conexion->query($query);
+    while ($row = $result->fetch_assoc()) {
+        $data[$row['causa_muerte']] = (int)$row['total'];
+    }
+    return $data;
+}
+
 $query_ventas = "SELECT fecha_venta, cantidad, num_caseta, num_corral FROM eliminacion_venta ORDER BY fecha_venta DESC";
 $result_ventas = $conexion->query($query_ventas);
 
@@ -61,6 +71,9 @@ $result_muertes = $conexion->query($query_muertes);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte de Actividades</title>
+  <link rel="icon" href="img/cerdo.ico" type="image/x-icon">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <!-- Estilos -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -98,8 +111,7 @@ $result_muertes = $conexion->query($query_muertes);
             margin: 0;
             font-size: 20px;
         }
-
-        /* Sidebar */
+ /* Sidebar */
         .sidebar {
             position: fixed;
             top: 60px;
@@ -181,6 +193,13 @@ $result_muertes = $conexion->query($query_muertes);
     </style>
 
     <script>
+
+
+
+
+
+
+
         document.addEventListener("DOMContentLoaded", function () {
             const sidebarLinks = document.querySelectorAll(".sidebar a");
             const currentPath = window.location.pathname.split("/").pop();
@@ -252,7 +271,8 @@ $result_muertes = $conexion->query($query_muertes);
             <button class="btn btn-outline-primary" onclick="toggleSection('tablaVentas')">📋 Ver Tabla de Ventas</button>
             <button class="btn btn-outline-danger" onclick="toggleSection('tablaMuertes')">📋 Ver Tabla de Muertes</button>
             <button class="btn btn-outline-info" onclick="toggleSection('graficas')">📊 Ver Gráficos</button>
-            <button class="btn btn-outline-success" onclick="generarPDF()">📝 Descargar Reporte</button>
+            <button onclick="generarPDF()">📄 Descargar Reporte PDF</button>
+
 
             <!-- Tabla de Ventas -->
             <div id="tablaVentas" class="hidden">
@@ -311,8 +331,211 @@ $result_muertes = $conexion->query($query_muertes);
 
                 <h3>Eliminaciones en el Tiempo</h3>
                 <canvas id="eliminacionesFecha"></canvas>
+
+                <h3>Causas de Muerte</h3>
+                <canvas id="causasMuerte"></canvas>
+
             </div>
         </div>
     </div>
+    <script>
+    const datosCaseta = <?= json_encode(getEliminacionesPorCaseta($conexion)); ?>;
+    const datosFecha = <?= json_encode(getEliminacionesPorFecha($conexion)); ?>;
+
+    // Caseta
+    const ctxCaseta = document.getElementById("eliminacionesCaseta").getContext("2d");
+    new Chart(ctxCaseta, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(datosCaseta),
+            datasets: [{
+                label: 'Eliminaciones por Caseta',
+                data: Object.values(datosCaseta),
+                backgroundColor: '#4caf50'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: 'Eliminaciones por Caseta'
+                }
+            }
+        }
+    });
+
+    // Fechas
+    const ctxFecha = document.getElementById("eliminacionesFecha").getContext("2d");
+    new Chart(ctxFecha, {
+        type: 'line',
+        data: {
+            labels: Object.keys(datosFecha),
+            datasets: [{
+                label: 'Total Eliminaciones',
+                data: Object.values(datosFecha),
+                borderColor: '#2196f3',
+                fill: false,
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Eliminaciones a lo Largo del Tiempo'
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Fecha'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Cantidad'
+                    },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+<script>
+    const datosCausas = <?= json_encode(getCausasDeMuerte($conexion)); ?>;
+
+    const ctxCausas = document.getElementById("causasMuerte").getContext("2d");
+    new Chart(ctxCausas, {
+        type: 'pie',
+        data: {
+            labels: Object.keys(datosCausas),
+            datasets: [{
+                label: 'Causas de Muerte',
+                data: Object.values(datosCausas),
+                backgroundColor: [
+                    '#ff6384', '#36a2eb', '#ffcd56', '#4caf50', '#9575cd', '#ff7043', '#26c6da'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Distribución de Causas de Muerte'
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+</script>
+<script>
+    async function generarPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        let y = 10;
+
+        // Mostrar las gráficas ocultas
+        const graficasDiv = document.getElementById("graficas");
+        graficasDiv.classList.remove("hidden");
+
+        // Esperar pequeño tiempo para renderizado
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        // ====== ENCABEZADO ======
+        doc.setFontSize(22);
+        doc.text("GestAP", 105, y, { align: "center" });
+        y += 12;
+
+        doc.setFontSize(14);
+        doc.text("Reporte de Eliminaciones de Cerdos", 105, y, { align: "center" });
+        y += 10;
+
+        // Fecha actual y campo de granja
+        const fecha = new Date();
+        const fechaStr = fecha.toLocaleString();
+
+        doc.setFontSize(11);
+        doc.text("Fecha de generación: " + fechaStr, 10, y);
+        y += 7;
+
+        doc.text("Granja:", 10, y); // Dejar en blanco para completar a mano
+        y += 10;
+
+        // ====== TABLA: Eliminaciones por Venta ======
+        doc.setFontSize(13);
+        doc.text("➡ Eliminaciones por Venta", 10, y);
+        y += 8;
+
+        <?php
+        $result_ventas->data_seek(0);
+        while ($fila = $result_ventas->fetch_assoc()) {
+            $linea = "Fecha: {$fila['fecha_venta']} | Caseta: {$fila['num_caseta']} | Corral: {$fila['num_corral']} | Cantidad: {$fila['cantidad']}";
+            echo "doc.text('". addslashes($linea) ."', 10, y); y += 8;\n";
+        }
+        ?>
+
+        y += 10;
+        if (y > 250) { doc.addPage(); y = 10; }
+
+        // ====== TABLA: Eliminaciones por Muerte ======
+        doc.setFontSize(13);
+        doc.text("➡ Eliminaciones por Muerte", 10, y);
+        y += 8;
+
+        <?php
+        $result_muertes->data_seek(0);
+        while ($fila = $result_muertes->fetch_assoc()) {
+            $linea = "Fecha: {$fila['fecha_muerte']} | Caseta: {$fila['num_caseta']} | Corral: {$fila['num_corral']} | Causa: {$fila['causa_muerte']}";
+            echo "doc.text('". addslashes($linea) ."', 10, y); y += 8;\n";
+        }
+        ?>
+
+        // ====== FUNCIÓN PARA INSERTAR GRÁFICAS ======
+        async function agregarGrafica(doc, canvasId, titulo, y) {
+            if (y > 220) {
+                doc.addPage();
+                y = 10;
+            }
+
+            doc.setFontSize(13);
+            doc.text(titulo, 10, y);
+            y += 5;
+
+            const canvas = document.getElementById(canvasId);
+            const canvasImage = await html2canvas(canvas);
+            const imgData = canvasImage.toDataURL("image/png");
+            const imgWidth = 180;
+            const imgHeight = canvasImage.height * imgWidth / canvasImage.width;
+            doc.addImage(imgData, 'PNG', 10, y, imgWidth, imgHeight);
+
+            return y + imgHeight + 10;
+        }
+
+        // ====== AGREGAR GRÁFICAS ======
+        y = await agregarGrafica(doc, "eliminacionesCaseta", " Eliminaciones por Caseta", y);
+        y = await agregarGrafica(doc, "eliminacionesFecha", " Eliminaciones en el Tiempo", y);
+        y = await agregarGrafica(doc, "causasMuerte", " Causas de Muerte", y);
+
+        // Ocultar gráficas nuevamente
+        graficasDiv.classList.add("hidden");
+
+        // ====== GUARDAR PDF ======
+        doc.save("Reporte_Eliminaciones.pdf");
+    }
+</script>
+
+
+
+
+
 </body>
 </html>

@@ -52,6 +52,7 @@ $result_historial = $conexion->query($sql_historial);
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.min.js"></script>
     <title>Acciones de Usuario</title>
+     <link rel="icon" href="img/cerdo.ico" type="image/x-icon">
     <style>
         body {
             background-image: url('img/f.jpeg');

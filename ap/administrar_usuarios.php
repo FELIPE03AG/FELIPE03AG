@@ -9,13 +9,8 @@ if (!isset($_SESSION['nombre'])) {
 $nombre = $_SESSION['nombre'];
 $rol = $_SESSION['rol'];
 
-echo $rol;
-
 // Incluir configuración para la conexión a la base de datos
 include("config.php");
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -32,8 +27,8 @@ include("config.php");
     <!-- Bootstrap JS (requiere Popper.js) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <link rel="icon" href="cerdo.png" type="image/x-icon">
     <title>Perfil de Usuarios</title>
+     <link rel="icon" href="img/cerdo.ico" type="image/x-icon">
 </head>
 
 <body>

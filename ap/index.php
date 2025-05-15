@@ -13,9 +13,8 @@ if(isset($_SESSION['nombre'])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GestAP</title>
-    
+     <link rel="icon" href="img/cerdo.ico" type="image/x-icon">
     <script src="https://www.google.com/recaptcha/api.js?render=6LeDJZ4pAAAAAO4I7EBvtsTm5qEm2p85sJYFwjqq"></script>
-    <link rel="icon" href="img/cerdo.png" type="image/x-icon">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.min.js"></script>
