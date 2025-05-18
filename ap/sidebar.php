@@ -15,9 +15,6 @@
         }
         ?>
 
-
-
-   
      <a href="logout.php">Cerrar Sesion</a>
  </div>
 
