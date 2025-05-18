@@ -34,8 +34,11 @@ $usuario = $result->fetch_assoc();
 <head>
     <meta charset="UTF-8">
     <title>Editar Usuario</title>
+    <link rel="icon" href="img/cerdo.ico" type="image/x-icon" />
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles/style_principal.css">
+    <link rel="stylesheet" href="styles/style_navbar.css">
+    <link rel="stylesheet" href="styles/style_sidebar.css">
 
 <script>
         document.addEventListener("DOMContentLoaded", function () {

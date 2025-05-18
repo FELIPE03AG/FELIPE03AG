@@ -24,6 +24,8 @@ echo $rol;
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles/style_principal.css">
+    <link rel="stylesheet" href="styles/style_navbar.css">
+    <link rel="stylesheet" href="styles/style_sidebar.css">
     <script src="js/bootstrap.bundle.min.js"></script>
 
 
@@ -43,13 +45,22 @@ echo $rol;
 </head>
 
 <body>
-    <!-- Navbar -->
-    <div class="navbar">
-        <h1>GestAP</h1>
-        <div class="user-name">
+   <!-- Navbar -->
+    <div class="navbar d-flex justify-content-between align-items-center px-4 py-2 bg-light shadow">
+    <h1 class="mb-0">GestAP</h1>
+
+    <!-- Usuario con dropdown -->
+    <div class="dropdown">
+        <button class="btn btn-light dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-user-circle me-2"></i>
             <?= htmlspecialchars($nombre) ?>
-        </div>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" href="logout.php"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a></li>
+        </ul>
     </div>
+</div>
+
 
     <!-- Sidebar -->
     <?php include 'sidebar.php'; ?>

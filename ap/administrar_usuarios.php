@@ -26,6 +26,8 @@ include("config.php");
     <title>Perfil de Usuarios</title>
     <link rel="icon" href="img/cerdo.ico" type="image/x-icon">
     <link rel="stylesheet" href="styles/style_principal.css">
+    <link rel="stylesheet" href="styles/style_navbar.css">
+    <link rel="stylesheet" href="styles/style_sidebar.css">
 </head>
 
 <body>

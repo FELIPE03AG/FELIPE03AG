@@ -1,0 +1,187 @@
+/* Content */
+        .content {
+            margin-top: 60px;
+            /* Espacio debajo del navbar */
+            margin-left: 250px;
+            /* Espacio para el sidebar */
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            color: #333;
+            min-height: calc(100vh - 60px);
+            /* Asegura que el contenido llene el espacio */
+        }
+
+        /* Estilo de texto */
+        .content h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        /* Estilos para la tabla */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            /* Espacio entre tablas */
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            min-width: 100px;
+            /* Ancho mínimo para celdas */
+        }
+
+        th {
+            background-color: #f2f2f2;
+            /* Color de fondo para encabezados */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+            /* Color de fondo para filas pares */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #contenedor-casetas {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .caseta {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;  
+            width: 100%;
+        }
+
+        .titulo-caseta {
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #333;
+        }
+
+        .atributos {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            margin: 5px;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .boton-verde {
+            background-color: #28a745;
+        }
+
+
+        .boton-verde:hover {
+            background-color: #218838;
+        }
+
+        .boton-amarillo {
+            background-color: rgb(255, 187, 0);
+        }
+
+        .boton-amarillo:hover {
+            background-color: rgb(223, 163, 0);
+        }
+
+        .boton-rojo {
+            background-color: #dc3545;
+        }
+
+        .boton-rojo:hover {
+            background-color: #c82333;
+        }
+
+        .titulo-caseta {
+                font-size: 24px;
+                font-weight: bold;
+                background-color: rgb(255, 255, 255);
+                color: black;
+                padding: 10px;
+                margin: 5px 0;
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-radius: 5px;
+            }
+
+            .titulo-caseta:hover {
+                background-color: rgb(148, 238, 152);
+            }
+
+            .corrales {
+                margin: 10px 0;
+                padding: 10px;
+                background-color: #f1f1f1;
+                border-radius: 5px;
+            }
+
+            .caseta {
+                margin-bottom: 20px;
+            }
+
+            .flecha {
+                margin-left: 10px;
+            }

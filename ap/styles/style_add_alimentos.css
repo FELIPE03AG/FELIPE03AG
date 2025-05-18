@@ -1,0 +1,139 @@
+form {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        label, input, select {
+            margin-bottom: 10px;
+            display: block;
+            width: 100%;
+        }
+        button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+
+         /* Content */
+        .content {
+            margin-top: 60px;
+            /* Espacio debajo del navbar */
+            margin-left: 250px;
+            /* Espacio para el sidebar */
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            color: #333;
+            min-height: calc(100vh - 60px);
+            /* Asegura que el contenido llene el espacio */
+        }
+
+        /* Estilo de texto */
+        .content h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        /* Estilos para la tabla */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            /* Espacio entre tablas */
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            min-width: 100px;
+            /* Ancho mínimo para celdas */
+        }
+
+        th {
+            background-color: #f2f2f2;
+            /* Color de fondo para encabezados */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+            /* Color de fondo para filas pares */
+        }
+
+        form {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #f7f7f7;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .corrales-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .corral-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #e9e9e9;
+            padding: 8px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .corral-item label {
+            margin-bottom: 5px;
+        }
+
+        .corral-item input {
+            width: 90%;
+            text-align: center;
+        }

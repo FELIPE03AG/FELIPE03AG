@@ -1,4 +1,3 @@
-        /* Content */
         .content {
             margin-top: 60px;
             margin-left: 250px;
@@ -11,13 +10,13 @@
         }
 
         .content h1 {
-            font-size: 28px;
+            font-size: 24px;
             margin-bottom: 20px;
         }
 
         .content p {
-            margin-bottom: 20px;
-            font-size: 18px;
+            margin-bottom: 15px;
+            line-height: 1.6;
         }
 
         table {
@@ -26,8 +25,7 @@
             margin-bottom: 20px;
         }
 
-        th,
-        td {
+        th, td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
@@ -40,4 +38,30 @@
 
         tr:nth-child(even) {
             background-color: #f2f2f2;
+        }
+
+        /* Paginación */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            margin: 0 5px;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .pagination a.active {
+            background-color: #4caf50;
+            color: white;
+            border-color: #4caf50;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
         }

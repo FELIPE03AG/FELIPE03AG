@@ -34,144 +34,10 @@ echo $rol;
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.min.js"></script>
     <title>Eliminacion de Cerdos</title>
-<link rel="icon" href="cerdo.ico" type="image/x-icon">
+    <link rel="icon" href="cerdo.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles/style_navbar.css">
+    <link rel="stylesheet" href="styles/style_sidebar.css">
 
-    <style>
-    body {
-                background-image: url('img/f.jpeg');
-                background-size: cover; /* para cubrir todo el fondo */
-                background-position: center; /* para centrar la imagen */
-                /* Añade más estilos si es necesario */
-            }
-            /* Navbar */
-            .navbar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 60px;
-                background-color: #f0f0f0; /* Gris oscuro */
-                color: black;
-                display: flex;
-                align-items: center;
-                padding: 0 20px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-                z-index: 1000;
-            }
-
-            .navbar h1 {
-                margin: 0;
-                font-size: 20px;
-            }
-
-            /* Sidebar */
-            .sidebar {
-                position: fixed;
-                top: 60px; /* Debajo del navbar */
-                left: 0;
-                width: 250px;
-                height: calc(100vh - 60px);
-                background-color: #f0f0f0; /* Gris medio */
-                color: black;
-                display: flex;
-                flex-direction: column;
-                padding-top: 20px;
-                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-            }
-
-            .sidebar a {
-                color: black;
-                padding: 15px 20px;
-                text-decoration: none;
-                transition: background 0.3s;
-            }
-
-            .sidebar a:hover {
-                background-color: #6e6e6e; /* Gris oscuro para el hover */
-            }
-            /* Resaltar el apartado activo */
-            .sidebar a.active {
-                background-color: #4caf50; /* Verde resalte */
-                color: black;
-                font-weight: bold;
-            }
-
-
-            /* Content */
-            .content {
-                margin-top: 60px; /* Espacio debajo del navbar */
-                margin-left: 250px; /* Espacio para el sidebar */
-                padding: 20px;
-                background-color: white;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                border-radius: 8px;
-                color: #333;
-                min-height: calc(100vh - 60px); /* Asegura que el contenido llene el espacio */
-            }
-
-            /* Estilo de texto */
-            .content h1 {
-                font-size: 24px;
-                margin-bottom: 20px;
-            }
-
-            .content p {
-                margin-bottom: 15px;
-                line-height: 1.6;
-            }
-
-            /* Estilos para la tabla */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px; /* Espacio entre tablas */
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-            min-width: 100px; /* Ancho mínimo para celdas */
-        }
-        th {
-            background-color: #f2f2f2; /* Color de fondo para encabezados */
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2; /* Color de fondo para filas pares */
-        }
-    </style>
-    
-     
-    <style>
-        .form-container {
-            margin: 20px auto;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 400px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input, select, button {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-        button {
-            background-color: #d9534f;
-            color: white;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #c9302c;
-        }
-    </style>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const sidebarLinks = document.querySelectorAll(".sidebar a");
@@ -210,40 +76,46 @@ echo $rol;
         <!-- Sidebar -->
         <?php include 'sidebar.php'; ?>
 
-        <div class="form-container">
-    <h2>Eliminar Cerdos por Muerte</h2>
-    <?php echo htmlspecialchars($id_caseta); ?>
-    <form action="eliminar_cerdos.php" method="POST">
-        <input type="hidden" name="tipo_eliminacion" value="muerte">
-        <input type="hidden" name="num_caseta_muerte" value="<?php echo htmlspecialchars($id_caseta); ?>"> <!-- valor dinámico -->
+<div class="content d-flex justify-content-center align-items-center" style="margin-left: 200px;">
+    <div class="card shadow-sm mt-5" style="min-width: 400px; width: 100%; max-width: 600px;">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0"><i class="fas fa-skull-crossbones"></i> Eliminar Cerdos por Muerte</h4>
+        </div>
+        <div class="card-body">
+            <?php echo htmlspecialchars($id_caseta); ?>
+            <form action="eliminar_cerdos.php" method="POST">
+                <input type="hidden" name="tipo_eliminacion" value="muerte">
+                <input type="hidden" name="num_caseta_muerte" value="<?php echo htmlspecialchars($id_caseta); ?>">
 
-        <div class="form-group">
-            <label for="fecha_muerte">Fecha de Muerte:</label>
-            <input type="datetime-local" name="fecha_muerte" id="fecha_muerte" required>
-        </div>
-        <div class="form-group">
-            <label for="num_corral_muerte">Número de Corral:</label>
-            <input type="number" name="num_corral_muerte" id="num_corral_muerte" required>
-        </div>
-        <div class="form-group">
-            <label for="causa_muerte">Causa de Muerte:</label>
-            <select name="causa_muerte" id="causa_muerte" required>
-                <option value="Tripa Roja">Tripa Roja</option>
-                <option value="Problemas Pulmonares">Problemas Pulmonares</option>
-                <option value="Agresion">Agresión</option>
-                <option value="Prolapso">Prolapso</option>
-                <option value="Desnutrición">Desnutrición</option>
-                <option value="Otra">Otra</option>
-            </select>
-        </div>
+                <div class="mb-3">
+                    <label for="fecha_muerte" class="form-label">Fecha de Muerte:</label>
+                    <input type="datetime-local" name="fecha_muerte" id="fecha_muerte" class="form-control" required>
+                </div>
 
-        <button type="submit">Eliminar por Muerte</button>
-    </form>
+                <div class="mb-3">
+                    <label for="num_corral_muerte" class="form-label">Número de Corral:</label>
+                    <input type="number" name="num_corral_muerte" id="num_corral_muerte" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="causa_muerte" class="form-label">Causa de Muerte:</label>
+                    <select name="causa_muerte" id="causa_muerte" class="form-select" required>
+                        <option value="Tripa Roja">Tripa Roja</option>
+                        <option value="Problemas Pulmonares">Problemas Pulmonares</option>
+                        <option value="Agresion">Agresión</option>
+                        <option value="Prolapso">Prolapso</option>
+                        <option value="Desnutrición">Desnutrición</option>
+                        <option value="Otra">Otra</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-danger w-100">
+                    <i class="fas fa-trash-alt"></i> Eliminar por Muerte
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
 
-
-
-    
-    
 </body>
 </html>

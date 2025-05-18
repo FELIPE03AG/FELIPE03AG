@@ -80,75 +80,10 @@ $result_muertes = $conexion->query($query_muertes);
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
+    <link rel="stylesheet" href="styles/style_navbar.css">
+    <link rel="stylesheet" href="styles/style_sidebar.css">
 
     <style>
-        body {
-            background-image: url('img/f.jpeg');
-            background-size: cover;
-            background-position: center;
-        }
-
-         /* Navbar */
-         .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 60px;
-            background-color: #f0f0f0;
-            /* Gris oscuro */
-            color: black;
-            display: flex;
-            justify-content: 'between';
-            align-items: center;
-            padding: 0 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-        }
-
-        .navbar h1 {
-            margin: 0;
-            font-size: 20px;
-        }
- /* Sidebar */
-        .sidebar {
-            position: fixed;
-            top: 60px;
-            /* Debajo del navbar */
-            left: 0;
-            width: 250px;
-            height: calc(100vh - 60px);
-            background-color: #f0f0f0;
-            /* Gris medio */
-            color: black;
-            display: flex;
-            flex-direction: column;
-            padding-top: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-        }
-
-        .sidebar a {
-            color: black;
-            padding: 15px 20px;
-            text-decoration: none;
-            transition: background 0.3s;
-        }
-
-        .sidebar a:hover {
-            background-color: #6e6e6e;
-            /* Gris oscuro para el hover */
-        }
-
-        /* Resaltar el apartado activo */
-        .sidebar a.active {
-            background-color: #4caf50;
-            /* Verde resalte */
-            color: black;
-            font-weight: bold;
-        }
-
-
         .content {
             margin-top: 60px;
             margin-left: 250px;
@@ -251,12 +186,21 @@ $result_muertes = $conexion->query($query_muertes);
 </head>
 
 <body>
+   <!-- Navbar -->
+    <div class="navbar d-flex justify-content-between align-items-center px-4 py-2 bg-light shadow">
+    <h1 class="mb-0">GestAP</h1>
 
-    <!-- Navbar -->
-    <div class="navbar">
-        <h1>GestAP</h1>
-        <div class="user-name"><?= htmlspecialchars($nombre) ?></div>
+    <!-- Usuario con dropdown -->
+    <div class="dropdown">
+        <button class="btn btn-light dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-user-circle me-2"></i>
+            <?= htmlspecialchars($nombre) ?>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" href="logout.php"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a></li>
+        </ul>
     </div>
+</div>
 
     <!-- Sidebar -->
     <?php include 'sidebar.php'; ?>

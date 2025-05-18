@@ -9,7 +9,6 @@ if (!isset($_SESSION['nombre'])) {
 $nombre = $_SESSION['nombre'];
 $rol = $_SESSION['rol'];
 
-// Incluir configuración para la conexión a la base de datos
 include("config.php");
 
 // Definir el número de registros por página
@@ -45,180 +44,74 @@ $result_historial = $conexion->query($sql_historial);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <Link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="font_awesome/css/all.min.css" rel="stylesheet">
-    <script src="js/bootstrap.bundle.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Acciones de Usuario</title>
-     <link rel="icon" href="img/cerdo.ico" type="image/x-icon">
-    <style>
-        body {
-            background-image: url('img/f.jpeg');
-            background-size: cover;
-            background-position: center;
-        }
+    <link rel="icon" href="img/cerdo.ico" type="image/x-icon" />
 
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 60px;
-            background-color: #f0f0f0;
-            color: black;
-            display: flex;
-            justify-content: 'between';
-            align-items: center;
-            padding: 0 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-        }
+    <!-- Estilos -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="font_awesome/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="styles/style_navbar.css" />
+    <link rel="stylesheet" href="styles/style_sidebar.css" />
+    <link rel="stylesheet" href="styles/style_acciones_usuario.css" />
 
-        .navbar h1 {
-            margin: 0;
-            font-size: 20px;
-        }
-
-        .sidebar {
-            position: fixed;
-            top: 60px;
-            left: 0;
-            width: 250px;
-            height: calc(100vh - 60px);
-            background-color: #f0f0f0;
-            color: black;
-            display: flex;
-            flex-direction: column;
-            padding-top: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-        }
-
-        .sidebar a {
-            color: black;
-            padding: 15px 20px;
-            text-decoration: none;
-            transition: background 0.3s;
-        }
-
-        .sidebar a:hover {
-            background-color: #6e6e6e;
-        }
-
-        .sidebar a.active {
-            background-color: #4caf50;
-            color: black;
-            font-weight: bold;
-        }
-
-        .content {
-            margin-top: 60px;
-            margin-left: 250px;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            color: #333;
-            min-height: calc(100vh - 60px);
-        }
-
-        .content h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .content p {
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-            min-width: 100px;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        /* Paginación */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .pagination a {
-            margin: 0 5px;
-            padding: 8px 12px;
-            text-decoration: none;
-            color: #333;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .pagination a.active {
-            background-color: #4caf50;
-            color: white;
-            border-color: #4caf50;
-        }
-
-        .pagination a:hover:not(.active) {
-            background-color: #ddd;
-        }
-    </style>
+    <!-- Scripts -->
+    <script src="js/bootstrap.bundle.min.js"></script>
 </head>
+
 <body>
 
-    <!-- Navbar -->
-    <div class="navbar">
-        <h1>GestAP</h1>
-        <div class="user-name">
+   <!-- Navbar -->
+    <div class="navbar d-flex justify-content-between align-items-center px-4 py-2 bg-light shadow">
+    <h1 class="mb-0">GestAP</h1>
+
+    <!-- Usuario con dropdown -->
+    <div class="dropdown">
+        <button class="btn btn-light dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-user-circle me-2"></i>
             <?= htmlspecialchars($nombre) ?>
-        </div>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" href="logout.php"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a></li>
+        </ul>
     </div>
+</div>
 
     <!-- Sidebar -->
     <?php include 'sidebar.php'; ?>
 
-    <!-- Content -->
+    <!-- Contenido principal -->
     <div class="content">
         <h2>Historial de Acciones</h2>
+
+        <!-- Tabla de acciones -->
         <table>
-            <tr>
-                <th>ID</th>
-                <th>Acción</th>
-                <th>Fecha y Hora</th>
-                <th>Usuario</th>
-            </tr>
-            <?php
-            if ($result_historial->num_rows > 0) {
-                while ($row = $result_historial->fetch_assoc()) {
-                    echo "<tr>
-                            <td>{$row['id_historial']}</td>
-                            <td>{$row['accion']}</td>
-                            <td>{$row['fecha_hora']}</td>
-                            <td>{$row['usuario']}</td>
-                          </tr>";
+            <thead>
+                <tr>
+                    <th>Acción</th>
+                    <th>Fecha y Hora</th>
+                    <th>Usuario</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if ($result_historial->num_rows > 0) {
+                    while ($row = $result_historial->fetch_assoc()) {
+                        echo "<tr>
+                                <td>{$row['accion']}</td>
+                                <td>{$row['fecha_hora']}</td>
+                                <td>{$row['usuario']}</td>
+                              </tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='3'>No hay acciones registradas</td></tr>";
                 }
-            } else {
-                echo "<tr><td colspan='4'>No hay acciones registradas</td></tr>";
-            }
-            $conexion->close();
-            ?>
+                $conexion->close();
+                ?>
+            </tbody>
         </table>
 
         <!-- Controles de paginación -->
@@ -228,7 +121,9 @@ $result_historial = $conexion->query($sql_historial);
             <?php endif; ?>
 
             <?php for ($i = 1; $i <= $total_paginas; $i++): ?>
-                <a href="?pagina=<?= $i ?>" <?= ($i == $pagina_actual) ? 'class="active"' : '' ?>><?= $i ?></a>
+                <a href="?pagina=<?= $i ?>" <?= ($i == $pagina_actual) ? 'class="active"' : '' ?>>
+                    <?= $i ?>
+                </a>
             <?php endfor; ?>
 
             <?php if ($pagina_actual < $total_paginas): ?>
@@ -237,16 +132,15 @@ $result_historial = $conexion->query($sql_historial);
         </div>
     </div>
 
+    <!-- Script para activar el link de la barra lateral -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const sidebarLinks = document.querySelectorAll(".sidebar a");
-            const currentPath = window.location.pathname.split("/").pop(); // Obtiene el archivo actual (home.php, services.php, etc.)
+            const currentPath = window.location.pathname.split("/").pop();
 
             sidebarLinks.forEach(link => {
-                // Elimina la clase activa de todos los enlaces
                 link.classList.remove("active");
 
-                // Agrega la clase activa al enlace correspondiente
                 if (link.getAttribute("href") === currentPath) {
                     link.classList.add("active");
                 }
