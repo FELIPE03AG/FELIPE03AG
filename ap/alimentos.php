@@ -90,7 +90,7 @@ $totalCasetas = 6;
             $alimento_actual = $llegada_alimento = $tipo_alimento = "N/A";
 
             if ($resultado && $fila = $resultado->fetch_assoc()) {
-                $alimento_actual = $fila['num_alim'] . " Toneladas";
+                $alimento_actual = number_format($fila['num_alim'] / 1000, 2) . " Toneladas";
                 $llegada_alimento = $fila['fecha_alim'];
                 $tipo_alimento = $fila['etapa_alim'];
                 
