@@ -56,24 +56,18 @@ include("config.php");
         <!-- Navbar -->
         <div class="navbar">
             <h1>GestAP</h1>
-
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserModal">
             Agregar Usuario
             </button>
 
-    
             <button type="button" class="btn btn-danger btn-delete" data-bs-toggle="modal" data-bs-target="#deleteUserModal">
             Eliminar Usuario
             </button>
-
-
-
-
-            <div>
-                <div class="user-name">
-                    <?= htmlspecialchars($nombre) ?>
-                </div>
+            <!-- Usuario sin dropdown -->
+            <div class="d-flex align-items-center">
+                <i class="fas fa-user-circle me-2"></i>
+                <span><?= htmlspecialchars($nombre) ?></span>
             </div>
         </div>
 
