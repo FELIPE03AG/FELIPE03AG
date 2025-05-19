@@ -80,61 +80,12 @@ $result_muertes = $conexion->query($query_muertes);
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <link rel="stylesheet" href="styles/style_navbar.css">
     <link rel="stylesheet" href="styles/style_sidebar.css">
-
-    <style>
-        .content {
-            margin-top: 60px;
-            margin-left: 250px;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            min-height: calc(100vh - 60px);
-        }
-
-        h2, h3 {
-            margin-bottom: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            min-width: 100px;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        button {
-            margin: 10px 10px 10px 0;
-        }
-    </style>
+    <link rel="stylesheet" href="styles/style_reportes.css">
 
     <script>
-
-
-
-
-
-
-
         document.addEventListener("DOMContentLoaded", function () {
             const sidebarLinks = document.querySelectorAll(".sidebar a");
             const currentPath = window.location.pathname.split("/").pop();
@@ -379,102 +330,136 @@ $result_muertes = $conexion->query($query_muertes);
 </script>
 <script>
     async function generarPDF() {
+    try {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        let y = 10;
+        let y = 15; // Posición vertical inicial
 
-        // Mostrar las gráficas ocultas
-        const graficasDiv = document.getElementById("graficas");
-        graficasDiv.classList.remove("hidden");
+        // ===== 1. HACER VISIBLES LAS GRÁFICAS TEMPORALMENTE =====
+        const graficasDiv = document.getElementById('graficas');
+        const originalState = {
+            class: graficasDiv.className,
+            display: graficasDiv.style.display,
+            opacity: graficasDiv.style.opacity
+        };
+        
+        graficasDiv.classList.remove('hidden');
+        graficasDiv.style.display = 'block';
+        graficasDiv.style.opacity = '1';
+        
+        // Esperar a que se rendericen los gráficos
+        await new Promise(resolve => setTimeout(resolve, 1000));
 
-        // Esperar pequeño tiempo para renderizado
-        await new Promise(resolve => setTimeout(resolve, 300));
-
-        // ====== ENCABEZADO ======
+        // ===== 2. ENCABEZADO =====
         doc.setFontSize(22);
-        doc.text("GestAP", 105, y, { align: "center" });
+        doc.setTextColor(41, 128, 185);
+        doc.text("Reporte de Eliminaciones", 105, y, { align: "center" });
         y += 12;
+        
+        doc.setFontSize(12);
+        doc.setTextColor(100, 100, 100);
+        doc.text("Granja Porcícola - " + new Date().toLocaleDateString(), 105, y, { align: "center" });
+        y += 20;
 
+        // ===== 3. TABLA DE VENTAS =====
         doc.setFontSize(14);
-        doc.text("Reporte de Eliminaciones de Cerdos", 105, y, { align: "center" });
-        y += 10;
-
-        // Fecha actual y campo de granja
-        const fecha = new Date();
-        const fechaStr = fecha.toLocaleString();
-
-        doc.setFontSize(11);
-        doc.text("Fecha de generación: " + fechaStr, 10, y);
-        y += 7;
-
-        doc.text("Granja:", 10, y); // Dejar en blanco para completar a mano
-        y += 10;
-
-        // ====== TABLA: Eliminaciones por Venta ======
-        doc.setFontSize(13);
-        doc.text("➡ Eliminaciones por Venta", 10, y);
+        doc.setTextColor(0, 0, 0);
+        doc.text("Eliminaciones por Venta", 14, y);
         y += 8;
+        
+        const ventasData = [["Fecha", "Caseta", "Corral", "Cantidad"]];
+        <?php $result_ventas->data_seek(0); while($fila = $result_ventas->fetch_assoc()): ?>
+        ventasData.push(["<?= $fila['fecha_venta'] ?>", "<?= $fila['num_caseta'] ?>", 
+                        "<?= $fila['num_corral'] ?>", "<?= $fila['cantidad'] ?>"]);
+        <?php endwhile; ?>
+        
+        doc.autoTable({
+            startY: y,
+            head: [ventasData[0]],
+            body: ventasData.slice(1),
+            headStyles: {
+                fillColor: [41, 128, 185],
+                textColor: 255,
+                fontStyle: 'bold'
+            },
+            alternateRowStyles: {
+                fillColor: [240, 240, 240]
+            },
+            margin: { left: 10, right: 10 }
+        });
+        
+        y = doc.lastAutoTable.finalY + 15;
 
-        <?php
-        $result_ventas->data_seek(0);
-        while ($fila = $result_ventas->fetch_assoc()) {
-            $linea = "Fecha: {$fila['fecha_venta']} | Caseta: {$fila['num_caseta']} | Corral: {$fila['num_corral']} | Cantidad: {$fila['cantidad']}";
-            echo "doc.text('". addslashes($linea) ."', 10, y); y += 8;\n";
-        }
-        ?>
-
-        y += 10;
-        if (y > 250) { doc.addPage(); y = 10; }
-
-        // ====== TABLA: Eliminaciones por Muerte ======
-        doc.setFontSize(13);
-        doc.text("➡ Eliminaciones por Muerte", 10, y);
+        // ===== 4. TABLA DE MUERTES =====
+        doc.setFontSize(14);
+        doc.text("Eliminaciones por Muerte", 14, y);
         y += 8;
+        
+        const muertesData = [["Fecha", "Caseta", "Corral", "Causa"]];
+        <?php $result_muertes->data_seek(0); while($fila = $result_muertes->fetch_assoc()): ?>
+        muertesData.push(["<?= $fila['fecha_muerte'] ?>", "<?= $fila['num_caseta'] ?>", 
+                         "<?= $fila['num_corral'] ?>", "<?= $fila['causa_muerte'] ?>"]);
+        <?php endwhile; ?>
+        
+        doc.autoTable({
+            startY: y,
+            head: [muertesData[0]],
+            body: muertesData.slice(1),
+            headStyles: {
+                fillColor: [192, 57, 43],
+                textColor: 255,
+                fontStyle: 'bold'
+            },
+            columnStyles: {
+                3: { cellWidth: 'auto' }
+            },
+            margin: { left: 10, right: 10 }
+        });
+        
+        y = doc.lastAutoTable.finalY + 15;
 
-        <?php
-        $result_muertes->data_seek(0);
-        while ($fila = $result_muertes->fetch_assoc()) {
-            $linea = "Fecha: {$fila['fecha_muerte']} | Caseta: {$fila['num_caseta']} | Corral: {$fila['num_corral']} | Causa: {$fila['causa_muerte']}";
-            echo "doc.text('". addslashes($linea) ."', 10, y); y += 8;\n";
-        }
-        ?>
-
-        // ====== FUNCIÓN PARA INSERTAR GRÁFICAS ======
-        async function agregarGrafica(doc, canvasId, titulo, y) {
-            if (y > 220) {
+        // ===== 5. GRÁFICAS (TAMAÑO REDUCIDO) =====
+        const graficas = [
+            { id: 'eliminacionesCaseta', title: 'Eliminaciones por Caseta', width: 120 },
+            { id: 'eliminacionesFecha', title: 'Eliminaciones por Fecha', width: 120 },
+            { id: 'causasMuerte', title: 'Causas de Muerte', width: 90 }
+        ];
+        
+        for (const grafica of graficas) {
+            if (y > 200) { // Si no hay espacio, nueva página
                 doc.addPage();
-                y = 10;
+                y = 15;
             }
-
-            doc.setFontSize(13);
-            doc.text(titulo, 10, y);
-            y += 5;
-
-            const canvas = document.getElementById(canvasId);
-            const canvasImage = await html2canvas(canvas);
-            const imgData = canvasImage.toDataURL("image/png");
-            const imgWidth = 180;
-            const imgHeight = canvasImage.height * imgWidth / canvasImage.width;
-            doc.addImage(imgData, 'PNG', 10, y, imgWidth, imgHeight);
-
-            return y + imgHeight + 10;
+            
+            const canvas = document.getElementById(grafica.id);
+            const imgData = await html2canvas(canvas, { scale: 0.8 });
+            
+            const imgHeight = (canvas.offsetHeight * grafica.width) / canvas.offsetWidth;
+            
+            doc.setFontSize(12);
+            doc.text(grafica.title, 14, y);
+            y += 7;
+            
+            // Centrar gráfica horizontalmente
+            const xPos = (doc.internal.pageSize.width - grafica.width) / 2;
+            doc.addImage(imgData, 'PNG', xPos, y, grafica.width, imgHeight);
+            y += imgHeight + 15;
         }
 
-        // ====== AGREGAR GRÁFICAS ======
-        y = await agregarGrafica(doc, "eliminacionesCaseta", " Eliminaciones por Caseta", y);
-        y = await agregarGrafica(doc, "eliminacionesFecha", " Eliminaciones en el Tiempo", y);
-        y = await agregarGrafica(doc, "causasMuerte", " Causas de Muerte", y);
+        // ===== 6. RESTAURAR ESTADO ORIGINAL =====
+        graficasDiv.className = originalState.class;
+        graficasDiv.style.display = originalState.display;
+        graficasDiv.style.opacity = originalState.opacity;
 
-        // Ocultar gráficas nuevamente
-        graficasDiv.classList.add("hidden");
-
-        // ====== GUARDAR PDF ======
-        doc.save("Reporte_Eliminaciones.pdf");
+        // ===== 7. GUARDAR PDF =====
+        doc.save(`Reporte_Eliminaciones_${new Date().toISOString().slice(0, 10)}.pdf`);
+        
+    } catch (error) {
+        console.error("Error al generar PDF:", error);
+        alert("Error al generar el PDF. Ver consola para detalles.");
     }
+}
 </script>
-
-
-
 
 
 </body>
