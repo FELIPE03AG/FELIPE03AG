@@ -82,10 +82,9 @@ echo $rol;
             <h4 class="mb-0"><i class="fas fa-skull-crossbones"></i> Eliminar Cerdos por Muerte</h4>
         </div>
         <div class="card-body">
-            <?php echo htmlspecialchars($id_caseta); ?>
             <form action="eliminar_cerdos.php" method="POST">
                 <input type="hidden" name="tipo_eliminacion" value="muerte">
-                <input type="hidden" name="num_caseta_muerte" value="<?php echo htmlspecialchars($id_caseta); ?>">
+                <input type="hidden" name="num_caseta_muerte" value=" <?php echo htmlspecialchars($id_caseta); ?>">
 
                 <div class="mb-3">
                     <label for="fecha_muerte" class="form-label">Fecha de Muerte:</label>

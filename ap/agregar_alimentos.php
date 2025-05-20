@@ -1,55 +1,50 @@
 <?php
-ob_start();
+// Habilitar reporte de errores para depuración
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-session_start();
-if (!isset($_SESSION['nombre'])) {
-    header('location:index.php');
-}
-
-$nombre = $_SESSION['nombre'];
-$rol = $_SESSION['rol'];
-
-echo $rol;
-
-?>
-
-<?php
-// Iniciar buffer de salida, aunque puede ser innecesario si no se está manipulando la salida
-ob_start();
-
-// Incluir configuración para la conexión a la base de datos
 include("config.php");
 
-//estos datos los estoy agarrando del modal de cerdos.php
-$tolva = isset($_REQUEST['num_tolva']) ? trim($_REQUEST['num_tolva']) : NULL;
-$cantidad = isset($_REQUEST['cantidad_alim']) ? trim($_REQUEST['cantidad_alim']) : NULL;
-$fecha = isset($_REQUEST['fecha_llegada_alim']) ? trim($_REQUEST['fecha_llegada_alim']) : NULL;
-$etapa = isset($_REQUEST['etapa_alim']) ? trim($_REQUEST['etapa_alim']) : NULL;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Verificar que todos los campos requeridos están presentes
+    if (!isset($_POST['num_alim'], $_POST['fecha_alim'], $_POST['etapa_alim'])) {
+        die("Faltan campos requeridos en el formulario");
+    }
 
-$consulta = "INSERT INTO alimentacion (num_tolva, cantidad_alim, fecha_llegada_alim, etapa_alim) 
-VALUES (?, ?, ?, ?)";
+    $num_alim = $_POST['num_alim'];
+    $fecha_alim = $_POST['fecha_alim'];
+    $etapa_alim = $_POST['etapa_alim'];
 
-$intenta = $conexion->prepare($consulta);
-$intenta->bind_param("isss", $tolva, $cantidad, $fecha, $etapa);
+    // Depuración: Mostrar los valores recibidos
+    echo "<pre>Datos recibidos:\n";
+    print_r($_POST);
+    echo "</pre>";
 
- // Insertar en la base de datos
-if ($intenta->execute()) {
-  // La consulta se realizó con éxito
-  echo "La consulta se realizó correctamente.";
-  header("location:alimentos.php");
+    // Preparar la consulta SQL
+    $sql = "INSERT INTO alimentos (num_alim, fecha_alim, etapa_alim) VALUES (?, ?, ?)";
+    
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("iss", $num_alim, $fecha_alim, $etapa_alim);
+        
+        if ($stmt->execute()) {
+            echo "Inserción exitosa! Redireccionando...";
+            header("Location: alimentos.php");
+            exit();
+        } else {
+            echo "<h3>Error al ejecutar la consulta:</h3>";
+            echo "<p>" . $stmt->error . "</p>";
+            echo "<h3>Consulta SQL:</h3>";
+            echo "<p>" . $sql . "</p>";
+        }
+        
+        $stmt->close();
+    } else {
+        echo "<h3>Error al preparar la consulta:</h3>";
+        echo "<p>" . $conn->error . "</p>";
+    }
+
+    $conn->close();
 } else {
-  // Error al ejecutar la consulta
-  echo "Error al ejecutar la consulta: " . $conexion->error;
+    echo "Método de solicitud no permitido";
 }
-
-
-
-
-
- 
-
-
-
-// Limpiar el buffer de salida, si es necesario
-ob_end_flush();
 ?>

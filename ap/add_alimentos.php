@@ -26,6 +26,7 @@ include("config.php");
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Agregar Tolva de Alimento - Caseta <?php echo $caseta; ?></title>
     <link rel="icon" href="img/cerdo.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles/style_navbar.css">
@@ -59,7 +60,7 @@ include("config.php");
 
             // Configura las páginas relacionadas para cada enlace
             const relatedPages = {
-                "alimentos.php": ["add_alimentos.php", "edit_alimentos.php"] // Páginas relacionadas con "cerdos"
+                "alimentos.php": ["add_alimentos.php", "edit_tolva.php"] // Páginas relacionadas con "cerdos"
                 
             };
 
@@ -77,16 +78,15 @@ include("config.php");
     </script>
 
 <div class= "content">
-<h2 style="text-align: center;">Agregar Tolva de Alimento - Caseta <?php echo $tolva; ?></h2>
+<h2 style="text-align: center;">Agregar Alimento - Caseta <?php echo $tolva; ?></h2>
 
 <form action="save_tolvas.php" method="POST">
     <input type="hidden" name="tolva" value="<?php echo $tolva; ?>">
 
-    <label>Número de Alimento (kg):</label>
-    <input type="number" name="num_alim" required min="1" max="5000"><br>
+    <label>Cantidad de Alimento (Kg):</label>
+    <input type="number" name="num_alim" required><br>
 
-
-    <label>Fecha de Alimentación:</label>
+    <label>Fecha de Llegada:</label>
     <input type="date" name="fecha_alim" required><br>
 
     <label>Etapa de Alimentación:</label>
@@ -100,6 +100,8 @@ include("config.php");
 
     <button type="submit">Guardar</button>
 </form>
+
+
 
 </body>
 </html>

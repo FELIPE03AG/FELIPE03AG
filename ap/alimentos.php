@@ -77,23 +77,25 @@ $totalCasetas = 6;
 
    
 
-    <div class="content">
+<div class="content">
     <h1>Gestión de Tolvas de Alimento</h1>
     <div id="contenedor-tolvas">
         <?php
         for ($i = 1; $i <= 6; $i++) { // Se generan 6 tolvas
+            // Consulta principal para datos de la tolva
             $query = "SELECT num_alim, fecha_alim, etapa_alim 
-                      FROM tolvas WHERE id = $i";
+                      FROM alimentos WHERE nombre = 'Tolva $i'";
             $resultado = $conexion->query($query);
 
-            // Inicializar valores en caso de que no haya datos
-            $alimento_actual = $llegada_alimento = $tipo_alimento = "N/A";
+            // Valores por defecto
+            $alimento_actual = "0 Toneladas";
+            $llegada_alimento = "Nunca";
+            $tipo_alimento = "No definido";
 
             if ($resultado && $fila = $resultado->fetch_assoc()) {
-                $alimento_actual = number_format($fila['num_alim'] / 1000, 2) . " Toneladas";
-                $llegada_alimento = $fila['fecha_alim'];
+                $alimento_actual = number_format($fila['num_alim'], 2) . " (Kg.)";
+                $llegada_alimento = date("d/m/Y", strtotime($fila['fecha_alim']));
                 $tipo_alimento = $fila['etapa_alim'];
-                
             }
         ?>
             <div class="tolva">
@@ -101,8 +103,8 @@ $totalCasetas = 6;
                     Tolva <?php echo $i; ?> <span id="flecha-<?php echo $i; ?>">▼</span>
                 </div>
                 <div class="atributos">
-                    <span><strong>Capacidad Total:</strong> 5 Toneladas </span>
-                    <span><strong>Alimento Disponible:</strong> <?php echo $alimento_actual; ?> </span>
+                    <span><strong>Capacidad Total:</strong> 5 Toneladas</span>
+                    <span><strong>Alimento Disponible:</strong> <?php echo $alimento_actual; ?></span>
                     <span><strong>Tipo de Alimento:</strong> <?php echo $tipo_alimento; ?></span>
                     <span><strong>Último Relleno:</strong> <?php echo $llegada_alimento; ?></span>
                 </div>
@@ -111,28 +113,26 @@ $totalCasetas = 6;
                     <button class="boton-verde" onclick="location.href='edit_tolva.php?tolva=<?php echo $i; ?>'">Editar Tolva</button>
                     <button class="boton-rojo" onclick="vaciarTolva(<?php echo $i; ?>)">Vaciar Tolva</button>
                     <div class="atributos" id="detalles-<?php echo $i; ?>" style="display: none;">
-                        
-    <h4>Historial de Rellenos:</h4>
-    <ul>
-        <?php
-        $historial_query = "SELECT cantidad_alim, etapa_alim, fecha_llegada_alim 
-                            FROM tolvas 
-                            WHERE num_tolva = $i 
-                            ORDER BY fecha_llegada_alim DESC";
+                        <h4>Historial de Rellenos:</h4>
+                        <ul>
+                            <?php
+                            $historial_query = "SELECT num_alim AS cantidad, etapa_alim, fecha_alim 
+                                              FROM historial_alimentos 
+                                              WHERE tolva_id = $i 
+                                              ORDER BY fecha_alim DESC";
+                            $historial_result = $conexion->query($historial_query);
 
-        $historial_result = $conexion->query($historial_query);
-
-        if ($historial_result && $historial_result->num_rows > 0) {
-            while ($registro = $historial_result->fetch_assoc()) {
-                echo "<li><strong>{$registro['fecha_llegada_alim']}</strong> - {$registro['cantidad_alim']} kg - {$registro['etapa_alim']}</li>";
-            }
-        } else {
-            echo "<li>No hay historial de alimentos para esta tolva.</li>";
-        }
-        ?>
-    </ul>
-</div>
-
+                            if ($historial_result && $historial_result->num_rows > 0) {
+                                while ($registro = $historial_result->fetch_assoc()) {
+                                    $fecha_formateada = date("d/m/Y", strtotime($registro['fecha_alim']));
+                                    echo "<li><strong>{$fecha_formateada}</strong> - {$registro['cantidad']} kg - {$registro['etapa_alim']}</li>";
+                                }
+                            } else {
+                                echo "<li>No hay historial de alimentos para esta tolva.</li>";
+                            }
+                            ?>
+                        </ul>
+                    </div>
                 </div>
             </div>
         <?php } ?>
@@ -173,5 +173,4 @@ $totalCasetas = 6;
 
     </div>
 </body>
-
 </html>
