@@ -84,7 +84,7 @@ include("config.php");
     <input type="hidden" name="tolva" value="<?php echo $tolva; ?>">
 
     <label>Cantidad de Alimento (Kg):</label>
-    <input type="number" name="num_alim" required><br>
+    <input type="number" name="num_alim" required min="1" max="5000"><br>
 
     <label>Fecha de Llegada:</label>
     <input type="date" name="fecha_alim" required><br>

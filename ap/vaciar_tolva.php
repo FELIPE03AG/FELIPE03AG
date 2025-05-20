@@ -5,7 +5,7 @@ if (isset($_GET['tolva'])) {
     $tolvaId = intval($_GET['tolva']);
 
     // Vaciar la tolva
-    $query_tolva = "UPDATE tolvas SET 
+    $query_tolva = "UPDATE alimentos SET 
                         num_alim = NULL,
                         etapa_alim = NULL,
                         fecha_alim = NULL
