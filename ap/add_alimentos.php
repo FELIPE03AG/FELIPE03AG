@@ -83,7 +83,7 @@ include("config.php");
 <form action="save_tolvas.php" method="POST">
     <input type="hidden" name="tolva" value="<?php echo $tolva; ?>">
 
-    <label>Cantidad de Alimento (Kg):</label>
+    <label>Cantidad de Alimento (Toneladas):</label>
     <input type="number" name="num_alim" required min="1" max="5000"><br>
 
     <label>Fecha de Llegada:</label>

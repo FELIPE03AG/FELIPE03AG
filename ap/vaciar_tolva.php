@@ -14,10 +14,10 @@ if (isset($_GET['tolva'])) {
 
     if ($resultado_tolva) {
         session_start();
-        $usuario = $_SESSION['nombre'];
+        $usuario = $_SESSION['nombre'] ?? 'Usuario desconocido'; // Manejo más seguro
 
         // Historial
-        $accion = "Vació la tolva con ID: $tolvaId";
+        $accion = "Vació la tolva $tolvaId";
         $fecha_hora = date('Y-m-d H:i:s');
         $registro = "INSERT INTO historial (accion, fecha_hora, usuario) 
                      VALUES ('$accion', '$fecha_hora', '$usuario')";
@@ -25,7 +25,7 @@ if (isset($_GET['tolva'])) {
 
         echo json_encode(['success' => true]);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Error al vaciar la tolva.']);
+        echo json_encode(['success' => false, 'message' => 'Error al vaciar la tolva: ' . mysqli_error($conexion)]);
     }
 } else {
     echo json_encode(['success' => false, 'message' => 'ID de tolva no proporcionado.']);

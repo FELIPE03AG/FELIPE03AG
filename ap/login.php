@@ -22,7 +22,7 @@ if ($fila = mysqli_fetch_assoc($resultado)) {
     $_SESSION['nombre'] = $fila['nombre'];
     $_SESSION['rol'] = $fila['rol'];
 
-    header("Location: principal.php");
+    header("Location: cerdos.php");
     exit();
 } else {
     // Usuario o contraseña incorrectos

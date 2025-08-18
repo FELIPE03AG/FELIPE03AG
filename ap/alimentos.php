@@ -81,10 +81,10 @@ $totalCasetas = 6;
     <h1>Gestión de Tolvas de Alimento</h1>
     <div id="contenedor-tolvas">
         <?php
-        for ($i = 1; $i <= 6; $i++) { // Se generan 6 tolvas
-            // Consulta principal para datos de la tolva
-            $query = "SELECT num_alim, fecha_alim, etapa_alim 
-                      FROM alimentos WHERE nombre = 'Tolva $i'";
+        for ($i = 1; $i <= 6; $i++) {
+            // Consulta modificada para usar ID en lugar de nombre
+            $query = "SELECT id, num_alim, fecha_alim, etapa_alim 
+                      FROM alimentos WHERE id = $i";
             $resultado = $conexion->query($query);
 
             // Valores por defecto
@@ -93,9 +93,9 @@ $totalCasetas = 6;
             $tipo_alimento = "No definido";
 
             if ($resultado && $fila = $resultado->fetch_assoc()) {
-                $alimento_actual = number_format($fila['num_alim'], 2) . " (Kg.)";
-                $llegada_alimento = date("d/m/Y", strtotime($fila['fecha_alim']));
-                $tipo_alimento = $fila['etapa_alim'];
+                $alimento_actual = ($fila['num_alim'] !== null) ? number_format($fila['num_alim'], 2) . " Toneladas" : "0 Toneladas";
+                $llegada_alimento = ($fila['fecha_alim'] !== null) ? date("d/m/Y", strtotime($fila['fecha_alim'])) : "Nunca";
+                $tipo_alimento = $fila['etapa_alim'] ?? "No definido";
             }
         ?>
             <div class="tolva">
@@ -110,29 +110,7 @@ $totalCasetas = 6;
                 </div>
                 <div>
                     <button class="boton-verde" onclick="location.href='add_alimentos.php?tolva=<?php echo $i; ?>'">Agregar Alimento</button>
-                    <button class="boton-verde" onclick="location.href='edit_tolva.php?tolva=<?php echo $i; ?>'">Editar Tolva</button>
                     <button class="boton-rojo" onclick="vaciarTolva(<?php echo $i; ?>)">Vaciar Tolva</button>
-                    <div class="atributos" id="detalles-<?php echo $i; ?>" style="display: none;">
-                        <h4>Historial de Rellenos:</h4>
-                        <ul>
-                            <?php
-                            $historial_query = "SELECT num_alim AS cantidad, etapa_alim, fecha_alim 
-                                              FROM historial_alimentos 
-                                              WHERE tolva_id = $i 
-                                              ORDER BY fecha_alim DESC";
-                            $historial_result = $conexion->query($historial_query);
-
-                            if ($historial_result && $historial_result->num_rows > 0) {
-                                while ($registro = $historial_result->fetch_assoc()) {
-                                    $fecha_formateada = date("d/m/Y", strtotime($registro['fecha_alim']));
-                                    echo "<li><strong>{$fecha_formateada}</strong> - {$registro['cantidad']} kg - {$registro['etapa_alim']}</li>";
-                                }
-                            } else {
-                                echo "<li>No hay historial de alimentos para esta tolva.</li>";
-                            }
-                            ?>
-                        </ul>
-                    </div>
                 </div>
             </div>
         <?php } ?>
@@ -140,23 +118,23 @@ $totalCasetas = 6;
 </div>
 
 <script>
-    function vaciarTolva(tolvaId) {
-        if (confirm("¿Estás seguro de que deseas vaciar la tolva " + tolvaId + "?")) {
-            fetch("vaciar_tolva.php?tolva=" + tolvaId)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("Tolva vaciada correctamente.");
-                        location.reload();
-                    } else {
-                        alert("Error al vaciar la tolva: " + data.message);
-                    }
-                })
-                .catch(error => {
-                    alert("Ocurrió un error: " + error);
-                });
-        }
+   function vaciarTolva(tolvaId) {
+    if (confirm("¿Estás seguro de que deseas vaciar la tolva " + tolvaId + "?")) {
+        fetch("vaciar_tolva.php?tolva=" + tolvaId)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Tolva vaciada correctamente.");
+                    location.reload();
+                } else {
+                    alert("Error al vaciar la tolva: " + data.message);
+                }
+            })
+            .catch(error => {
+                alert("Ocurrió un error: " + error);
+            });
     }
+}
 
     function toggleDetalles(id) {
         const detalles = document.getElementById(`detalles-${id}`);
