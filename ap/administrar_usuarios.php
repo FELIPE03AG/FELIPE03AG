@@ -54,22 +54,15 @@ include("config.php");
     <body>
 
         <!-- Navbar -->
-        <div class="navbar">
-            <h1>GestAP</h1>
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserModal">
-            Agregar Usuario
-            </button>
+    <div class="navbar d-flex justify-content-between align-items-center px-4 py-2 bg-light shadow">
+        <h1 class="mb-0">GestAP</h1>
 
-            <button type="button" class="btn btn-danger btn-delete" data-bs-toggle="modal" data-bs-target="#deleteUserModal">
-            Eliminar Usuario
-            </button>
-            <!-- Usuario sin dropdown -->
-            <div class="d-flex align-items-center">
-                <i class="fas fa-user-circle me-2"></i>
-                <span><?= htmlspecialchars($nombre) ?></span>
-            </div>
+        <!-- Usuario sin dropdown -->
+        <div class="d-flex align-items-center">
+            <i class="fas fa-user-circle me-2"></i>
+            <span><?= htmlspecialchars($nombre) ?></span>
         </div>
+    </div>
 
         <!-- Modal para agregar usuario -->
 <div class="modal fade" id="addUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
@@ -231,6 +224,16 @@ document.getElementById('formEditarUsuario').addEventListener('submit', function
 
 
         <div class="content">
+            <h2>Acciones de Usuarios</h2>
+
+         <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserModal">
+            Agregar Usuario
+            </button>
+
+            <button type="button" class="btn btn-danger btn-delete" data-bs-toggle="modal" data-bs-target="#deleteUserModal">
+            Eliminar Usuario
+            </button>
 
             <h2>Usuarios Registrados</h2>
             <table>
