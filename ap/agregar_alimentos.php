@@ -1,50 +1,36 @@
 <?php
-// Habilitar reporte de errores para depuración
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-include("config.php");
+include("conexion.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Verificar que todos los campos requeridos están presentes
-    if (!isset($_POST['num_alim'], $_POST['fecha_alim'], $_POST['etapa_alim'])) {
-        die("Faltan campos requeridos en el formulario");
-    }
+    $num_caseta = $_POST['num_caseta'];
+    $cantidad = $_POST['cantidad'];
+    $etapa = $_POST['etapa'];
 
-    $num_alim = $_POST['num_alim'];
-    $fecha_alim = $_POST['fecha_alim'];
-    $etapa_alim = $_POST['etapa_alim'];
+    $sql = "INSERT INTO tolvas (num_tolva, cantidad_alim, etapa_alim, fecha_llegada_alim) 
+            VALUES ('$num_caseta', '$cantidad', '$etapa', NOW())";
 
-    // Depuración: Mostrar los valores recibidos
-    echo "<pre>Datos recibidos:\n";
-    print_r($_POST);
-    echo "</pre>";
-
-    // Preparar la consulta SQL
-    $sql = "INSERT INTO alimentos (num_alim, fecha_alim, etapa_alim) VALUES (?, ?, ?)";
-    
-    if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("iss", $num_alim, $fecha_alim, $etapa_alim);
-        
-        if ($stmt->execute()) {
-            echo "Inserción exitosa! Redireccionando...";
-            header("Location: alimentos.php");
-            exit();
-        } else {
-            echo "<h3>Error al ejecutar la consulta:</h3>";
-            echo "<p>" . $stmt->error . "</p>";
-            echo "<h3>Consulta SQL:</h3>";
-            echo "<p>" . $sql . "</p>";
-        }
-        
-        $stmt->close();
+    if ($conn->query($sql) === TRUE) {
+        header("Location: alimentos.php?success=1");
     } else {
-        echo "<h3>Error al preparar la consulta:</h3>";
-        echo "<p>" . $conn->error . "</p>";
+        echo "Error: " . $conn->error;
     }
+}
+?>
+3️⃣ eliminar_alimento.php
+php
+Copiar código
+<?php
+include("conexion.php");
 
-    $conn->close();
-} else {
-    echo "Método de solicitud no permitido";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id = $_POST['id'];
+
+    $sql = "DELETE FROM tolvas WHERE id = '$id'";
+
+    if ($conn->query($sql) === TRUE) {
+        header("Location: alimentos.php?deleted=1");
+    } else {
+        echo "Error: " . $conn->error;
+    }
 }
 ?>

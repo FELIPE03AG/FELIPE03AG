@@ -76,6 +76,8 @@ if(isset($_SESSION['nombre'])){
 
             <!-- Botón de inicio de sesión -->
             <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+            <a href="recuperar_clave.php">Recuperar Contraseña</a>
+            
         </form>
     </div>
 </body>

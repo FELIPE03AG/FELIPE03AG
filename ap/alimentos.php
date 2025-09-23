@@ -27,6 +27,7 @@ $totalCasetas = 6;
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Gestion de Alimentos</title>
     <link rel="icon" href="img/cerdo.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles/style_navbar.css">
@@ -79,76 +80,133 @@ $totalCasetas = 6;
 
 <div class="content">
     <h1>Gestión de Tolvas de Alimento</h1>
-    <div id="contenedor-tolvas">
-        <?php
-        for ($i = 1; $i <= 6; $i++) {
-            // Consulta modificada para usar ID en lugar de nombre
-            $query = "SELECT id, num_alim, fecha_alim, etapa_alim 
-                      FROM alimentos WHERE id = $i";
-            $resultado = $conexion->query($query);
+   <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Alimento</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
 
-            // Valores por defecto
-            $alimento_actual = "0 Toneladas";
-            $llegada_alimento = "Nunca";
-            $tipo_alimento = "No definido";
+<div class="container mt-5">
 
-            if ($resultado && $fila = $resultado->fetch_assoc()) {
-                $alimento_actual = ($fila['num_alim'] !== null) ? number_format($fila['num_alim'], 2) . " Toneladas" : "0 Toneladas";
-                $llegada_alimento = ($fila['fecha_alim'] !== null) ? date("d/m/Y", strtotime($fila['fecha_alim'])) : "Nunca";
-                $tipo_alimento = $fila['etapa_alim'] ?? "No definido";
-            }
-        ?>
-            <div class="tolva">
-                <div class="titulo-tolva" onclick="toggleDetalles(<?php echo $i; ?>)">
-                    Tolva <?php echo $i; ?> <span id="flecha-<?php echo $i; ?>">▼</span>
-                </div>
-                <div class="atributos">
-                    <span><strong>Capacidad Total:</strong> 5 Toneladas</span>
-                    <span><strong>Alimento Disponible:</strong> <?php echo $alimento_actual; ?></span>
-                    <span><strong>Tipo de Alimento:</strong> <?php echo $tipo_alimento; ?></span>
-                    <span><strong>Último Relleno:</strong> <?php echo $llegada_alimento; ?></span>
-                </div>
-                <div>
-                    <button class="boton-verde" onclick="location.href='add_alimentos.php?tolva=<?php echo $i; ?>'">Agregar Alimento</button>
-                    <button class="boton-rojo" onclick="vaciarTolva(<?php echo $i; ?>)">Vaciar Tolva</button>
-                </div>
-            </div>
-        <?php } ?>
+    <!-- Botones -->
+    <div class="d-flex justify-content-between mb-3">
+        <h2>Gestión de Alimento</h2>
+    </div>
+        <div>
+            <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#modalAgregar">
+                ➕ Agregar Registro
+            </button>
+            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar">
+                ❌ Eliminar Registro
+            </button>
+        </div>
+    </div>
+
+    <!-- Tabla de registros -->
+    <div class="card shadow">
+        <div class="card-body">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Número de Caseta</th>
+                        <th>Cantidad de Alimento (kg)</th>
+                        <th>Etapa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $sql = "SELECT id, fecha_llegada_alim, TIME(fecha_llegada_alim) as hora, num_tolva as caseta, cantidad_alim, etapa_alim 
+                            FROM tolvas ORDER BY fecha_llegada_alim DESC";
+                    $result = $conn->query($sql);
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>
+                                    <td>".$row['id']."</td>
+                                    <td>".$row['fecha_llegada_alim']."</td>
+                                    <td>".$row['hora']."</td>
+                                    <td>".$row['caseta']."</td>
+                                    <td>".$row['cantidad_alim']."</td>
+                                    <td>".$row['etapa_alim']."</td>
+                                  </tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='6' class='text-center'>No hay registros</td></tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
-<script>
-   function vaciarTolva(tolvaId) {
-    if (confirm("¿Estás seguro de que deseas vaciar la tolva " + tolvaId + "?")) {
-        fetch("vaciar_tolva.php?tolva=" + tolvaId)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert("Tolva vaciada correctamente.");
-                    location.reload();
-                } else {
-                    alert("Error al vaciar la tolva: " + data.message);
-                }
-            })
-            .catch(error => {
-                alert("Ocurrió un error: " + error);
-            });
-    }
-}
-
-    function toggleDetalles(id) {
-        const detalles = document.getElementById(`detalles-${id}`);
-        const flecha = document.getElementById(`flecha-${id}`);
-        if (detalles.style.display === 'none' || detalles.style.display === '') {
-            detalles.style.display = 'block';
-            flecha.textContent = '▲';
-        } else {
-            detalles.style.display = 'none';
-            flecha.textContent = '▼';
-        }
-    }
-</script>
-
+<!-- Modal Agregar -->
+<div class="modal fade" id="modalAgregar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="agregar_alimento.php" method="POST">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title">Agregar Registro</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <label class="form-label">Número de Caseta:</label>
+          <input type="number" name="num_caseta" class="form-control" required>
+          
+          <label class="form-label mt-2">Cantidad de Alimento (kg):</label>
+          <input type="number" name="cantidad" class="form-control" required>
+          
+          <label class="form-label mt-2">Etapa:</label>
+          <select name="etapa" class="form-select" required>
+              <option value="Iniciador">Iniciador</option>
+              <option value="Crecimiento">Crecimiento</option>
+              <option value="Desarrollo">Desarrollo</option>
+              <option value="Finalizador">Finalizador</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Guardar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </form>
     </div>
+  </div>
+</div>
+
+<!-- Modal Eliminar -->
+<div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="eliminar_alimento.php" method="POST">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title">Eliminar Registro</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <label class="form-label">ID del registro a eliminar:</label>
+          <input type="number" name="id" class="form-control" required>
+          <small class="text-muted">Consulta la tabla para ver el ID correspondiente.</small>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-danger">Eliminar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+
 </body>
 </html>
