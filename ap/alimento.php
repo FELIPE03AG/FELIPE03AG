@@ -10,7 +10,8 @@ $nombre = $_SESSION['nombre'];
 $rol = $_SESSION['rol'];
 
 include("config.php");
-$totalCasetas = 6;
+
+
 ?>
 
 <!DOCTYPE html>
@@ -27,12 +28,11 @@ $totalCasetas = 6;
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-    
-    <title>Gestion de Alimentos</title>
+    <title>Gestión de Alimento</title>
     <link rel="icon" href="img/cerdo.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles/style_navbar.css">
     <link rel="stylesheet" href="styles/style_sidebar.css">
-    <link rel="stylesheet" href="styles/style_alimentos.css">
+    <link rel="stylesheet" href="styles/style_cerdos.css">
 </head>
 
 <body>
@@ -43,7 +43,7 @@ $totalCasetas = 6;
 
             // Configura las páginas relacionadas para cada enlace
             const relatedPages = {
-                "alimentos.php": ["alimentos.php", "alim.php"] // Páginas relacionadas con "cerdos"
+                "alimento.php": ["alimento.php", "alim.php"] // Páginas relacionadas con "cerdos"
                 
             };
 
@@ -59,7 +59,6 @@ $totalCasetas = 6;
             });
         });
     </script>
-   
 
     <!-- Navbar -->
     <div class="navbar d-flex justify-content-between align-items-center px-4 py-2 bg-light shadow">
@@ -76,53 +75,23 @@ $totalCasetas = 6;
     <!-- Sidebar -->
     <?php include 'sidebar.php'; ?>
 
-   
 
-<div class="content">
+
+    <div class="content">
         <h2 class="mb-4">Gestión de Tolvas de Alimento</h2>
 
-        <!-- Botones -->
+       <!-- Botones -->
         <div class="mb-3">
             <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#modalAgregar">
                 ➕ Agregar Registro
             </button>
-            <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Agregar
-</button>
+
             <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar">
                 ❌ Eliminar Registro
             </button>
         </div>
 
-           <!-- Tabla de registros -->
-    <div class="mt-4">
-      <table class="table table-bordered">
-        <thead class="table-dark">
-          <tr>
-            <th>ID</th>
-            <th>Fecha y Hora</th>
-            <th>Número de Caseta</th>
-            <th>Cantidad</th>
-            <th>Etapa</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php while($fila = $resultado->fetch_assoc()): ?>
-            <tr>
-              <td><?= $fila['id'] ?></td>
-              <td><?= $fila['fecha'] ?></td>
-              <td><?= $fila['num_caseta'] ?></td>
-              <td><?= $fila['cantidad'] ?></td>
-              <td><?= $fila['etapa'] ?></td>
-            </tr>
-          <?php endwhile; ?>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-    <!-- Modal Agregar -->
+ <!-- Modal Agregar -->
     <div class="modal fade" id="modalAgregar" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -181,28 +150,57 @@ $totalCasetas = 6;
         </div>
     </div>
 
-    <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
+ <?php
+
+
+// Consulta a la tabla tolvas
+$sql = "SELECT id, fecha, num_caseta, cantidad, etapa 
+        FROM tolvas 
+        ORDER BY fecha DESC";
+
+$resultado = $conexion->query($sql);
+?>
+
+<!-- Tabla de registros -->
+<div class="mt-4">
+  <table class="table table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Fecha y Hora</th>
+        <th>Número de Caseta</th>
+        <th>Cantidad</th>
+        <th>Etapa</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php if($resultado && $resultado->num_rows > 0): ?>
+        <?php while($fila = $resultado->fetch_assoc()): ?>
+          <tr>
+            <td><?= $fila['id'] ?></td>
+            <td><?= $fila['fecha'] ?></td>
+            <td><?= $fila['num_caseta'] ?></td>
+            <td><?= $fila['cantidad'] ?></td>
+            <td><?= $fila['etapa'] ?></td>
+          </tr>
+        <?php endwhile; ?>
+      <?php else: ?>
+        <tr>
+          <td colspan="5" class="text-center">No hay registros en la tabla tolvas</td>
+        </tr>
+      <?php endif; ?>
+    </tbody>
+  </table>
 </div>
 
 
-</body>
-</html>
 
+
+
+
+        
+
+
+    </div>
 </body>
 </html>

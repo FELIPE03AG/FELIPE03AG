@@ -2,7 +2,7 @@
  <div class="sidebar">
      <h2 class="text-center">Inicio</h2>
      <a href="cerdos.php">Cerdos</a>
-     <a href="alimentos.php">Alimentos</a>
+     <a href="alimento.php">Alimentos</a>
 
      <?php
         if ($rol == 'admin') {

@@ -95,7 +95,7 @@ function calcularEtapa($fecha_llegada) {
 
     <div class="content">
 
-        <h1>Gestión de Casetas de Cerdos</h1>
+        <h2>Gestión de Casetas de Cerdos</h2>
         <div id="contenedor-casetas">
             <?php
             for ($i = 1; $i <= $totalCasetas; $i++) {
