@@ -1,52 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <Link href="css/bootstrap.min.css" rel="stylesheet">
-    <script src="js/bootstrap.bundle.min.js"></script>
-</head>
-<body>
-<style>
-   body {
-            background-image: url('img/fnd.jpeg');
-            background-size: cover; /* para cubrir todo el fondo */
-            background-position: center; /* para centrar la imagen */
-            /* Añade más estilos si es necesario */
-        }
-  </style>
-    <button><a href="index.php">Regresar al Lobby</a></button>
+<?php
+session_start();
+require_once 'config/database.php';
 
-    
-    
-      
-    <div class="container text-center">
-      <div class="row">
-        <div class="col">
-          Columna 1
-          <div>
-            Imagen LOGO
-          </div>
-          <img src="logotipo.png" width="500px" alt="Descripción de mi SVG" />
-        </div>
+header('Content-Type: application/json');
 
-  
-  
-  
-      <div class="col">
-          Columna 2
-          <div>
-          LOGIN    
-          </div>
-          <div>
-            En Proceso
-          </div>
-          
-  
-        
-  
-      
-  </body>
-</html>
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode(['success' => false, 'message' => 'Método no permitido']);
+    exit;
+}
+
+$email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    echo json_encode(['success' => false, 'message' => 'Email no válido']);
+    exit;
+}
+
+try {
+    $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // Verificar si el email existe
+    $stmt = $pdo->prepare("SELECT id, nombre FROM usuarios WHERE co = ?");
+    $stmt->execute([$email]);
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$usuario) {
+        echo json_encode(['success' => true, 'message' => 'Si el email existe, recibirás instrucciones para recuperar tu contraseña.']);
+        exit;
+    }
+
+    // Generar token
+    $token = bin2hex(random_bytes(32));
+    $expiracion = date('Y-m-d H:i:s', strtotime('+1 hour'));
+
+    // Guardar token en BD
+    $stmt = $pdo->prepare("UPDATE usuarios SET token_recuperacion = ?, token_expiracion = ? WHERE co = ?");
+    $stmt->execute([$token, $expiracion, $email]);
+
+    // Guardar en archivo de log para pruebas
+    $logMessage = date('Y-m-d H:i:s') . " - Email: $email - Token: $token - Enlace: http://localhost/tu_proyecto/restablecer_clave.php?token=$token" . PHP_EOL;
+    file_put_contents('tokens_recuperacion.log', $logMessage, FILE_APPEND);
+
+    // Para desarrollo, mostrar el token directamente
+    echo json_encode([
+        'success' => true, 
+        'message' => 'Para pruebas locales: ' . $token . ' - Revisa el archivo tokens_recuperacion.log'
+    ]);
+
+} catch (PDOException $e) {
+    error_log("Error en recuperar_clave.php: " . $e->getMessage());
+    echo json_encode(['success' => false, 'message' => 'Error del servidor. Intenta más tarde.']);
+}
+?>

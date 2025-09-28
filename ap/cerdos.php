@@ -137,10 +137,31 @@ $etapa_alimentacion = $etapa_calculada; // Mostrar la nueva etapa
                         <span><strong>Etapa:</strong> <?php echo $etapa_alimentacion; ?></span>
                     </div>
                     <div>
-                        <button class="boton-verde" onclick="location.href='add_cerdos.php?caseta=<?php echo $i; ?>'">Agregar Registro</button>
-                        <button class="boton-amarillo" onclick="location.href='elim_cerdosVenta.php?caseta=<?php echo $i; ?>'">Venta de Cerdos</button>
-                        <button class="boton-amarillo" onclick="location.href='elim_cerdosMuerte.php?caseta=<?php echo $i; ?>'">Muerte de Cerdos</button>
-                        <button class="boton-rojo" onclick="vaciarCaseta(<?php echo $i; ?>)">Vaciar Caseta</button>
+                <div class="d-flex gap-2">
+                    <!-- Agregar Registro -->
+                    <button class="btn btn-success rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Agregar Registro"
+                        onclick="location.href='add_cerdos.php?caseta=<?php echo $i; ?>'">
+                        <i class="fas fa-plus"></i>
+                    </button>
+
+                    <!-- Venta de Cerdos -->
+                    <button class="btn btn-warning rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Venta de Cerdos"
+                        onclick="location.href='elim_cerdosVenta.php?caseta=<?php echo $i; ?>'">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </button>
+
+                    <!-- Muerte de Cerdos -->
+                    <button class="btn btn-dark rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Muerte de Cerdos"
+                        onclick="location.href='elim_cerdosMuerte.php?caseta=<?php echo $i; ?>'">
+                        <i class="fas fa-skull-crossbones"></i>
+                    </button>
+
+                    <!-- Vaciar Caseta -->
+                    <button class="btn btn-danger rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Vaciar Caseta"
+                        onclick="vaciarCaseta(<?php echo $i; ?>)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
                     </div>
                     <div id="corrales-<?php echo $i; ?>" class="corrales" style="display: none;">
                         <?php
@@ -172,9 +193,6 @@ $etapa_alimentacion = $etapa_calculada; // Mostrar la nueva etapa
                             ?>
                         </table>
                     </div>
-
-
-
                 </div>
             <?php } ?>
         </div>
@@ -212,5 +230,11 @@ $etapa_alimentacion = $etapa_calculada; // Mostrar la nueva etapa
             }
         </script>
     </div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        [...tooltipTriggerList].map(el => new bootstrap.Tooltip(el));
+    });
+</script>
 </body>
 </html>
