@@ -94,11 +94,12 @@ include("config.php");
         <label for="peso_prom">Peso Promedio (kg):</label>
         <input type="number" name="peso_prom" step="0.01" required>
 
-        <label for="edad_prom">Edad Promedio (días):</label>
+        <label for="edad_prom">Edad Promedio (Semanas):</label>
         <input type="number" name="edad_prom" required>
 
         <label for="fecha_llegada">Fecha de Llegada:</label>
-        <input type="date" name="fecha_llegada" required>
+<input type="date" name="fecha_llegada" value="<?php echo date('Y-m-d'); ?>" readonly required>
+
 
         <label for="etapa">Etapa de Alimentación:</label>
         <select name="etapa" required>

@@ -3,6 +3,7 @@
      <h2 class="text-center">Inicio</h2>
      <a href="cerdos.php">Cerdos</a>
      <a href="alimento.php">Alimentos</a>
+     <a href="vacunacion.php">Vacunacion</a>
 
      <?php
         if ($rol == 'admin') {

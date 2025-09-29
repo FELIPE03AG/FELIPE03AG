@@ -166,22 +166,24 @@ $resultado = $conexion->query($sql);
   <table class="table table-bordered">
     <thead class="table-dark">
       <tr>
-        <th>ID</th>
         <th>Fecha y Hora</th>
         <th>Número de Caseta</th>
         <th>Cantidad</th>
         <th>Etapa</th>
+        <th>Accion</th>
+
       </tr>
     </thead>
     <tbody>
       <?php if($resultado && $resultado->num_rows > 0): ?>
         <?php while($fila = $resultado->fetch_assoc()): ?>
           <tr>
-            <td><?= $fila['id'] ?></td>
             <td><?= $fila['fecha'] ?></td>
             <td><?= $fila['num_caseta'] ?></td>
             <td><?= $fila['cantidad'] ?></td>
             <td><?= $fila['etapa'] ?></td>
+            <td><?= $fila['etapa'] ?></td>
+
           </tr>
         <?php endwhile; ?>
       <?php else: ?>

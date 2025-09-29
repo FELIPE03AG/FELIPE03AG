@@ -16,9 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-3️⃣ eliminar_alimento.php
-php
-Copiar código
+
 <?php
 include("conexion.php");
 
