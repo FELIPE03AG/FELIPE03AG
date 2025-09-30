@@ -235,38 +235,46 @@ document.getElementById('formEditarUsuario').addEventListener('submit', function
             Eliminar Usuario
             </button>
 
+            <!-- Tabla -->
             <h2>Usuarios Registrados</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Usuario</th>
-                        <th>Nombre</th>
-                        <th>Correo</th>
-                        <th>Rol</th>
-                        <th>Modificar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $sql = "SELECT id, u, nombre, co, rol FROM usuarios";
-                    $result = $conexion->query($sql);
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>
-                            <td>{$row['u']}</td>
-                            <td>{$row['nombre']}</td>
-                            <td>{$row['co']}</td>
-                            <td>{$row['rol']}</td>
-                            <td class='text-center'>
-                                <a href='editar_usuario.php?id={$row['id']}' class='btn btn-sm btn-primary'>
-                                    <i class='fas fa-edit'></i> Editar
-                                </a>
-                            </td>
-                        </tr>";
-                    }
-                    ?>
-                </tbody>
 
-            </table>
+            
+            <div class="mt-4">
+
+            
+                    <table class= "table table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                                <th>Rol</th>
+                                <th>Modificar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $sql = "SELECT id, u, nombre, co, rol FROM usuarios";
+                            $result = $conexion->query($sql);
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<tr>
+                                    <td>{$row['u']}</td>
+                                    <td>{$row['nombre']}</td>
+                                    <td>{$row['co']}</td>
+                                    <td>{$row['rol']}</td>
+                                    <td class='text-center'>
+                                        <a href='editar_usuario.php?id={$row['id']}' class='btn btn-sm btn-primary'>
+                                            <i class='fas fa-edit'></i> Editar
+                                        </a>
+                                    </td>
+                                </tr>";
+                            }
+                            ?>
+                        </tbody>
+
+                    </table>
+            </div>
+
         </div>
         <?php $conn->close(); ?>
         <!-- Modal de prueba -->

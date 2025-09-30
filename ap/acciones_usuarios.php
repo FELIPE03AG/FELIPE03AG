@@ -79,8 +79,8 @@ $result_historial = $conexion->query($sql_historial);
         <h2>Historial de Acciones</h2>
 
         <!-- Tabla de acciones -->
-        <table>
-            <thead>
+        <table class="table table-bordered">
+            <thead class="table-dark">
                 <tr>
                     <th>Acción</th>
                     <th>Fecha y Hora</th>
