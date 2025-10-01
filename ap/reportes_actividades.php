@@ -71,9 +71,9 @@ $result_muertes = $conexion->query($query_muertes);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte de Actividades</title>
-  <link rel="icon" href="img/cerdo.ico" type="image/x-icon">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="icon" href="img/cerdo.ico" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <!-- Estilos -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -81,6 +81,7 @@ $result_muertes = $conexion->query($query_muertes);
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <link rel="stylesheet" href="styles/style_navbar.css">
     <link rel="stylesheet" href="styles/style_sidebar.css">
     <link rel="stylesheet" href="styles/style_reportes.css">
@@ -216,15 +217,15 @@ $result_muertes = $conexion->query($query_muertes);
             </div>
 
             <!-- Gráficas -->
-            <div id="graficas" class="hidden">
+           <div id="graficas" class="hidden">
                 <h3>Eliminaciones por Caseta</h3>
-                <canvas id="eliminacionesCaseta"></canvas>
+                <canvas id="eliminacionesCaseta" class="grafica"></canvas>
 
                 <h3>Eliminaciones en el Tiempo</h3>
-                <canvas id="eliminacionesFecha"></canvas>
+                <canvas id="eliminacionesFecha" class="grafica"></canvas>
 
                 <h3>Causas de Muerte</h3>
-                <canvas id="causasMuerte"></canvas>
+                <canvas id="causasMuerte" class="grafica" ></canvas>
 
             </div>
         </div>
@@ -247,6 +248,7 @@ $result_muertes = $conexion->query($query_muertes);
         },
         options: {
             responsive: true,
+            maintainAspectRatio: true,
             plugins: {
                 legend: { display: false },
                 title: {
@@ -273,6 +275,7 @@ $result_muertes = $conexion->query($query_muertes);
         },
         options: {
             responsive: true,
+            maintainAspectRatio: true,
             plugins: {
                 title: {
                     display: true,
@@ -302,31 +305,38 @@ $result_muertes = $conexion->query($query_muertes);
     const datosCausas = <?= json_encode(getCausasDeMuerte($conexion)); ?>;
 
     const ctxCausas = document.getElementById("causasMuerte").getContext("2d");
-    new Chart(ctxCausas, {
-        type: 'pie',
-        data: {
-            labels: Object.keys(datosCausas),
-            datasets: [{
-                label: 'Causas de Muerte',
-                data: Object.values(datosCausas),
-                backgroundColor: [
-                    '#ff6384', '#36a2eb', '#ffcd56', '#4caf50', '#9575cd', '#ff7043', '#26c6da'
-                ]
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Distribución de Causas de Muerte'
-                },
-                legend: {
-                    position: 'bottom'
-                }
+new Chart(ctxCausas, {
+    type: 'pie',
+    data: {
+        labels: Object.keys(datosCausas),
+        datasets: [{
+            label: 'Causas de Muerte',
+            data: Object.values(datosCausas),
+            backgroundColor: [
+                '#ff6384', '#36a2eb', '#ffcd56', '#4caf50', '#9575cd', '#ff7043', '#26c6da'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+            title: {
+                display: true,
+                text: 'Distribución de Causas de Muerte'
+            },
+            legend: {
+                position: 'bottom'
+            },
+            datalabels: {             // <-- Aquí activamos los números
+                color: '#000',
+                font: { weight: 'bold', size: 14 },
+                formatter: (value, ctx) => value // Muestra el número exacto
             }
         }
-    });
+    },
+    plugins: [ChartDataLabels]
+});
 </script>
 <script>
     async function generarPDF() {

@@ -39,3 +39,20 @@
         button {
             margin: 10px 10px 10px 0;
         }
+
+        /* 🔹 Ajustar ,}las dos primeras graficas */
+        #eliminacionesCaseta,
+        #eliminacionesFecha {
+            width: 500px !important;
+            height: 250px !important;
+            margin: 30px auto;
+            display: block;
+        }
+
+        /* Ajustar solo la última gráfica (fijo) */
+        #causasMuerte {
+            width: 350px !important;   /* ancho fijo */
+            height: 350px !important;  /* alto fijo */
+            display: block;
+            margin: 30px auto;         /* centrada horizontalmente */
+        }
