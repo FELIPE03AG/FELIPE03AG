@@ -6,25 +6,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $id = intval($_POST['id']); // sanitizar a número entero
 
         // Preparar query para evitar inyección SQL
-        $stmt = $conexion->prepare("DELETE FROM tolvas WHERE id = ?");
+        $stmt = $conexion->prepare("DELETE FROM vacunas WHERE id = ?");
         $stmt->bind_param("i", $id);
 
         if ($stmt->execute()) {
             // Eliminado con éxito
-            header("Location: alimento.php?msg=eliminado");
+            header("Location: vacunacion.php?msg=eliminado");
             exit();
         } else {
             // Error al eliminar
-            header("Location: alimento.php?msg=error");
+            header("Location: vacunacion.php?msg=error");
             exit();
         }
 
         $stmt->close();
     } else {
-        header("Location: alimento.php?msg=invalid");
+        header("Location: vacunacion.php?msg=invalid");
         exit();
     }
 } else {
-    header("Location: alimento.php");
+    header("Location: vacunacion.php");
     exit();
 }
