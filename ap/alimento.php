@@ -33,6 +33,17 @@ include("config.php");
     <link rel="stylesheet" href="styles/style_navbar.css">
     <link rel="stylesheet" href="styles/style_sidebar.css">
     <link rel="stylesheet" href="styles/style_cerdos.css">
+
+    <!-- Estilo para denegar flechas en los cuadros de texto-->
+    <style>
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+</style>
+
 </head>
 
 <body>
@@ -146,10 +157,11 @@ include("config.php");
                         <input type="date" name="fecha" class="form-control" value="<?php echo date('Y-m-d'); ?>" readonly>
 
                         <label class="form-label mt-2">Número de Caseta:</label>
-                        <input type="number" name="num_caseta" class="form-control" required>
+                        <input type="number" name="num_caseta" class="form-control" required min="1" max="6">
 
                         <label class="form-label mt-2">Cantidad de Alimento (Toneladas):</label>
-                        <input type="number" step="0.01" name="cantidad" class="form-control" required>
+                        <input type="number" step="0.01" name="cantidad" class="form-control" required min="0" max="5">
+
 
                         <label class="form-label mt-2">Etapa:</label>
                         <select name="etapa" class="form-select" required>

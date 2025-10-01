@@ -1,4 +1,12 @@
 <?php
+session_start();
+if (!isset($_SESSION['nombre'])) {
+    header('location:index.php');
+}
+
+$nombre = $_SESSION['nombre'];
+$rol = $_SESSION['rol'];
+
 include("config.php"); // Conexión a la BD ($conexion)
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {

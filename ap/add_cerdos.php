@@ -40,6 +40,15 @@ include("config.php");
     <link rel="stylesheet" href="styles/style_sidebar.css">
     <link rel="stylesheet" href="styles/style_add_cerdos.css">
     
+    <!-- Estilo para denegar flechas en los cuadros de texto-->
+    <style>
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+</style>
 </head>
 <body>
     
