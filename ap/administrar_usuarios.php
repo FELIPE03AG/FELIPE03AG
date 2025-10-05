@@ -224,61 +224,74 @@ document.getElementById('formEditarUsuario').addEventListener('submit', function
 
 
         <div class="content">
-            <h2>Acciones de Usuarios</h2>
-
-         <!-- Button trigger modal -->
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserModal">
-            Agregar Usuario
+            <h2>Administrar Usuarios</h2>
+        
+            <button class="btn btn-success rounded-circle has-tooltip"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addUserModal"
+                    title="Añadir Usuario"
+                    type="button">
+                <i class="fas fa-plus"></i>Añadir
             </button>
 
-            <button type="button" class="btn btn-danger btn-delete" data-bs-toggle="modal" data-bs-target="#deleteUserModal">
-            Eliminar Usuario
+            <button class="btn btn-danger rounded-circle has-tooltip" 
+            data-bs-toggle="modal" 
+            data-bs-target="#deleteUserModal"
+            title="Eliminar Usuario"
+            type="button">
+            <i class="fas fa-trash"></i>Eliminar
             </button>
 
-            <!-- Tabla -->
-            <h2>Usuarios Registrados</h2>
+            <h2></h2>
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Rol</th>
+                        <th>Modificar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $sql = "SELECT id, u, nombre, co, rol FROM usuarios";
+                    $result = $conexion->query($sql);
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>
+                            <td>{$row['u']}</td>
+                            <td>{$row['nombre']}</td>
+                            <td>{$row['co']}</td>
+                            <td>{$row['rol']}</td>
+                            <td class='text-center'>
+                                <a href='editar_usuario.php?id={$row['id']}'
+                                class='btn btn-primary rounded-circle'
+                                data-bs-toggle='tooltip'
+                                data-bs-placement='top'
+                                title='Editar Usuario'>
+                                <i class='fas fa-edit'></i>
+                                </a>
+                            </td>
+                        </tr>";
+                    }
+                    ?>
+                </tbody>
 
-            
-            <div class="mt-4">
-
-            
-                    <table class= "table table-bordered">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Usuario</th>
-                                <th>Nombre</th>
-                                <th>Correo</th>
-                                <th>Rol</th>
-                                <th>Modificar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $sql = "SELECT id, u, nombre, co, rol FROM usuarios";
-                            $result = $conexion->query($sql);
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<tr>
-                                    <td>{$row['u']}</td>
-                                    <td>{$row['nombre']}</td>
-                                    <td>{$row['co']}</td>
-                                    <td>{$row['rol']}</td>
-                                    <td class='text-center'>
-                                        <a href='editar_usuario.php?id={$row['id']}' class='btn btn-sm btn-primary'>
-                                            <i class='fas fa-edit'></i> Editar
-                                        </a>
-                                    </td>
-                                </tr>";
-                            }
-                            ?>
-                        </tbody>
-
-                    </table>
-            </div>
-
+            </table>
         </div>
         <?php $conn->close(); ?>
         <!-- Modal de prueba -->
         <!-- Modal -->
+
+    <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+  });
+</script>
+
     </body>
 
 </html>
