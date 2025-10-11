@@ -159,11 +159,76 @@ $result_muertes = $conexion->query($query_muertes);
     <div class="content">
         <div class="container">
             <h2>Reportes de Eliminación</h2>
-
+            <!-- antiguos botones
             <button class="btn btn-outline-primary" onclick="toggleSection('tablaVentas')">📋 Ver Tabla de Ventas</button>
             <button class="btn btn-outline-danger" onclick="toggleSection('tablaMuertes')">📋 Ver Tabla de Muertes</button>
             <button class="btn btn-outline-info" onclick="toggleSection('graficas')">📊 Ver Gráficos</button>
             <button onclick="generarPDF()">📄 Descargar Reporte PDF</button>
+             -->
+
+<!-- Contenedor centrado de botones -->
+<div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; margin-top: 10px;">
+
+    <!-- Botón: Ver Tabla de Ventas -->
+    <button class="btn btn-primary rounded-circle shadow"
+            style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;"
+            onclick="toggleSection('tablaVentas')"
+            data-bs-title="Ver Tabla de Ventas">
+        <i class="fa-solid fa-dollar-sign"></i>
+    </button>
+
+    <!-- Botón: Ver Tabla de Muertes -->
+    <button class="btn btn-danger rounded-circle shadow"
+            style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;"
+            onclick="toggleSection('tablaMuertes')"
+            data-bs-title="Ver Tabla de Muertes">
+        <i class="fa-solid fa-skull"></i>
+    </button>
+
+    <!-- Botón: Ver Gráficos -->
+    <button class="btn btn-info rounded-circle shadow"
+            style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;"
+            onclick="toggleSection('graficas')"
+            data-bs-title="Ver Gráficos">
+        <i class="fa-solid fa-chart-column"></i>
+    </button>
+
+    <!-- Botón: Descargar Reporte PDF -->
+    <button class="btn btn-warning rounded-circle shadow"
+            style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;"
+            onclick="generarPDF()"
+             data-bs-placement="top" 
+            data-bs-title="Descargar Reporte PDF">
+        <i class="fa-solid fa-arrow-down"></i>
+    </button>
+
+    
+
+</div>
+
+<!-- Script para inicializar tooltips -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-title]'))
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+  });
+</script>
+
+<!-- CSS para personalizar tooltip -->
+<style>
+  .tooltip-inner {
+    background-color: black !important; /* Fondo negro */
+    color: white !important;            /* Texto blanco */
+    font-weight: bold;
+  }
+  .tooltip.bs-tooltip-top .tooltip-arrow::before {
+    border-top-color: black !important; /* Flecha negra */
+  }
+</style>
+
+
 
 
             <!-- Tabla de Ventas -->
@@ -230,6 +295,8 @@ $result_muertes = $conexion->query($query_muertes);
             </div>
         </div>
     </div>
+
+    
     <script>
     const datosCaseta = <?= json_encode(getEliminacionesPorCaseta($conexion)); ?>;
     const datosFecha = <?= json_encode(getEliminacionesPorFecha($conexion)); ?>;

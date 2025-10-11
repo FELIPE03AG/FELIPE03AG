@@ -71,7 +71,7 @@ for ($i = 1; $i <= 30; $i++) {
 }
 
    // Guardar el registro en el historial
-   $accion = "Agregó un nuevo registro en el Area de cerdos";
+   $accion = "Agregó un nuevo registro de Cerdos, Caseta:$caseta_id";
    $fecha_hora = date('Y-m-d H:i:s');
    $registro = "INSERT INTO historial (accion, fecha_hora, usuario) VALUES ('$accion', '$fecha_hora', '$usuario')";
    mysqli_query($conexion, $registro);

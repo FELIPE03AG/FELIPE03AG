@@ -25,6 +25,7 @@ if (isset($_GET['caseta'])) {
 
          // Obtener el nombre de usuario desde la sesión
         $usuario = $_SESSION['nombre'];
+        $total_cerdos = $_SESSION['total_cerdos'];
 
         // Insertar registro en la tabla historial
         $accion = "Vació la caseta con ID: $casetaId";

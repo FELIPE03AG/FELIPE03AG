@@ -247,7 +247,7 @@ $resultado = $conexion->query($sql);
                 <th>Número de Caseta</th>
                 <th>Fecha</th>
                 <th>Nombre de la Vacuna</th>
-                <th>Acciones</th>
+                <th>Eliminar</th>
             </tr>
         </thead>
         <tbody>

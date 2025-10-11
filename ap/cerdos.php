@@ -153,7 +153,7 @@ $etapa_alimentacion = $etapa_calculada; // Mostrar la nueva etapa
                     <!-- Muerte de Cerdos -->
                     <button class="btn btn-dark rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Muerte de Cerdos"
                         onclick="location.href='elim_cerdosMuerte.php?caseta=<?php echo $i; ?>'">
-                        <i class="fas fa-skull-crossbones"></i>
+                        <i class="fa-solid fa-skull"></i>
                     </button>
 
                     <!-- Vaciar Caseta -->

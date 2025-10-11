@@ -271,7 +271,7 @@ $resultado = $conexion->query($sql);
         <th>Número de Caseta</th>
         <th>Cantidad (Toneladas)</th>
         <th>Etapa</th>
-        <th>Acción</th>
+        <th>Eliminar</th>
       </tr>
     </thead>
     <tbody>

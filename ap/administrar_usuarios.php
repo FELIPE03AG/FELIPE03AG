@@ -225,22 +225,57 @@ document.getElementById('formEditarUsuario').addEventListener('submit', function
 
         <div class="content">
             <h2>Administrar Usuarios</h2>
-        
-            <button class="btn btn-success rounded-circle has-tooltip"
-                    data-bs-toggle="modal"
-                    data-bs-target="#addUserModal"
-                    title="Añadir Usuario"
-                    type="button">
-                <i class="fas fa-plus"></i>Añadir
-            </button>
+             <!-- Botones circulares -->
+    <div class="mb-3 d-flex gap-2">
 
-            <button class="btn btn-danger rounded-circle has-tooltip" 
-            data-bs-toggle="modal" 
-            data-bs-target="#deleteUserModal"
-            title="Eliminar Usuario"
-            type="button">
-            <i class="fas fa-trash"></i>Eliminar
-            </button>
+        <!-- Botón circular para abrir el Modal Agregar -->
+        <button class="btn btn-success rounded-circle" 
+                style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;"
+                data-bs-toggle="modal" 
+                data-bs-target="#addUserModal"
+                data-bs-placement="top" 
+                data-bs-title="Añadir Usuario">
+            <i class="fas fa-plus"></i>
+        </button>
+
+        <button class="btn btn-danger rounded-circle" 
+                style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;"
+                data-bs-toggle="modal" 
+                data-bs-target="#deleteUserModal"
+                data-bs-placement="top" 
+                data-bs-title="Eliminar Usuario">
+            <i class="fas fa-trash"></i>
+        </button>
+
+
+
+     </div>
+        
+            
+
+            
+<!-- Script para inicializar tooltips -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-title]'))
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+  });
+</script>
+
+<!-- CSS para personalizar tooltip -->
+<style>
+  .tooltip-inner {
+    background-color: black !important; /* Fondo negro */
+    color: white !important;            /* Texto blanco */
+    font-weight: bold;
+  }
+  .tooltip.bs-tooltip-top .tooltip-arrow::before {
+    border-top-color: black !important; /* Flecha negra */
+  }
+</style>
+
 
             <h2></h2>
             <table class="table table-bordered">
