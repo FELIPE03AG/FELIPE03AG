@@ -88,16 +88,39 @@ if(isset($_SESSION['nombre'])){
 
             <?php
             $valor = isset($_REQUEST['valor']) ? $_REQUEST['valor'] : NULL;
+
             if ($valor == 1) {
-                echo '<div class="alert alert-danger d-flex align-items-center fade show p-2 rounded" role="alert">\n                        <i class="fas fa-exclamation-circle me-2"></i>\n                        <span> Datos incorrectos, intente de nuevo.</span>\n                      </div>';
+                echo '<div class="alert alert-danger d-flex align-items-center fade show p-2 rounded" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <span>Datos incorrectos, intente de nuevo.</span>
+                    </div>';
             }
             if ($valor == 2) {
-                echo '<div class="alert alert-danger d-flex align-items-center fade show p-2 rounded" role="alert">\n                        <i class="fas fa-times-circle me-2"></i>\n                        <span> Correo electrónico inválido.</span>\n                      </div>';
+                echo '<div class="alert alert-danger d-flex align-items-center fade show p-2 rounded" role="alert">
+                        <i class="fas fa-times-circle me-2"></i>
+                        <span>Correo electrónico inválido.</span>
+                    </div>';
             }
             if ($valor == 3) {
-                echo '<div class="alert alert-success d-flex align-items-center fade show p-2 rounded" role="alert">\n                        <i class="fas fa-check-circle me-2"></i>\n                        <span> ¡Contraseña cambiada exitosamente!</span>\n                      </div>';
+                echo '<div class="alert alert-success d-flex align-items-center fade show p-2 rounded" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <span>¡Contraseña cambiada exitosamente!</span>
+                    </div>';
+            }
+            if ($valor == 4) {
+                echo '<div class="alert alert-warning d-flex align-items-center fade show p-2 rounded" role="alert">
+                        <i class="fas fa-user-slash me-2"></i>
+                        <span>El usuario ingresado no existe.</span>
+                    </div>';
+            }
+            if ($valor == 5) {
+                echo '<div class="alert alert-danger d-flex align-items-center fade show p-2 rounded" role="alert">
+                        <i class="fas fa-lock me-2"></i>
+                        <span>La contraseña ingresada es incorrecta.</span>
+                    </div>';
             }
             ?>
+
 
             <!-- Botón de inicio de sesión -->
             <button type="submit" class="btn btn-primary">Iniciar sesión</button>

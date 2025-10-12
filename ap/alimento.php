@@ -282,17 +282,18 @@ $resultado = $conexion->query($sql);
             <td><?= $fila['num_caseta'] ?></td>
             <td><?= $fila['cantidad'] ?></td>
             <td><?= $fila['etapa'] ?></td>
-            <td class="text-center">
-              <!-- Botón Eliminar en la tabla -->
-              <button class="btn btn-danger btn-sm rounded-circle"
-                      style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;"
-                      data-bs-toggle="modal" 
-                      data-bs-target="#modalEliminar"
-                      data-id="<?= $fila['id'] ?>"
-                      data-bs-placement="top"
-                      data-bs-title="Eliminar Registro">
+            <td class="text-center align-middle">
+            <div class="d-flex justify-content-center">
+                <button class="btn btn-danger btn-sm rounded-circle"
+                        style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;"
+                        data-bs-toggle="modal" 
+                        data-bs-target="#modalEliminar"
+                        data-id="<?= $fila['id'] ?>"
+                        data-bs-placement="top"
+                        data-bs-title="Eliminar Registro">
                 <i class="fas fa-trash"></i>
-              </button>
+                </button>
+            </div>
             </td>
           </tr>
         <?php endwhile; ?>

@@ -285,7 +285,7 @@ document.getElementById('formEditarUsuario').addEventListener('submit', function
                         <th>Nombre</th>
                         <th>Correo</th>
                         <th>Rol</th>
-                        <th>Modificar</th>
+                        <th>Editar</th>
                     </tr>
                 </thead>
                 <tbody>
