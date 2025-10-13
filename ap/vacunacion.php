@@ -153,8 +153,8 @@ input[type=number]::-webkit-outer-spin-button {
                     <label class="form-label">Fecha:</label>
                         <input type="date" name="fecha" class="form-control" value="<?php echo date('Y-m-d'); ?>" readonly>
 
-                    <label class="form-label">Número de Caseta:</label>
-                    <input type="number" name="num_caseta" class="form-control" required>
+                    <label class="form-label mt-2">Número de Caseta:</label>
+                        <input type="number" name="num_caseta" class="form-control" required min="1" max="6">
 
                     <label class="form-label mt-2">Nombre de la Vacuna:</label>
                     <input type="text" name="nombre" class="form-control" required>
@@ -256,18 +256,18 @@ $resultado = $conexion->query($sql);
                     <td><?= $fila['num_caseta'] ?></td>
                     <td><?= $fila['fecha'] ?></td>
                     <td><?= $fila['nombre'] ?></td>
-                    <td class="text-center">
-              <!-- Botón Eliminar en la tabla -->
-              <button class="btn btn-danger btn-sm rounded-circle"
-                      style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;"
-                      data-bs-toggle="modal" 
-                      data-bs-target="#modalEliminar"
-                      data-id="<?= $fila['id'] ?>"
-                      data-bs-placement="top"
-                      data-bs-title="Eliminar Registro">
-                <i class="fas fa-trash"></i>
-              </button>
-            </td>
+                    <td class="text-center align-middle">
+                    <button class="btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center mx-auto"
+                            style="width: 35px; height: 35px;"
+                            data-bs-toggle="modal" 
+                            data-bs-target="#modalEliminar"
+                            data-id="<?= $fila['id'] ?>"
+                            data-bs-placement="top"
+                            data-bs-title="Eliminar Registro">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    </td>
+
                 </tr>
             <?php endwhile; ?>
         </tbody>
