@@ -214,21 +214,15 @@ document.getElementById('formEditarUsuario').addEventListener('submit', function
         confirmModal.show();
 }
 
-    </script>
+</script>
 
         <!-- Sidebar -->
         <?php include 'sidebar.php'; ?>
 
-        <!-- Content -->
-
-
-
         <div class="content">
             <h2>Administrar Usuarios</h2>
              <!-- Botones circulares -->
-    <div class="mb-3 d-flex gap-2">
-
-        <!-- Botón circular para abrir el Modal Agregar -->
+        <div class="mb-3 d-flex justify-content-center gap-2">
         <button class="btn btn-success rounded-circle" 
                 style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;"
                 data-bs-toggle="modal" 
@@ -246,14 +240,8 @@ document.getElementById('formEditarUsuario').addEventListener('submit', function
                 data-bs-title="Eliminar Usuario">
             <i class="fas fa-trash"></i>
         </button>
-
-
-
      </div>
-        
-            
 
-            
 <!-- Script para inicializar tooltips -->
 <script>
   document.addEventListener("DOMContentLoaded", function () {
@@ -275,8 +263,6 @@ document.getElementById('formEditarUsuario').addEventListener('submit', function
     border-top-color: black !important; /* Flecha negra */
   }
 </style>
-
-
             <h2></h2>
             <table class="table table-bordered">
                 <thead class="table-dark">
@@ -314,18 +300,16 @@ document.getElementById('formEditarUsuario').addEventListener('submit', function
 
             </table>
         </div>
-        <?php $conn->close(); ?>
-        <!-- Modal de prueba -->
-        <!-- Modal -->
 
+        <?php $conn->close(); ?>
     <script>
-  document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
       return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
-  });
-</script>
+        })
+    });
+    </script>
 
     </body>
 
