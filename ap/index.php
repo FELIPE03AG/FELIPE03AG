@@ -68,7 +68,7 @@ if(isset($_SESSION['nombre'])){
 
 <body onload="ejecutarRecaptcha()">
     <div class="login-container">
-        <h1 class="logo-text">GestAP</h1>
+        <img src="img/Logo1.png" alt="GestAP" class="logo-img img-fluid mx-auto d-block" style="max-width:300px;">
         <form method="post" action="login.php">
             <!-- Usuario -->
             <div class="input-group mb-3">
@@ -124,38 +124,7 @@ if(isset($_SESSION['nombre'])){
 
             <!-- Botón de inicio de sesión -->
             <button type="submit" class="btn btn-primary">Iniciar sesión</button>
-            <!-- Enlace actualizado: abre un modal en lugar de navegar a otra página -->
-            <a href="#" id="recuperarLink" class="ms-3">Recuperar Contraseña</a>
-
         </form>
-    </div>
-
-    <!-- Modal de recuperar contraseña (Bootstrap 4) -->
-    <div class="modal fade" id="recuperarModal" tabindex="-1" role="dialog" aria-labelledby="recuperarModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="recuperarModalLabel">Recuperar Contraseña</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="recuperarForm" method="post" action="recuperar_clave.php">
-                    <div class="modal-body">
-                        <p>Introduce el correo electrónico asociado a tu cuenta. Te enviaremos instrucciones para restablecer tu contraseña.</p>
-                        <div class="form-group">
-                            <label for="recuperarEmail">Correo electrónico</label>
-                            <input type="email" name="email" id="recuperarEmail" class="form-control" required placeholder="tu@correo.com">
-                        </div>
-                        <!-- campo oculto para reCAPTCHA (se rellenará antes de enviar) -->
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Enviar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
     </div>
 
 </body>
