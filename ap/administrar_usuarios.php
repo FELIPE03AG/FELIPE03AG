@@ -23,6 +23,8 @@ include("config.php");
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/snippets.js"></script>
+     <!-- Bootstrap Bundle con Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
@@ -38,15 +40,22 @@ include("config.php");
  <script>
         document.addEventListener("DOMContentLoaded", function() {
             const sidebarLinks = document.querySelectorAll(".sidebar a");
-            const currentPath = window.location.pathname.split("/").pop(); // Obtiene el archivo actual (home.php, services.php, etc.)
+            const currentPath = window.location.pathname.split("/").pop(); // Obtiene el archivo actual
+
+            // Configura las páginas relacionadas para cada enlace
+            const relatedPages = {
+                "administrar_usuarios.php": ["administrar_usuarios.php", "perfil.php", "perfil1.php"] // Páginas relacionadas con "cerdos"
+
+            };
 
             sidebarLinks.forEach(link => {
-                // Elimina la clase activa de todos los enlaces
-                link.classList.remove("active");
+                const href = link.getAttribute("href");
 
-                // Agrega la clase activa al enlace correspondiente
-                if (link.getAttribute("href") === currentPath) {
+                // Comprueba si la página actual está en las relacionadas
+                if (relatedPages[href] && relatedPages[href].includes(currentPath)) {
                     link.classList.add("active");
+                } else {
+                    link.classList.remove("active");
                 }
             });
         });
