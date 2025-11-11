@@ -9,8 +9,8 @@ if (!isset($_SESSION['nombre'])) {
 $nombre = $_SESSION['nombre'];
 $rol = $_SESSION['rol'];
 
-// Incluir configuración para la conexión a la base de datos
 include("config.php");
+
 ?>
 
 <!DOCTYPE html>
@@ -21,20 +21,21 @@ include("config.php");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <Link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/snippets.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     <title>Perfil de Usuarios</title>
-    <link rel="icon" href="img/cerdo.ico" type="image/x-icon">
-    <link rel="stylesheet" href="styles/style_principal.css">
+    <link rel="icon" href="img/cerdo.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles/style_navbar.css">
     <link rel="stylesheet" href="styles/style_sidebar.css">
+    <link rel="stylesheet" href="styles/style_cerdos.css">
 </head>
 
 <body>
-
-    </head>
-
-    <script>
+ <script>
         document.addEventListener("DOMContentLoaded", function() {
             const sidebarLinks = document.querySelectorAll(".sidebar a");
             const currentPath = window.location.pathname.split("/").pop(); // Obtiene el archivo actual (home.php, services.php, etc.)
@@ -51,20 +52,14 @@ include("config.php");
         });
     </script>
 
-    <body>
+ <!-- Nav bar -->
+    <?php include 'navbar.php'; ?>
 
-        <!-- Navbar -->
-    <div class="navbar d-flex justify-content-between align-items-center px-4 py-2 bg-light shadow">
-        <h1 class="mb-0">GestAP</h1>
+    <!-- Sidebar -->
+    <?php include 'sidebar.php'; ?>
 
-        <!-- Usuario sin dropdown -->
-        <div class="d-flex align-items-center">
-            <i class="fas fa-user-circle me-2"></i>
-            <span><?= htmlspecialchars($nombre) ?></span>
-        </div>
-    </div>
-
-        <!-- Modal para agregar usuario -->
+    
+     <!-- Modal para agregar usuario -->
 <div class="modal fade" id="addUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -216,10 +211,10 @@ document.getElementById('formEditarUsuario').addEventListener('submit', function
 
 </script>
 
-        <!-- Sidebar -->
-        <?php include 'sidebar.php'; ?>
 
-        <div class="content">
+
+
+    <div class="content">
             <h2>Administrar Usuarios</h2>
              <!-- Botones circulares -->
         <div class="mb-3 d-flex justify-content-center gap-2">
@@ -311,6 +306,7 @@ document.getElementById('formEditarUsuario').addEventListener('submit', function
     });
     </script>
 
-    </body>
 
+    
+</body>
 </html>

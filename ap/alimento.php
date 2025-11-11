@@ -81,17 +81,10 @@ $resultado = $conexion->query($sql);
         });
     </script>
 
-    <!-- Navbar -->
-    <div class="navbar d-flex justify-content-between align-items-center px-4 py-2 bg-light shadow">
-        <h1 class="mb-0">GestAP</h1>
+    
 
-        <!-- Usuario sin dropdown -->
-        <div class="d-flex align-items-center">
-            <i class="fas fa-user-circle me-2"></i>
-            <span><?= htmlspecialchars($nombre) ?></span>
-        </div>
-    </div>
-
+    <!-- Nav bar -->
+      <?php include 'navbar.php'; ?>
 
     <!-- Sidebar -->
     <?php include 'sidebar.php'; ?>

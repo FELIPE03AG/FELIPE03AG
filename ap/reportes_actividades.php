@@ -191,15 +191,11 @@ $result_muertes = $conexion->query($query_muertes);
 </head>
 <body>
 
-<div class="navbar d-flex justify-content-between align-items-center px-4 py-2 bg-light shadow">
-    <h1 class="mb-0">GestAP</h1>
-    <div class="d-flex align-items-center">
-        <i class="fas fa-user-circle me-2"></i>
-        <span><?= htmlspecialchars($nombre ?? 'Usuario') ?></span>
-    </div>
-</div>
+ <!-- Nav bar -->
+      <?php include 'navbar.php'; ?>
 
-<?php include 'sidebar.php'; ?>
+    <!-- Sidebar -->
+    <?php include 'sidebar.php'; ?>
 
 <div class="content">
     <div class="container py-3">
