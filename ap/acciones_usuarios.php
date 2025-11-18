@@ -40,8 +40,6 @@ $sql_historial = "SELECT id_historial, accion, fecha_hora, usuario
                   ORDER BY fecha_hora DESC 
                   LIMIT $registros_por_pagina OFFSET $offset";
 $result_historial = $conexion->query($sql_historial);
-
-
 ?>
 
 <!DOCTYPE html>
@@ -65,6 +63,7 @@ $result_historial = $conexion->query($sql_historial);
     <link rel="stylesheet" href="styles/style_navbar.css">
     <link rel="stylesheet" href="styles/style_sidebar.css">
     <link rel="stylesheet" href="styles/style_cerdos.css">
+    <link rel="stylesheet" href="styles/style_paginador.css">
 </head>
 
 <body>
