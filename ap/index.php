@@ -68,7 +68,7 @@ if(isset($_SESSION['nombre'])){
 
 <body onload="ejecutarRecaptcha()">
     <div class="login-container">
-        <img src="img/Logo1.png" alt="GestAP" class="logo-img img-fluid mx-auto d-block" style="max-width:300px;">
+        <img src="img/Logo1.png" alt="GestAP" class="logo-img img-fluid">
         <form method="post" action="login.php">
             <!-- Usuario -->
             <div class="input-group mb-3">

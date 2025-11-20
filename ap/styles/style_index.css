@@ -32,3 +32,73 @@ color: #333; /* Color del texto */
 text-align: center; /* Centrar el texto */
 font-family: "Verdana", sans-serif; /* Fuente del texto */
 }
+
+/* Contenedor centrado */
+.login-container {
+    max-width: 400px;
+    width: 90%;
+    margin: 40px auto;
+    padding: 25px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 14px rgba(0,0,0,0.15);
+}
+
+/* Imagen responsiva del logo */
+.logo-img {
+    max-width: 350px;
+    width: 80%;
+    height: auto;
+    display: block;
+    margin: 0 auto 20px auto;
+}
+
+/* Inputs */
+.input-group-text {
+    width: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Botón */
+button.btn-primary {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+}
+
+/* Alertas */
+.alert {
+    font-size: 0.9rem;
+    padding: 8px 10px;
+}
+
+/* 📱 RESPONSIVE PARA CELULARES */
+@media (max-width: 480px) {
+
+    .login-container {
+        padding: 18px;
+        margin-top: 20px;
+    }
+
+    .logo-img {
+        max-width: 200px;
+    }
+
+    button.btn-primary {
+        font-size: 1rem;
+        padding: 10px;
+    }
+
+    .input-group-text {
+        width: 40px;
+    }
+}
+
+/* 📱 Tablets y pantallas medianas */
+@media (max-width: 768px) {
+    .login-container {
+        max-width: 450px;
+    }
+}
