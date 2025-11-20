@@ -221,14 +221,29 @@ $result_muertes = $conexion->query($query_muertes);
                 </button>
                 
                 <div class="controls-row">
-                <label for="startDate" class="mb-0">Desde</label>
-                <input id="startDate" type="date" class="form-control" style="width:150px;" />
-                <label for="endDate" class="mb-0">Hasta</label>
-                <input id="endDate" type="date" class="form-control" style="width:150px;" />
-                <button id="filtrarBtn" class="btn btn-secondary" type="button">Aplicar rango</button>
+                    <label for="startDate" class="mb-0">Desde</label>
+                    <input id="startDate" type="date" class="form-control" style="width:150px;" />
+
+                    <label for="endDate" class="mb-0">Hasta</label>
+                    <input id="endDate" type="date" class="form-control" style="width:150px;" />
+
+                    <a href="reportes_actividades.php" class="btn btn-outline-secondary">
+                        <i class="fas fa-broom"></i> Limpiar
+                    </a>
                 </div>
             </div>
         </div>
+
+
+        <script>
+        // Activar filtro automático al cambiar fechas
+        document.getElementById("startDate").addEventListener("change", () => {
+            onAplicarRango();
+        });
+        document.getElementById("endDate").addEventListener("change", () => {
+            onAplicarRango();
+        });
+        </script>
 
         <!-- Tabla de Ventas -->
         <div id="tablaVentas" class="hidden">
@@ -326,7 +341,7 @@ $result_muertes = $conexion->query($query_muertes);
         });
 
         // Botones
-        document.getElementById('filtrarBtn').addEventListener('click', onAplicarRango);
+        document.getElementById('downloadPdfBtn').addEventListener('click', onDownloadPdf);
         document.getElementById('downloadPdfBtn').addEventListener('click', onDownloadPdf);
     });
 
