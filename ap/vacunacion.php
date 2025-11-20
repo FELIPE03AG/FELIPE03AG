@@ -12,8 +12,8 @@ $rol = $_SESSION['rol'];
 include("config.php");
 
 // Obtener fechas del filtro
-$fecha_inicio = isset($_GET['fecha_inicio']) ? $_GET['fecha_inicio'] : '';
-$fecha_fin    = isset($_GET['fecha_fin']) ? $_GET['fecha_fin'] : '';
+$fecha_inicio = isset($_POST['fecha_inicio']) ? $_POST['fecha_inicio'] : '';
+$fecha_fin    = isset($_POST['fecha_fin']) ? $_POST['fecha_fin'] : '';
 
 // Consulta base
 $sql = "SELECT id, num_caseta, fecha, nombre FROM vacunas";
@@ -119,7 +119,7 @@ $resultado = $conexion->query($sql);
                 <i class="fa-solid fa-arrow-down"></i>
             </button>
             
-            <form method="GET" id="formFechas"
+            <form method="POST" id="formFechas"
                 class="controls-row d-flex align-items-center justify-content-center gap-3 flex-wrap bg-light p-3 rounded shadow-sm">
                 
                 <label for="startDate" class="mb-0 fw-bold">Desde</label>
@@ -201,8 +201,8 @@ $resultado = $conexion->query($sql);
     <table class="table table-bordered">
         <thead class="table-dark">
             <tr>
-                <th>Número de Caseta</th>
                 <th>Fecha</th>
+                <th>Número de Caseta</th>
                 <th>Vacuna</th>
                 <th>Eliminar</th>
             </tr>
@@ -211,8 +211,8 @@ $resultado = $conexion->query($sql);
             <?php if ($resultado && $resultado->num_rows > 0): ?>
                 <?php while ($fila = $resultado->fetch_assoc()): ?>
                     <tr>
+                        <td><?= date("d/m/Y", strtotime($fila['fecha'])) ?></td>
                         <td><?= $fila['num_caseta'] ?></td>
-                        <td><?= $fila['fecha'] ?></td>
                         <td><?= $fila['nombre'] ?></td>
                         <td class="d-flex justify-content-center align-items-center" style="height: 50px;">
                             <button class="btn btn-danger btn-sm rounded-circle"

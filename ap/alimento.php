@@ -114,11 +114,10 @@ $resultado = $conexion->query($sql);
 
                 <label for="endDate" class="mb-0 fw-bold">Hasta</label>
                 <input id="endDate" type="date" class="form-control" style="width:150px;" />
-
-                <button id="limpiarFiltroBtn" class="btn btn-outline-secondary">
-                    <i class="fas fa-broom"></i> Limpiar
-                </button>
             </div>
+            <button id="limpiarFiltroBtn" class="btn btn-outline-secondary">
+                    <i class="fas fa-broom"></i> Limpiar
+            </button>
         </div>
     </div>
 
@@ -190,6 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 
 <script>
+
 // Pasar ID al modal de eliminar
 document.addEventListener("DOMContentLoaded", () => {
     const modal = document.getElementById('modalEliminar');
@@ -214,7 +214,9 @@ document.addEventListener("DOMContentLoaded", () => {
         <?php if($resultado && $resultado->num_rows > 0): ?>
             <?php while($fila = $resultado->fetch_assoc()): ?>
                 <tr>
-                    <td><?= $fila['fecha'] ?></td>
+                    <td data-fecha="<?= $fila['fecha'] ?>">
+                        <?= date("d/m/Y", strtotime($fila['fecha'])) ?>
+                    </td>
                     <td><?= $fila['num_caseta'] ?></td>
                     <td><?= $fila['cantidad'] ?></td>
                     <td><?= $fila['etapa'] ?></td>
@@ -240,52 +242,38 @@ document.addEventListener("DOMContentLoaded", () => {
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-    // Función para aplicar el filtro
     function aplicarFiltro() {
-        // Obtiene las fechas de los inputs (formato YYYY-MM-DD)
-        const start = document.getElementById("startDate").value;
-        const end = document.getElementById("endDate").value;
+    const start = document.getElementById("startDate").value;
+    const end = document.getElementById("endDate").value;
 
-        // Selecciona todas las filas (excepto el posible mensaje de vacío)
-        const rows = document.querySelectorAll("table tbody tr:not(#emptyMsg)");
-        let visibleCount = 0;
-        const tbody = document.querySelector("table tbody");
-        let msg = document.getElementById("emptyMsg");
+    const rows = document.querySelectorAll("table tbody tr:not(#emptyMsg)");
+    let visibleCount = 0;
+    const tbody = document.querySelector("table tbody");
+    let msg = document.getElementById("emptyMsg");
 
-        rows.forEach(r => {
-            // Obtiene la cadena de fecha de la primera celda (columna 0)
-            const rowDate = r.cells[0].innerText.trim();
-            let show = true;
+    rows.forEach(r => {
+        const rowDate = r.cells[0].dataset.fecha; // FECHA REAL
+        let show = true;
 
-            // La clave de la corrección: La comparación de cadenas 'YYYY-MM-DD' funciona
-            if (start && rowDate < start) {
-                show = false;
-            }
-            if (end && rowDate > end) {
-                show = false;
-            }
+        if (start && rowDate < start) show = false;
+        if (end && rowDate > end) show = false;
 
-            r.style.display = show ? "" : "none";
-            if (show) {
-                visibleCount++;
-            }
-        });
+        r.style.display = show ? "" : "none";
+        if (show) visibleCount++;
+    });
 
-        // Manejo del mensaje "No hay registros en ese rango"
-        if (visibleCount === 0) {
-            // Si no hay filas visibles y no existe el mensaje, lo crea
-            if (!msg) {
-                msg = document.createElement("tr");
-                msg.id = "emptyMsg";
-                // colspan debe ser igual al número de columnas (5)
-                msg.innerHTML = `<td colspan="5" class="text-center">No hay registros en ese rango</td>`;
-                tbody.appendChild(msg);
-            }
-        } else if (msg) {
-            // Si hay filas visibles y el mensaje existe, lo elimina
-            msg.remove();
+    if (visibleCount === 0) {
+        if (!msg) {
+            msg = document.createElement("tr");
+            msg.id = "emptyMsg";
+            msg.innerHTML = `<td colspan="5" class="text-center">No hay registros en ese rango</td>`;
+            tbody.appendChild(msg);
         }
+    } else if (msg) {
+        msg.remove();
     }
+}
+
 
     // --- Event Listeners ---
     document.getElementById("startDate").addEventListener("change", aplicarFiltro);
