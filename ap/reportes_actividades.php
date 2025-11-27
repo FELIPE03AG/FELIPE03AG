@@ -162,7 +162,7 @@ $result_muertes = $conexion->query($query_muertes);
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles/style_navbar.css">
     <link rel="stylesheet" href="styles/style_sidebar.css">
-    <link rel="stylesheet" href="styles/style_reportes.css">
+    <link rel="stylesheet" href="styles/style_cerdos.css">
 
     <script src="js/bootstrap.bundle.min.js"></script>
 

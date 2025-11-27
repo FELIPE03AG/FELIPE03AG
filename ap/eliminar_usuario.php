@@ -1,42 +1,91 @@
 <?php
+session_start();
 // Incluir archivo de conexión a la base de datos
-include("config.php"); // Asegúrate de que este archivo contiene los datos correctos para la conexión a la base de datos.
+include("config.php"); 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obtener el nombre de usuario del formulario
-    $usuario_a_eliminar = trim($_POST['u']); // El 'u' es el nombre del input oculto del formulario que contiene el usuario seleccionado.
+    $usuario_a_eliminar = trim($_POST['u']);
 
-    // Validar que el nombre de usuario no esté vacío
+    // 1. Validar que el nombre de usuario no esté vacío
     if (empty($usuario_a_eliminar)) {
-        echo "El nombre de usuario es obligatorio.";
+        $_SESSION['mensaje_error'] = "El nombre de usuario es obligatorio.";
+        header('location: administrar_usuarios.php');
         exit();
     }
+    
+    // --- NUEVO: 2. VERIFICAR EL ROL DEL USUARIO ANTES DE ELIMINAR ---
+    $sql_check_role = "SELECT rol FROM usuarios WHERE u = ?";
 
-    // Preparar la consulta SQL para eliminar al usuario
-    $sql = "DELETE FROM usuarios WHERE u = ?";
+    if ($stmt_check = $conexion->prepare($sql_check_role)) {
+        $stmt_check->bind_param("s", $usuario_a_eliminar);
+        $stmt_check->execute();
+        $result_check = $stmt_check->get_result();
+        
+        if ($result_check->num_rows > 0) {
+            $row = $result_check->fetch_assoc();
+            $rol_a_eliminar = $row['rol'];
+            $stmt_check->close();
+
+            // Aplicar la restricción: Si el rol es 'admin', se aborta la eliminación
+            if ($rol_a_eliminar === 'admin') {
+                // Mensaje específico para el modal
+                $_SESSION['modal_error_title'] = "Operación Denegada";
+                $_SESSION['modal_error_body'] = "No es posible eliminar al usuario '{$usuario_a_eliminar}' porque tiene el rol de Administrador. Esta es una medida de seguridad.";
+                $_SESSION['show_modal'] = true; // Flag para activar el modal en el frontend
+                
+                $conexion->close();
+                header('location: administrar_usuarios.php');
+                exit(); 
+            }
+        } else {
+            // Si el usuario no existe
+            $stmt_check->close();
+            $_SESSION['mensaje_error'] = "Error: El usuario '{$usuario_a_eliminar}' no fue encontrado en la base de datos.";
+            $conexion->close();
+            header('location: administrar_usuarios.php');
+            exit();
+        }
+
+    } else {
+        $_SESSION['mensaje_error'] = "Error al preparar la consulta de verificación de rol.";
+        $conexion->close();
+        header('location: administrar_usuarios.php');
+        exit();
+    }
+    // ----------------------------------------------------------------
+
+
+    // 3. Preparar la consulta SQL para eliminar al usuario (solo si el rol no era 'admin')
+    $sql_delete = "DELETE FROM usuarios WHERE u = ?";
 
     // Usar prepared statements para evitar inyecciones SQL
-    if ($stmt = $conexion->prepare($sql)) {
+    if ($stmt_delete = $conexion->prepare($sql_delete)) {
         // Vincular el parámetro
-        $stmt->bind_param("s", $usuario_a_eliminar);
+        $stmt_delete->bind_param("s", $usuario_a_eliminar);
 
         // Ejecutar la consulta
-        if ($stmt->execute()) {
-            // Si la eliminación fue exitosa, redirigir a la página de administrar usuarios
-            echo "<script>window.location.href='administrar_usuarios.php';</script>";
+        if ($stmt_delete->execute()) {
+            $_SESSION['mensaje_exito'] = "Usuario '{$usuario_a_eliminar}' eliminado correctamente.";
         } else {
-            echo "Error al eliminar el usuario: " . $stmt->error;
+            $_SESSION['mensaje_error'] = "Error al eliminar el usuario: " . $stmt_delete->error;
         }
 
         // Cerrar el statement
-        $stmt->close();
+        $stmt_delete->close();
     } else {
-        echo "Error al preparar la consulta SQL.";
+        $_SESSION['mensaje_error'] = "Error al preparar la consulta SQL de eliminación.";
     }
 
     // Cerrar la conexión a la base de datos
     $conexion->close();
+
+    // Redirigir siempre al final
+    header('location: administrar_usuarios.php');
+    exit();
 } else {
-    echo "Acceso no autorizado.";
+    // Si no es un método POST, redirigir
+    header('location: administrar_usuarios.php');
+    exit();
 }
 ?>

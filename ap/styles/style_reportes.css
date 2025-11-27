@@ -1,58 +1,68 @@
-        .content {
-            margin-top: 60px;
-            margin-left: 250px;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            min-height: calc(100vh - 60px);
-        }
+.content {
+    margin-top: 0; 
+    margin-left: 250px;
+    padding-top: 80px; 
+    padding-right: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px; 
+    
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    
+    min-height: 100vh;
+}
 
-        h2, h3 {
-            margin-bottom: 20px;
-        }
+.content h2:first-child {
+    margin-top: 0; 
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-        }
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            min-width: 100px;
-        }
+h2, h3 {
+    margin-bottom: 20px;
+}
 
-        th {
-            background-color: #f2f2f2;
-        }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    min-width: 100px;
+}
 
-        .hidden {
-            display: none;
-        }
+th {
+    background-color: #f2f2f2;
+}
 
-        button {
-            margin: 10px 10px 10px 0;
-        }
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
 
-        /* 🔹 Ajustar ,}las dos primeras graficas */
-        #eliminacionesCaseta,
-        #eliminacionesFecha {
-            width: 500px !important;
-            height: 250px !important;
-            margin: 30px auto;
-            display: block;
-        }
+.hidden {
+    display: none;
+}
 
-        /* Ajustar solo la última gráfica (fijo) */
-        #causasMuerte {
-            width: 350px !important;   /* ancho fijo */
-            height: 350px !important;  /* alto fijo */
-            display: block;
-            margin: 30px auto;         /* centrada horizontalmente */
-        }
+button {
+    margin: 10px 10px 10px 0;
+}
+
+/* Ajustar las dos primeras gráficas */
+#eliminacionesCaseta,
+#eliminacionesFecha {
+    width: 500px !important;
+    height: 250px !important;
+    margin: 30px auto;
+    display: block;
+}
+
+/* Ajustar solo la última gráfica (fijo) */
+#causasMuerte {
+    width: 350px !important;   /* ancho fijo */
+    height: 350px !important;  /* alto fijo */
+    display: block;
+    margin: 30px auto;          /* centrada horizontalmente */
+}

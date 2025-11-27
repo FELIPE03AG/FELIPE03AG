@@ -37,7 +37,6 @@ $usuario = $result->fetch_assoc();
     <link rel="icon" href="img/cerdo.ico" type="image/x-icon" />
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.min.js"></script>
-    <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="font_awesome/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="styles/style_principal.css">
     <link rel="stylesheet" href="styles/style_navbar.css">
@@ -50,7 +49,7 @@ $usuario = $result->fetch_assoc();
 
             // Configura las páginas relacionadas para cada enlace
             const relatedPages = {
-                "administrar_usuarios.php": ["administrar_usuarios.php", "editar_usuario.php"] // Páginas relacionadas con "cerdos"
+                "administrar_usuarios.php": ["administrar_usuarios.php", "editar_usuario.php"] // Páginas relacionadas con "usuarios"
                 
             };
 
@@ -69,60 +68,80 @@ $usuario = $result->fetch_assoc();
 
 </head>
 <body>
-        <!-- Navbar -->
     <div class="navbar d-flex justify-content-between align-items-center px-4 py-2 bg-light shadow">
         <h1 class="mb-0">GestAP</h1>
 
-        <!-- Usuario sin dropdown -->
         <div class="d-flex align-items-center">
             <i class="fas fa-user-circle me-2"></i>
             <span><?= htmlspecialchars($nombre) ?></span>
         </div>
     </div>
 
-    <!-- Sidebar -->
     <?php include 'sidebar.php'; ?>
 
 
     <div class="content">
 
-            <div class="container mt-4">
-                <h2>Editar Usuario</h2>
+        <div class="container mt-5">
+            <div class="card shadow-lg p-4"> <h2 class="card-title mb-4"><i class="fas fa-user-edit me-2"></i> Editar Usuario</h2>
                 <form action="procesar_edicion.php" method="POST">
-                    <input type="hidden" name="id" value="<?= $usuario['id'] ?>">
+                    <input type="hidden" name="id" value="<?= htmlspecialchars($usuario['id']) ?>">
 
-                    <div class="mb-3">
-                        <label for="usuario" class="form-label">Usuario:</label>
-                        <input type="text" class="form-control" id="usuario" name="usuario" value="<?= $usuario['u'] ?>" required>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="usuario" class="form-label">Usuario:</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <input type="text" class="form-control" id="usuario" name="usuario" value="<?= htmlspecialchars($usuario['u']) ?>" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="nombre" class="form-label">Nombre:</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-signature"></i></span>
+                                <input type="text" class="form-control" id="nombre" name="nombre" value="<?= htmlspecialchars($usuario['nombre']) ?>" required>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label">Nombre:</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" value="<?= $usuario['nombre'] ?>" required>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="correo" class="form-label">Correo Electrónico:</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                <input type="email" class="form-control" id="correo" name="correo" value="<?= htmlspecialchars($usuario['co']) ?>" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="rol" class="form-label">Rol:</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                                <select class="form-control" id="rol" name="rol" required>
+                                    <option value="admin" <?= ($usuario['rol'] == 'admin') ? 'selected' : '' ?>>Admin</option>
+                                    <option value="user" <?= ($usuario['rol'] == 'user') ? 'selected' : '' ?>>User</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="correo" class="form-label">Correo Electrónico:</label>
-                        <input type="email" class="form-control" id="correo" name="correo" value="<?= $usuario['co'] ?>" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="rol" class="form-label">Rol:</label>
-                        <select class="form-control" id="rol" name="rol" required>
-                            <option value="admin" <?= ($usuario['rol'] == 'admin') ? 'selected' : '' ?>>Admin</option>
-                            <option value="user" <?= ($usuario['rol'] == 'user') ? 'selected' : '' ?>>User</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
+                    <div class="mb-4">
                         <label for="password" class="form-label">Nueva Contraseña (Dejar vacío si no se quiere cambiar):</label>
-                        <input type="password" class="form-control" id="password" name="password">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control" id="password" name="password">
+                        </div>
+                        <small class="form-text text-muted">La contraseña solo se actualizará si se introduce un valor aquí.</small>
                     </div>
 
-                    <button type="submit" class="btn btn-success">Guardar Cambios</button>
-                    <a href="administrar_usuarios.php" class="btn btn-secondary">Cancelar</a>
+                    <div class="d-flex justify-content-start">
+                        <button type="submit" class="btn btn-primary me-2"><i class="fas fa-save me-1"></i> Guardar Cambios</button>
+                        <a href="administrar_usuarios.php" class="btn btn-secondary"><i class="fas fa-times-circle me-1"></i> Cancelar</a>
+                    </div>
                 </form>
             </div>
+        </div>
         
     </div>
 
