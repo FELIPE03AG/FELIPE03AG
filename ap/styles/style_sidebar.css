@@ -5,29 +5,42 @@
     left: 0;
     width: 250px;
     height: calc(100vh - 60px);
-    background: linear-gradient(180deg, #2e7d32, #1b5e20);
+    
+    /* Fondo: Gris claro */
+    background: #f0f0f0;
+    
+    /* El color de texto general se sobrescribe por .sidebar a */
     color: #fff;
+    
     display: flex;
     flex-direction: column;
+    
+    /* Centrado Vertical del contenido (Links) */
+    justify-content: center; 
+    
     padding-top: 20px;
     box-shadow: 4px 0 12px rgba(0, 0, 0, 0.4);
     overflow-y: auto;
 }
 
 /* Título */
+/* (Asegúrate de tener un <h2> en tu HTML si usas esta regla) */
 .sidebar h2 {
-    color: white;
+    color: black;
     margin-bottom: 20px;
     font-weight: bold;
 }
 
-/* Links del menú */
+/* Links del menú (Estado Normal) */
 .sidebar a {
     display: flex;
     align-items: center;
     gap: 12px;
-    color: white;
-    padding: 12px 20px;
+    
+    /* Color de texto en estado normal (Negro) */
+    color: black;
+    
+    padding: 30px 40px;
     text-decoration: none;
     transition: 0.3s ease;
     border-left: 4px solid transparent;
@@ -40,21 +53,30 @@
     font-size: 16px;
 }
 
-/* Hover */
+/* Hover (Al pasar el mouse) */
 .sidebar a:hover {
     background-color: rgba(255, 255, 255, 0.15);
     border-left: 4px solid #a5d6a7;
     padding-left: 25px;
 }
 
-/* Activo */
+/* Activo (Página Actual) */
 .sidebar a.active {
-    background-color: rgba(255, 255, 255, 0.25);
-    border-left: 4px solid #c8e6c9;
+    /* Color de fondo: Gris semi-transparente */
+    background-color: rgba(95, 93, 93, 0.25);
+    
+    /* Borde izquierdo: Verde brillante */
+    border-left: 4px solid #63f568; 
+    
+    /* Fuente en negrita */
     font-weight: bold;
+    
+    /* 🌟 IMPORTANTE: Color del texto en estado activo 🌟 */
+    /* Usamos el verde del borde para resaltarlo */
+    color: #1b5e20; 
 }
 
-/* Scroll bonito */
+/* Scroll bonito (Webkit browsers como Chrome/Safari) */
 .sidebar::-webkit-scrollbar {
     width: 6px;
 }

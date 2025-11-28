@@ -1,8 +1,5 @@
  <!-- Sidebar -->
  <div class="sidebar">
-    <h2 class="text-center">
-        <i class="fas fa-home"></i> Inicio
-    </h2>
 
     <a href="cerdos.php">
         <i class="fas fa-piggy-bank"></i> Cerdos

@@ -14,15 +14,9 @@ if (isset($_GET['caseta'])) {
 }
 
 $id_caseta = $_SESSION['caseta_id'];
-
-
-
 $nombre = $_SESSION['nombre'];
 $rol = $_SESSION['rol'];
-
-
 echo $rol;
-
 ?>
 
 <!DOCTYPE html>
@@ -30,14 +24,15 @@ echo $rol;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <Link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.min.js"></script>
-    <title>Eliminación de Cerdos</title>
-    <link rel="icon" href="img/cerdo.ico" type="image/x-icon" />
+    <script src="js/snippets.js"></script>
+    <title>Venta de Cerdos</title>
+    <link rel="icon" href="img/cerdo.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="styles/style_navbar.css">
     <link rel="stylesheet" href="styles/style_sidebar.css">
-    <link rel="stylesheet" href="styles/style_elim_cerdosVenta.css">
+    <link rel="stylesheet" href="styles/style_elim_cerdosVenta_Muerte.css">
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -65,50 +60,55 @@ echo $rol;
 
 </head>
 <body>
-
         <!-- Navbar -->
-        <div class="navbar">
-            <h1>GestAP</h1>
-            <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="cerdos.php">Regresar</a>
-            </li>
-        </div>
+        <?php include 'navbar.php'; ?>
 
         <!-- Sidebar -->
         <?php include 'sidebar.php'; ?>
 
-<div class="content d-flex justify-content-center align-items-center" style="margin-left: 200px;">
-    <div class="card shadow-sm mt-5" style="min-width: 400px; width: 100%; max-width: 600px;">
-        <div class="card-header bg-danger text-white">
-            <h4 class="mb-0"><i class="fas fa-piggy-bank"></i> Eliminar Cerdos por Venta</h4>
-        </div>
-        <div class="card-body">
-            <form action="eliminar_cerdos.php" method="POST">
-                <input type="hidden" name="tipo_eliminacion" value="venta">
-                <input type="hidden" name="num_caseta_venta" value="<?php echo htmlspecialchars($id_caseta); ?>">
+    <div class="content d-flex justify-content-center align-items-center" style="margin-left: 200px;">
+        <div class="card shadow-sm mt-5" style="min-width: 400px; width: 100%; max-width: 600px;">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0"><i class="fas fa-piggy-bank"></i> Eliminar Cerdos por Venta</h4>
+            </div>
+            <div class="card-body">
+                <form action="eliminar_cerdos.php" method="POST">
+                    <input type="hidden" name="tipo_eliminacion" value="venta">
+                    <input type="hidden" name="num_caseta_venta" value="<?php echo htmlspecialchars($id_caseta); ?>">
 
-                <div class="mb-3">
-                    <label for="fecha_venta" class="form-label">Fecha de Venta:</label>
-                    <input type="datetime-local" name="fecha_venta" id="fecha_venta" class="form-control" required>
-                </div>
+                    <div class="mb-3">
+                        <label for="fecha_venta" class="form-label">Fecha de Venta:</label>
+                        <input type="datetime-local" name="fecha_venta" id="fecha_venta" class="form-control" required>
+                    </div>
 
-                <div class="mb-3">
-                    <label for="num_corral_venta" class="form-label">Número de Corral:</label>
-                    <input type="number" name="num_corral_venta" id="num_corral_venta" class="form-control" required>
-                </div>
+                    <div class="mb-3">
+                        <label for="num_corral_venta" class="form-label">Número de Corral:</label>
+                        <input type="number" name="num_corral_venta" id="num_corral_venta" class="form-control" required>
+                    </div>
 
-                <div class="mb-3">
-                    <label for="cantidad" class="form-label">Cantidad de Cerdos a Eliminar:</label>
-                    <input type="number" name="cantidad" id="cantidad" class="form-control" required>
-                </div>
+                    <div class="mb-3">
+                        <label for="cantidad" class="form-label">Cantidad de Cerdos a Eliminar:</label>
+                        <input type="number" name="cantidad" id="cantidad" class="form-control" required>
+                    </div>
 
-                <button type="submit" class="btn btn-danger w-100">
-                    <i class="fas fa-trash-alt"></i> Eliminar por Venta
-                </button>
-            </form>
+                    <div class="row">
+                        <div class="col-6">
+                            <a href="cerdos.php" class="btn btn-secondary w-100">
+                                <i class="fas fa-arrow-left"></i> Regresar
+                            </a>
+                        </div>
+
+                        <div class="col-6">
+                            <button type="submit" class="btn btn-danger w-100">
+                                <i class="fas fa-trash-alt"></i> Eliminar por Venta
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
 </body>
 </html>

@@ -15,14 +15,9 @@ if (isset($_GET['caseta'])) {
 }
 
 $id_caseta = $_SESSION['caseta_id'];
-
 $nombre = $_SESSION['nombre'];
 $rol = $_SESSION['rol'];
-
-
-
 echo $rol;
-
 ?>
 
 <!DOCTYPE html>
@@ -30,13 +25,14 @@ echo $rol;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <Link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.min.js"></script>
     <title>Eliminacion de Cerdos</title>
-    <link rel="icon" href="cerdo.ico" type="image/x-icon">
+    <link rel="icon" href="img/cerdo.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="styles/style_navbar.css">
     <link rel="stylesheet" href="styles/style_sidebar.css">
+    <link rel="stylesheet" href="styles/style_elim_cerdosVenta_Muerte.css">
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
