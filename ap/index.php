@@ -69,21 +69,41 @@ if(isset($_SESSION['nombre'])){
 <body onload="ejecutarRecaptcha()">
     <div class="login-container">
         <img src="img/Logo1.png" alt="GestAP" class="logo-img img-fluid">
-        <form method="post" action="login.php">
+        <form method="post" action="login.php">    
             <!-- Usuario -->
-            <div class="input-group mb-3">
-                <span class="input-group-text">
-                    <i class="fas fa-user"></i>
+            <div class="input-group mb-3 shadow-sm">
+                <span class="input-group-text bg-white">
+                    <i class="fas fa-user text-primary"></i>
                 </span>
-                <input type="text" name="u" id="username" class="form-control" required placeholder="Usuario" />
+
+                <input type="text" 
+                    name="u" 
+                    id="username" 
+                    class="form-control border-start-0 ps-3" 
+                    required 
+                    placeholder="Usuario" />
             </div>
 
             <!-- Contraseña -->
-            <div class="input-group mb-3">
-                <span class="input-group-text">
-                    <i class="fas fa-lock"></i>
+            <div class="input-group mb-3 shadow-sm">
+                <span class="input-group-text bg-white">
+                    <i class="fas fa-lock text-primary"></i>
                 </span>
-                <input type="password" name="c" id="password" class="form-control" required placeholder="Contraseña" />
+
+                <input type="password" 
+                    name="c" 
+                    id="password" 
+                    class="form-control border-start-0 border-end-0 ps-3" 
+                    required 
+                    placeholder="Contraseña" />
+
+                <!-- Botón para mostrar/ocultar -->
+                <button type="button" 
+                        class="btn bg-white border" 
+                        onclick="togglePassword()"
+                        style="border-left:0;">
+                    <i class="fas fa-eye text-secondary" id="eyeIcon"></i>
+                </button>
             </div>
 
             <?php
@@ -126,6 +146,23 @@ if(isset($_SESSION['nombre'])){
             <button type="submit" class="btn btn-primary">Iniciar sesión</button>
         </form>
     </div>
+
+    <script>
+    function togglePassword() {
+        const input = document.getElementById("password");
+        const icon = document.getElementById("eyeIcon");
+
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            input.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    }
+    </script>
 
 </body>
 </html>

@@ -168,7 +168,7 @@ $result_muertes = $conexion->query($query_muertes);
 
     <style>
         .hidden { display: none !important; }
-        .grafica { max-width: 80%; height: 400px;}
+        .grafica { max-width: 60%; height: 400px;}
         table.table { width: 100%; }
         .controls-centered { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; margin-top: 10px; flex-direction: column; }
         .controls-row { display:flex; gap:12px; align-items:center; }
