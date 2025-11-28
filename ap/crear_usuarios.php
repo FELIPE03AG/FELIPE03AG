@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include("config.php"); // Conexión a la base de datos
+include("config.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -15,53 +15,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Validar que el rol sea "admin" o "user"
+    // Validar rol permitido
     if ($rol !== 'admin' && $rol !== 'user') {
         $rol = 'user';
     }
 
-    // Verificar si el usuario o correo ya existen en la base de datos
-    $sql_check = "SELECT u FROM usuarios WHERE u = ? OR co = ?";
+    $sql_user = "SELECT u FROM usuarios WHERE u = ?";
+    $stmt_user = $conexion->prepare($sql_user);
+    $stmt_user->bind_param("s", $usuario);
+    $stmt_user->execute();
+    $stmt_user->store_result();
 
-    if ($stmt_check = $conexion->prepare($sql_check)) {
-        $stmt_check->bind_param("ss", $usuario, $correo);
-        $stmt_check->execute();
-        $stmt_check->store_result();
-
-        if ($stmt_check->num_rows > 0) {
-            $stmt_check->close();
-            $conexion->close();
-
-            header("Location: administrar_usuarios.php?error=existe");
-            exit();
-        }
-
-        $stmt_check->close();
+    if ($stmt_user->num_rows > 0) {
+        $stmt_user->close();
+        $conexion->close();
+        header("Location: administrar_usuarios.php?error=usuario");
+        exit();
     }
+    $stmt_user->close();
 
-    // Encriptar la contraseña
+    $sql_mail = "SELECT co FROM usuarios WHERE co = ?";
+    $stmt_mail = $conexion->prepare($sql_mail);
+    $stmt_mail->bind_param("s", $correo);
+    $stmt_mail->execute();
+    $stmt_mail->store_result();
+
+    if ($stmt_mail->num_rows > 0) {
+        $stmt_mail->close();
+        $conexion->close();
+        header("Location: administrar_usuarios.php?error=correo");
+        exit();
+    }
+    $stmt_mail->close();
+
     $password_encriptada = sha1($password);
 
-    // Insertar el nuevo usuario
     $sql_insert = "INSERT INTO usuarios (u, nombre, co, rol, c) VALUES (?, ?, ?, ?, ?)";
+    $stmt_insert = $conexion->prepare($sql_insert);
+    $stmt_insert->bind_param("sssss", $usuario, $nombre, $correo, $rol, $password_encriptada);
 
-    if ($stmt_insert = $conexion->prepare($sql_insert)) {
-        $stmt_insert->bind_param("sssss", $usuario, $nombre, $correo, $rol, $password_encriptada);
-
-        if ($stmt_insert->execute()) {
-
-            header("Location: administrar_usuarios.php?success=1");
-            exit();
-
-        } else {
-            header("Location: administrar_usuarios.php?error=bd");
-            exit();
-        }
-
+    if ($stmt_insert->execute()) {
         $stmt_insert->close();
+        $conexion->close();
+        header("Location: administrar_usuarios.php?success=1");
+        exit();
+    } else {
+        $stmt_insert->close();
+        $conexion->close();
+        header("Location: administrar_usuarios.php?error=bd");
+        exit();
     }
 
-    $conexion->close();
 } else {
     header("Location: administrar_usuarios.php?error=acceso");
     exit();

@@ -27,7 +27,8 @@ if (!empty($password)) {
 }
 
 if ($stmt->execute()) {
-    echo "<script>window.location='administrar_usuarios.php';</script>";
+    header("Location: administrar_usuarios.php?success=edit");
+    exit();
 } else {
     echo "<script>alert('Error al actualizar usuario.'); window.history.back();</script>";
 }

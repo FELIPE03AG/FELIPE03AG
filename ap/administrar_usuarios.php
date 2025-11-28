@@ -404,17 +404,75 @@ include("config.php");
     }
     ?>
 
-<?php if (isset($_GET['success'])): ?>
+<?php if (isset($_GET['error']) || isset($_GET['success'])): ?>
 <script>
-Swal.fire({
-    icon: 'success',
-    title: '¡Usuario registrado!',
-    text: 'La información fue almacenada correctamente.',
-    showConfirmButton: false,
-    timer: 2000
-}).then(() => {
-    window.location.href = "administrar_usuarios.php";
-});
+<?php if (isset($_GET['error'])): ?>
+
+    <?php if ($_GET['error'] == 'usuario'): ?>
+        Swal.fire({
+            icon: 'error',
+            title: 'Usuario existente',
+            text: 'El nombre de usuario ya está registrado.',
+        });
+
+    <?php elseif ($_GET['error'] == 'correo'): ?>
+        Swal.fire({
+            icon: 'error',
+            title: 'Correo existente',
+            text: 'El correo ingresado ya está registrado.',
+        });
+
+    <?php elseif ($_GET['error'] == 'campos'): ?>
+        Swal.fire({
+            icon: 'warning',
+            title: 'Campos incompletos',
+            text: 'Debes llenar todos los campos.',
+        });
+
+    <?php elseif ($_GET['error'] == 'bd'): ?>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error en base de datos',
+            text: 'Ocurrió un error al guardar el usuario.',
+        });
+
+    <?php elseif ($_GET['error'] == 'acceso'): ?>
+        Swal.fire({
+            icon: 'error',
+            title: 'Acceso no permitido',
+            text: 'No puedes acceder directamente a esta página.',
+        });
+    <?php endif; ?>
+
+<?php endif; ?>
+
+<?php if (isset($_GET['success'])): ?>
+
+    <?php if ($_GET['success'] == 1): ?>
+        Swal.fire({
+            icon: 'success',
+            title: 'Usuario creado',
+            text: 'El usuario ha sido registrado correctamente.',
+            timer: 1500,
+            showConfirmButton: false
+        }).then(() => {
+            window.location.href = "administrar_usuarios.php";
+        });
+    <?php endif; ?>
+
+    <?php if ($_GET['success'] == 'edit'): ?>
+        Swal.fire({
+            icon: 'success',
+            title: 'Cambios guardados',
+            text: 'El usuario ha sido actualizado correctamente.',
+            timer: 1500,
+            showConfirmButton: false
+        }).then(() => {
+            window.location.href = "administrar_usuarios.php";
+        });
+    <?php endif; ?>
+
+<?php endif; ?>
 </script>
 <?php endif; ?>
 

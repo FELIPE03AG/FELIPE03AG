@@ -1,5 +1,5 @@
 body {
-    background-image: url('/ap/img/fondo1.png'); /* Ajusta la ruta si es necesario */
+    background-image: url('/ap/img/fondo1.png');
     background-size: cover;
     background-position: center;
     height: 100vh;

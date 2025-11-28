@@ -37,10 +37,11 @@ $usuario = $result->fetch_assoc();
     <link rel="icon" href="img/cerdo.ico" type="image/x-icon" />
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="font_awesome/css/all.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="styles/style_principal.css">
     <link rel="stylesheet" href="styles/style_navbar.css">
     <link rel="stylesheet" href="styles/style_sidebar.css">
+    <link rel="stylesheet" href="styles/style_principal.css">
 
 <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -68,14 +69,7 @@ $usuario = $result->fetch_assoc();
 
 </head>
 <body>
-    <div class="navbar d-flex justify-content-between align-items-center px-4 py-2 bg-light shadow">
-        <h1 class="mb-0">GestAP</h1>
-
-        <div class="d-flex align-items-center">
-            <i class="fas fa-user-circle me-2"></i>
-            <span><?= htmlspecialchars($nombre) ?></span>
-        </div>
-    </div>
+    <?php include 'navbar.php'; ?>
 
     <?php include 'sidebar.php'; ?>
 

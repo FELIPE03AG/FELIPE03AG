@@ -141,7 +141,6 @@ if(isset($_SESSION['nombre'])){
             }
             ?>
 
-
             <!-- Botón de inicio de sesión -->
             <button type="submit" class="btn btn-primary">Iniciar sesión</button>
         </form>
