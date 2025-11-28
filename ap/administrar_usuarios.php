@@ -24,7 +24,7 @@ include("config.php");
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>Perfil de Usuarios</title>
+    <title>Administrar Usuarios</title>
     <link rel="icon" href="img/cerdo.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles/style_navbar.css">
     <link rel="stylesheet" href="styles/style_sidebar.css">

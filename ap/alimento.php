@@ -35,6 +35,7 @@ $resultado = $conexion->query($sql);
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <title>Gestión de Alimento</title>
@@ -43,25 +44,22 @@ $resultado = $conexion->query($sql);
     <link rel="stylesheet" href="styles/style_sidebar.css">
     <link rel="stylesheet" href="styles/style_cerdos.css">
 
-    <style>
-    /* Ocultar flechas de control en input type="number" */
-    input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
-    /* Estilos para Tooltips */
-    .tooltip-inner {
-        background-color: black !important;
-        color: white !important;
-        font-weight: bold;
-    }
-    .tooltip.bs-tooltip-top .tooltip-arrow::before {
-        border-top-color: black !important;
-    }
+        <style>
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        /* Estilos para Tooltips (Asegura visibilidad) */
+        .tooltip-inner {
+            background-color: black !important;
+            color: white !important;
+            font-weight: bold;
+        }
+        .tooltip.bs-tooltip-top .tooltip-arrow::before {
+            border-top-color: black !important;
+        }
     </style>
-
 </head>
 
 <body>

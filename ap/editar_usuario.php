@@ -77,7 +77,7 @@ $usuario = $result->fetch_assoc();
     <div class="content">
 
         <div class="container mt-5">
-            <div class="card shadow-lg p-4"> <h2 class="card-title mb-4"><i class="fas fa-user-edit me-2"></i> Editar Usuario</h2>
+            <div class="card shadow-lg p-4"> <h2 class="card-title mb-4"><i class="fas fa-user-edit me-2"></i> Mi perfil</h2>
                 <form action="procesar_edicion.php" method="POST">
                     <input type="hidden" name="id" value="<?= htmlspecialchars($usuario['id']) ?>">
 
