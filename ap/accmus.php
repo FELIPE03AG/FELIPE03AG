@@ -85,7 +85,7 @@ $result_historial = $conexion->query($sql_historial);
 
  <!-- Nav bar -->
     <?php include 'navbar.php'; ?>
-
+    <?php include 'navbar.php'; ?>
     <!-- Sidebar -->
     <?php include 'sidebar.php'; ?>
 
