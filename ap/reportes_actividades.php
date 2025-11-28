@@ -168,7 +168,7 @@ $result_muertes = $conexion->query($query_muertes);
 
     <style>
         .hidden { display: none !important; }
-        .grafica { max-width: 100%; height: 320px; }
+        .grafica { max-width: 80%; height: 400px;}
         table.table { width: 100%; }
         .controls-centered { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; margin-top: 10px; flex-direction: column; }
         .controls-row { display:flex; gap:12px; align-items:center; }
@@ -418,78 +418,122 @@ $result_muertes = $conexion->query($query_muertes);
     }
 
     // Generar PDF con datos filtrados
-    async function onDownloadPdf() {
-        const start = document.getElementById('startDate').value || null;
-        const end = document.getElementById('endDate').value || null;
-        try {
-            const data = await fetchDatosFiltrados(start, end);
-            if (!data.success) throw new Error('No se obtuvieron datos.');
+    // --- FUNCIÓN onDownloadPdf COMPLETA Y ACTUALIZADA ---
 
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            let y = 15;
+async function onDownloadPdf() {
+    const start = document.getElementById('startDate').value || null;
+    const end = document.getElementById('endDate').value || null;
+    
+    // Configuración de las dimensiones de las imágenes en el PDF (en mm)
+    // 140mm es un buen ancho para gráficas centradas en una hoja A4
+    const PDF_IMAGE_WIDTH = 140; 
+    const PDF_START_Y = 15;
+    const PDF_PAGE_LIMIT = 260; // Límite de la página antes de saltar
 
-            doc.setFontSize(18);
-            doc.text('Reporte de Eliminaciones', 105, y, { align: 'center' });
-            y += 8;
-            doc.setFontSize(10);
-            const rangoTexto = 'Rango: ' + (start || 'inicio') + ' — ' + (end || 'fin');
-            doc.text(rangoTexto, 105, y, { align: 'center' });
-            y += 12;
+    try {
+        const data = await fetchDatosFiltrados(start, end);
+        if (!data.success) throw new Error('No se obtuvieron datos.');
 
-            // Tabla Ventas
-            doc.setFontSize(12);
-            doc.text('Eliminaciones por Venta', 14, y);
-            y += 6;
-            const ventasHead = [['Fecha','Caseta','Corral','Cantidad']];
-            const ventasBody = data.ventas.map(v => [v.fecha_venta, v.num_caseta, v.num_corral, v.cantidad]);
-            doc.autoTable({ startY: y, head: ventasHead, body: ventasBody, margin: { left:10, right:10 } });
-            y = doc.lastAutoTable.finalY + 10;
+        // Inicialización de jsPDF (formato vertical A4, unidades en mm)
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('p', 'mm', 'a4'); 
+        let y = PDF_START_Y;
 
-            // Tabla Muertes
-            doc.text('Eliminaciones por Muerte', 14, y);
-            y += 6;
-            const muertesHead = [['Fecha','Caseta','Corral','Causa']];
-            const muertesBody = data.muertes.map(m => [m.fecha_muerte, m.num_caseta, m.num_corral, m.causa_muerte]);
-            doc.autoTable({ startY: y, head: muertesHead, body: muertesBody, margin: { left:10, right:10 } });
-            y = doc.lastAutoTable.finalY + 10;
+        // 1. Título y Rango
+        doc.setFontSize(18);
+        doc.text('Reporte de Eliminaciones', 105, y, { align: 'center' });
+        y += 8;
+        doc.setFontSize(10);
+        const rangoTexto = 'Rango: ' + (start || 'inicio') + ' — ' + (end || 'fin');
+        doc.text(rangoTexto, 105, y, { align: 'center' });
+        y += 12;
 
-            // Gráficas: hacer visibles temporalmente
-            const graficasDiv = document.getElementById('graficas');
-            const originalState = { class: graficasDiv.className, display: graficasDiv.style.display, opacity: graficasDiv.style.opacity };
-            graficasDiv.classList.remove('hidden'); graficasDiv.style.display = 'block'; graficasDiv.style.opacity = '1';
-            await new Promise(r => setTimeout(r, 600));
+        // 2. Tablas (Ventas y Muertes)
+        // Tabla Ventas
+        doc.setFontSize(12);
+        doc.text('Eliminaciones por Venta', 14, y);
+        y += 6;
+        const ventasHead = [['Fecha','Caseta','Corral','Cantidad']];
+        const ventasBody = data.ventas.map(v => [v.fecha_venta, v.num_caseta, v.num_corral, v.cantidad]);
+        doc.autoTable({ startY: y, head: ventasHead, body: ventasBody, margin: { left:10, right:10 } });
+        y = doc.lastAutoTable.finalY + 10;
 
-            const chartsToAdd = [
-                { id: 'eliminacionesCaseta', title: 'Por Caseta', width: 140 },
-                { id: 'eliminacionesFecha', title: 'Por Fecha', width: 140 },
-                { id: 'causasMuerte', title: 'Causas de Muerte', width: 110 }
-            ];
+        // Tabla Muertes
+        doc.text('Eliminaciones por Muerte', 14, y);
+        y += 6;
+        const muertesHead = [['Fecha','Caseta','Corral','Causa']];
+        const muertesBody = data.muertes.map(m => [m.fecha_muerte, m.num_caseta, m.num_corral, m.causa_muerte]);
+        doc.autoTable({ startY: y, head: muertesHead, body: muertesBody, margin: { left:10, right:10 } });
+        y = doc.lastAutoTable.finalY + 10;
 
-            for (const ch of chartsToAdd) {
-                if (y > 200) { doc.addPage(); y = 15; }
-                const canvas = document.getElementById(ch.id);
-                if (!canvas) continue;
-                const canvasImg = await html2canvas(canvas, { scale: 1 });
-                const imgData = canvasImg.toDataURL('image/png');
-                const imgHeight = (canvas.offsetHeight * ch.width) / canvas.offsetWidth;
-                doc.text(ch.title, 14, y); y += 6;
-                const xPos = (doc.internal.pageSize.width - ch.width) / 2;
-                doc.addImage(imgData, 'PNG', xPos, y, ch.width, imgHeight);
-                y += imgHeight + 10;
+        // 3. Preparación para Captura de Gráficas (Hacerlas visibles y esperar)
+        const graficasDiv = document.getElementById('graficas');
+        const originalState = { class: graficasDiv.className, display: graficasDiv.style.display, opacity: graficasDiv.style.opacity };
+        
+        graficasDiv.classList.remove('hidden'); 
+        graficasDiv.style.display = 'block'; 
+        graficasDiv.style.opacity = '1';
+        // Espera de 300ms para asegurar que Chart.js las dibuje correctamente
+        await new Promise(r => setTimeout(r, 300)); 
+
+        const chartsToAdd = [
+            { id: 'eliminacionesCaseta', title: 'Por Caseta' },
+            { id: 'eliminacionesFecha', title: 'Por Fecha' },
+            { id: 'causasMuerte', title: 'Causas de Muerte' }
+        ];
+        
+        // 4. Bucle de Captura y Adición al PDF
+        for (const ch of chartsToAdd) {
+            
+            const canvas = document.getElementById(ch.id);
+            if (!canvas) continue;
+
+            // Obtener dimensiones del canvas en la página (para mantener la proporción)
+            const canvasHeightPx = canvas.offsetHeight;
+            const canvasWidthPx = canvas.offsetWidth; 
+            
+            // Capturar el canvas con alta resolución (escala 3x)
+            const captureScale = 3; 
+            const canvasImg = await html2canvas(canvas, { scale: captureScale });
+            
+            // Convertir a JPEG para reducir el tamaño del archivo
+            const imgData = canvasImg.toDataURL('image/jpeg', 1.0); 
+            
+            // Calcular la altura en mm manteniendo la proporción del canvas original
+            const imgHeight = (PDF_IMAGE_WIDTH * canvasHeightPx) / canvasWidthPx;
+            
+            // Lógica de Salto de Página: si el espacio restante es menor que la altura de la imagen + margen.
+            if (y + imgHeight + 10 > PDF_PAGE_LIMIT) { 
+                 doc.addPage(); 
+                 y = PDF_START_Y;
             }
 
-            // Restaurar estado
-            graficasDiv.className = originalState.class; graficasDiv.style.display = originalState.display; graficasDiv.style.opacity = originalState.opacity;
-
-            const filename = `Reporte_Eliminaciones_${(start||'inicio')}_a_${(end||'fin')}.pdf`;
-            doc.save(filename);
-
-        } catch (err) {
-            console.error(err);
-            alert('Error al generar PDF. Revisa la consola.');
+            // Título de la Gráfica
+            doc.setFontSize(14);
+            doc.text(ch.title, 14, y); 
+            y += 7;
+            
+            // Centrar y Añadir la Imagen
+            const xPos = (doc.internal.pageSize.width - PDF_IMAGE_WIDTH) / 2;
+            doc.addImage(imgData, 'JPEG', xPos, y, PDF_IMAGE_WIDTH, imgHeight);
+            
+            y += imgHeight + 10; // Espacio después de la gráfica
         }
+
+        // 5. Finalización
+        // Restaurar estado original
+        graficasDiv.className = originalState.class; 
+        graficasDiv.style.display = originalState.display; 
+        graficasDiv.style.opacity = originalState.opacity;
+
+        const filename = `Reporte_Eliminaciones_${(start||'inicio')}_a_${(end||'fin')}.pdf`;
+        doc.save(filename);
+
+    } catch (err) {
+        console.error(err);
+        alert('Error al generar PDF. Revisa la consola y la configuración de las librerías.');
     }
+}
 </script>
 
 </body>

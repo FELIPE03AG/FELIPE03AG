@@ -10,12 +10,6 @@ $nombre = $_SESSION['nombre'];
 $rol = $_SESSION['rol'];
 $caseta = $_GET['caseta'];
 
-
-
-
-
-
-// Incluir configuración para la conexión a la base de datos
 include("config.php");
 
 ?>
@@ -40,16 +34,16 @@ include("config.php");
     <link rel="stylesheet" href="styles/style_sidebar.css">
     <link rel="stylesheet" href="styles/style_add_cerdos.css">
     
-    <!-- Estilo para denegar flechas en los cuadros de texto-->
     <style>
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
-}
+    }
+    </style>
 
-</style>
 </head>
+
 <body>
     
     <!-- Navbar -->
@@ -92,60 +86,77 @@ input[type=number]::-webkit-outer-spin-button {
             });
         });
     </script>
+
 <div class="content">
-    <h2>Agregar Registro - Caseta <?php echo $caseta; ?></h2>
+
+    <h2 class="text-center mb-4">
+        <i class="fas fa-pen"></i> Agregar Registro - Caseta <?php echo $caseta; ?>
+    </h2>
+
     <form id="form-cerdos" action="save_cerdos.php" method="POST">
         <input type="hidden" name="caseta" value="<?php echo $caseta; ?>">
 
-        <label for="num_cerdos">Cantidad Inicial de Cerdos:</label>
-        <input type="number" name="num_cerdos" id="num_cerdos" required>
+        <div class="section">
+            <h4><i class="fas fa-info-circle"></i> Datos generales</h4>
+            <hr>
 
-        <label for="peso_prom">Peso Promedio (kg):</label>
-        <input type="number" name="peso_prom" step="0.01" required>
+            <label for="num_cerdos">Cantidad Inicial de Cerdos</label>
+            <input type="number" name="num_cerdos" id="num_cerdos" min="1" required>
 
-        <label for="edad_prom">Edad Promedio (Semanas):</label>
-        <input type="number" name="edad_prom" required>
+            <label for="peso_prom">Peso Promedio (kg)</label>
+            <input type="number" name="peso_prom" step="0.01" min="1" required>
 
-        <label for="fecha_llegada">Fecha de Llegada:</label>
-<input type="date" name="fecha_llegada" value="<?php echo date('Y-m-d'); ?>" readonly required>
+            <label for="edad_prom">Edad Promedio (Semanas)</label>
+            <input type="number" name="edad_prom" min="1" required>
 
+            <label for="fecha_llegada">Fecha de Llegada</label>
+            <input type="date" name="fecha_llegada" value="<?php echo date('Y-m-d'); ?>" readonly required>
 
-        <label for="etapa">Etapa de Alimentación:</label>
-        <select name="etapa" required>
-            <option value="Iniciador">Iniciador</option>
-            <option value="Crecimiento">Crecimiento</option>
-            <option value="Desarrollo">Desarrollo</option>
-            <option value="Finalizador">Finalizador</option>
-        </select>
+            <label for="etapa">Etapa de Alimentación</label>
+            <select name="etapa" required>
+                <option value="Iniciador">Iniciador</option>
+                <option value="Crecimiento">Crecimiento</option>
+                <option value="Desarrollo">Desarrollo</option>
+                <option value="Finalizador">Finalizador</option>
+            </select>
+        </div>
 
-        <h3>Distribución de Cerdos por Corral</h3>
-        <?php for ($i = 1; $i <= 30; $i++) { ?>
-            <label for="corral_<?php echo $i; ?>">Corral <?php echo $i; ?>:</label>
-            <input type="number" name="corral_<?php echo $i; ?>" id="corral_<?php echo $i; ?>" required>
-        <?php } ?>
+        <div class="section">
+            <h4><i class="fas fa-th"></i> Distribución por Corrales</h4>
+            <hr>
 
-        <button type="submit">Guardar</button>
+            <div class="corrales-grid">
+                <?php for ($i = 1; $i <= 30; $i++) { ?>
+                    <div class="corral-item">
+                        <label for="corral_<?php echo $i; ?>">Corral <?php echo $i; ?></label>
+                        <input type="number" name="corral_<?php echo $i; ?>" id="corral_<?php echo $i; ?>" min="0" required>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-save">
+            <i class="fas fa-save"></i> Guardar Registro
+        </button>
+
+        <a href="cerdos.php" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
     </form>
-
-    <script>
-        document.getElementById('form-cerdos').addEventListener('submit', function(e) {
-            const cantidadInicial = parseInt(document.getElementById('num_cerdos').value);
-            let sumaCorrales = 0;
-
-            for (let i = 1; i <= 30; i++) {
-                const valor = parseInt(document.getElementById('corral_' + i).value) || 0;
-                sumaCorrales += valor;
-            }
-
-            if (sumaCorrales !== cantidadInicial) {
-                e.preventDefault();
-                alert('⚠️ La suma de los cerdos en los corrales (' + sumaCorrales + ') no coincide con la cantidad inicial (' + cantidadInicial + ').');
-            }
-        });
-    </script>
 </div>
-
 </form>
+
+<script>
+document.getElementById('num_cerdos').addEventListener('change', function() {
+    let total = parseInt(this.value) || 0;
+    let promedio = Math.floor(total / 30);
+    let resto = total % 30;
+
+    for (let i = 1; i <= 30; i++) {
+        document.getElementById('corral_' + i).value = promedio + (i <= resto ? 1 : 0);
+    }
+});
+</script>
 
 </body>
 </html>

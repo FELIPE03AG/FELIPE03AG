@@ -137,3 +137,95 @@
         width: 90%;
         text-align: center;
     }
+
+    .section {
+    margin-bottom: 30px;
+}
+
+.section h4 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+form {
+    max-width: 950px;
+    margin: auto;
+    padding: 25px;
+    border-radius: 12px;
+    background-color: #fafafa;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+label {
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+input, select {
+    border-radius: 6px;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.corrales-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.corral-item {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.1);
+}
+
+.corral-item label {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.corral-item input {
+    text-align: center;
+    font-weight: bold;
+}
+
+/* BOTONES */
+.btn-save {
+    background: linear-gradient(45deg, #4CAF50, #2e7d32);
+    color: white;
+    border: none;
+    padding: 12px;
+    margin-top: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+}
+
+.btn-save:hover {
+    background: linear-gradient(45deg, #43a047, #1b5e20);
+}
+
+.btn-back {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+}
+
+.btn-back:hover {
+    background-color: #5a6268;
+}
+
+@media (max-width: 768px) {
+    .content {
+        margin-left: 0;
+    }
+}
