@@ -73,7 +73,7 @@ if(isset($_SESSION['nombre'])){
             <!-- Usuario -->
             <div class="input-group mb-3 shadow-sm">
                 <span class="input-group-text bg-white">
-                    <i class="fas fa-user text-primary"></i>
+                    <i class="fas fa-user text-secundary"></i>
                 </span>
 
                 <input type="text" 
@@ -87,7 +87,7 @@ if(isset($_SESSION['nombre'])){
             <!-- Contraseña -->
             <div class="input-group mb-3 shadow-sm">
                 <span class="input-group-text bg-white">
-                    <i class="fas fa-lock text-primary"></i>
+                    <i class="fas fa-lock text-secundary"></i>
                 </span>
 
                 <input type="password" 

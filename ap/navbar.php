@@ -27,13 +27,13 @@
             <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
                 <li>
                     <a class="dropdown-item d-flex align-items-center" href="administrar_usuarios.php">
-                        <i class="fas fa-users-cog me-2 text-primary"></i> Administrar Usuarios
+                        <i class="fas fa-users-cog me-2 text-secundary"></i> Administrar usuarios
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item d-flex align-items-center" 
                         href="editar_usuario.php?id=<?= $_SESSION['id'] ?>">
-                        <i class="fas fa-user me-2 text-secondary"></i> Perfil
+                        <i class="fas fa-user me-2 text-secondary"></i> Editar perfil
                     </a>
 
                 </li>
