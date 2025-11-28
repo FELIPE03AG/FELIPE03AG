@@ -33,9 +33,9 @@ $resultado = $conexion->query($sql);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <title>Gestión de Alimento</title>
     <link rel="icon" href="img/cerdo.ico" type="image/x-icon" />
@@ -348,6 +348,20 @@ document.getElementById("btnDescargarPdf").addEventListener("click", () => {
     doc.save("reporte_alimento.pdf");
 });
 </script>
+
+<?php if (isset($_GET['success'])): ?>
+<script>
+Swal.fire({
+    icon: 'success',
+    title: '¡Registro guardado!',
+    text: 'La información fue almacenada correctamente.',
+    showConfirmButton: false,
+    timer: 2000
+}).then(() => {
+    window.location.href = "alimento.php";
+});
+</script>
+<?php endif; ?>
 
 </body>
 </html>

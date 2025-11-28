@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if ($stmt->execute()) {
             // Registro exitoso
-            header("Location: alimento.php?msg=agregado");
+            header("Location: alimento.php?success=1");
             exit();
         } else {
             // Error en la inserción

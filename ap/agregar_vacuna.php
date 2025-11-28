@@ -82,7 +82,7 @@ try {
     $conexion->commit();
 
     // Redirigir con mensaje de éxito
-    header("Location: vacunacion.php?msg=vacuna_agregada");
+    header("Location: vacunacion.php?success=1");
     exit();
 
 } catch (Exception $e) {

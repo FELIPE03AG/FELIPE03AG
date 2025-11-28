@@ -23,6 +23,7 @@ include("config.php");
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Perfil de Usuarios</title>
     <link rel="icon" href="img/cerdo.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles/style_navbar.css">
@@ -216,7 +217,7 @@ include("config.php");
     </div>
 
     <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="messageModalLabel">Mensaje</h5>
@@ -233,7 +234,7 @@ include("config.php");
 
 
     <div class="modal fade" id="errorAdminModal" tabindex="-1" aria-labelledby="errorAdminModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
                     <h5 class="modal-title" id="errorAdminModalLabel"><i class="fas fa-exclamation-triangle"></i> <?php echo isset($_SESSION['modal_error_title']) ? htmlspecialchars($_SESSION['modal_error_title']) : 'Error de Seguridad'; ?></h5>
@@ -402,6 +403,20 @@ include("config.php");
         unset($_SESSION['mensaje_error']);
     }
     ?>
+
+<?php if (isset($_GET['success'])): ?>
+<script>
+Swal.fire({
+    icon: 'success',
+    title: '¡Usuario registrado!',
+    text: 'La información fue almacenada correctamente.',
+    showConfirmButton: false,
+    timer: 2000
+}).then(() => {
+    window.location.href = "administrar_usuarios.php";
+});
+</script>
+<?php endif; ?>
 
 </body>
 </html>

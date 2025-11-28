@@ -84,8 +84,6 @@ function calcularEtapa($fecha_llegada) {
     <!-- Sidebar -->
     <?php include 'sidebar.php'; ?>
 
-
-
     <div class="content">
 
         <h2>Gestión de Casetas de Cerdos</h2>
@@ -167,7 +165,7 @@ $etapa_alimentacion = $etapa_calculada; // Mostrar la nueva etapa
 
                         <!-- Mostrar total de cerdos fuera de la tabla -->
                         <div style="margin-bottom: 10px; font-size: 18px; font-weight: bold; color: #333;">
-                            🐷 Total de Cerdos en la Caseta: <span style="color: #28a745;"><?php echo $total_cerdos; ?></span>
+                            Total de Cerdos en la Caseta: <span style="color: #28a745;"><?php echo $total_cerdos; ?></span>
                         </div>
 
                         <table>

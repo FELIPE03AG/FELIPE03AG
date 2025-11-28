@@ -3,12 +3,6 @@ session_start();
 
 include("config.php");
 
-
-
-   
-
-
-
 $usuario = $_SESSION['nombre'];
 $rol = $_SESSION['rol'];
 
@@ -76,8 +70,7 @@ for ($i = 1; $i <= 30; $i++) {
    $registro = "INSERT INTO historial (accion, fecha_hora, usuario) VALUES ('$accion', '$fecha_hora', '$usuario')";
    mysqli_query($conexion, $registro);
   // Redirigir a la página de agregar cerdos
-  header("Location: cerdos.php");
-  
+  header("Location: add_cerdos.php?caseta=$caseta&success=1");
   exit(); // Importante para asegurar que no se ejecute nada después
 $conexion->close();
 ?>

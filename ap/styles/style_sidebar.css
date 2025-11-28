@@ -1,31 +1,65 @@
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            top: 60px;
-            left: 0;
-            width: 250px;
-            height: calc(100vh - 60px);
-            background-color: #f0f0f0;
-            color: black;
-            display: flex;
-            flex-direction: column;
-            padding-top: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-        }
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 250px;
+    height: calc(100vh - 60px);
+    background: linear-gradient(180deg, #2e7d32, #1b5e20);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.4);
+    overflow-y: auto;
+}
 
-        .sidebar a {
-            color: black;
-            padding: 15px 20px;
-            text-decoration: none;
-            transition: background 0.3s;
-        }
+/* Título */
+.sidebar h2 {
+    color: white;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
 
-        .sidebar a:hover {
-            background-color: #6e6e6e;
-        }
+/* Links del menú */
+.sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+    padding: 12px 20px;
+    text-decoration: none;
+    transition: 0.3s ease;
+    border-left: 4px solid transparent;
+}
 
-        .sidebar a.active {
-            background-color: #4caf50;
-            color: black;
-            font-weight: bold;
-        }
+/* Iconos */
+.sidebar i {
+    min-width: 20px;
+    text-align: center;
+    font-size: 16px;
+}
+
+/* Hover */
+.sidebar a:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-left: 4px solid #a5d6a7;
+    padding-left: 25px;
+}
+
+/* Activo */
+.sidebar a.active {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-left: 4px solid #c8e6c9;
+    font-weight: bold;
+}
+
+/* Scroll bonito */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.3);
+    border-radius: 10px;
+}

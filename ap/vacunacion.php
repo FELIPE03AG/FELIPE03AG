@@ -39,13 +39,11 @@ $resultado = $conexion->query($sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles/style_navbar.css">
     <link rel="stylesheet" href="styles/style_sidebar.css">
     <link rel="stylesheet" href="styles/style_cerdos.css">
-
     <title>Gestión de Vacunación</title>
     <link rel="icon" href="img/cerdo.ico" type="image/x-icon" />
 
@@ -71,9 +69,9 @@ $resultado = $conexion->query($sql);
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -297,6 +295,20 @@ document.getElementById('btnDescargarPdf').addEventListener('click', async () =>
     doc.save("reporte_vacunacion.pdf");
 });
 </script>
+
+<?php if (isset($_GET['success'])): ?>
+<script>
+Swal.fire({
+    icon: 'success',
+    title: '¡Registro guardado!',
+    text: 'La información fue almacenada correctamente.',
+    showConfirmButton: false,
+    timer: 2000
+}).then(() => {
+    window.location.href = "vacunacion.php";
+});
+</script>
+<?php endif; ?>
 
 </body>
 </html>
