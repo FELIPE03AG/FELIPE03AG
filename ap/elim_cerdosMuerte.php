@@ -82,7 +82,7 @@ echo $rol;
                 <!-- Fecha -->
                 <div class="mb-3">
                     <label for="fecha_muerte" class="form-label">Fecha de Muerte:</label>
-                    <input type="datetime-local" name="fecha_muerte" id="fecha_muerte" class="form-control" required>
+                    <input type="date" name="fecha_muerte" id="fecha_muerte" class="form-control" required>
                 </div>
 
                 <!-- Corral -->

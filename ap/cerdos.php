@@ -36,195 +36,250 @@ function calcularEtapa($fecha_llegada) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <Link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
+
+    <!-- Bootstrap -->
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/snippets.js"></script>
-        <!-- Bootstrap Bundle con Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <link href="styles/style_navbar.css" rel="stylesheet">
+    <link href="styles/style_sidebar.css" rel="stylesheet">
+    <link href="styles/style_cerdos.css" rel="stylesheet">
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <title>Gestión de Cerdos</title>
     <link rel="icon" href="img/cerdo.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="styles/style_navbar.css">
-    <link rel="stylesheet" href="styles/style_sidebar.css">
-    <link rel="stylesheet" href="styles/style_cerdos.css">
 </head>
 
 <body>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const sidebarLinks = document.querySelectorAll(".sidebar a");
-            const currentPath = window.location.pathname.split("/").pop(); // Obtiene el archivo actual
 
-            // Configura las páginas relacionadas para cada enlace
-            const relatedPages = {
-                "cerdos.php": ["cerdos.php", "add_cerdos.php", "elim_cerdosVenta.php", "elim_cerdosMuerte.php"] // Páginas relacionadas con "cerdos"
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const sidebarLinks = document.querySelectorAll(".sidebar a");
+        const currentPath = window.location.pathname.split("/").pop();
 
-            };
+        const relatedPages = {
+            "cerdos.php": ["cerdos.php", "add_cerdos.php", "elim_cerdosVenta.php", "elim_cerdosMuerte.php"]
+        };
 
-            sidebarLinks.forEach(link => {
-                const href = link.getAttribute("href");
-
-                // Comprueba si la página actual está en las relacionadas
-                if (relatedPages[href] && relatedPages[href].includes(currentPath)) {
-                    link.classList.add("active");
-                } else {
-                    link.classList.remove("active");
-                }
-            });
+        sidebarLinks.forEach(link => {
+            const href = link.getAttribute("href");
+            if (relatedPages[href] && relatedPages[href].includes(currentPath)) {
+                link.classList.add("active");
+            } else {
+                link.classList.remove("active");
+            }
         });
-    </script>
+    });
+</script>
 
-    <!-- Nav bar -->
-    <?php include 'navbar.php'; ?>
+<!-- Nav bar -->
+<?php include 'navbar.php'; ?>
 
-    <!-- Sidebar -->
-    <?php include 'sidebar.php'; ?>
+<!-- Sidebar -->
+<?php include 'sidebar.php'; ?>
 
-    <div class="content">
+<div class="content">
 
-        <h2>Gestión de Casetas de Cerdos</h2>
-        <div id="contenedor-casetas">
-            <?php
-            for ($i = 1; $i <= $totalCasetas; $i++) {
-                // Consulta de datos de la caseta con los nombres de columnas correctos
-                $query = "SELECT num_cerdos, peso_promedio, edad_promedio, fecha_llegada, etapa_alimentacion 
-                  FROM casetas WHERE id = $i";
-                $resultado = $conexion->query($query);
+    <h2>Gestión de Casetas de Cerdos</h2>
+    <div id="contenedor-casetas">
 
-                // Inicializar valores en caso de que no haya datos
-                $cantidad_cerdos = $peso_promedio = $edad_promedio = $fecha_llegada = $etapa_alimentacion = "N/A";
+        <?php
+        for ($i = 1; $i <= $totalCasetas; $i++) {
+            
+            $query = "SELECT num_cerdos, peso_promedio, edad_promedio, fecha_llegada, etapa_alimentacion 
+                      FROM casetas WHERE id = $i";
+            $resultado = $conexion->query($query);
 
-                if ($resultado && $fila = $resultado->fetch_assoc()) {
-                    $cantidad_cerdos = $fila['num_cerdos'];
-                    $peso_promedio = $fila['peso_promedio'];
-                    $edad_promedio = $fila['edad_promedio'];
-                    $fecha_llegada = $fila['fecha_llegada'];
-                    $etapa_actual = $fila['etapa_alimentacion'];
-                    $etapa_calculada = calcularEtapa($fecha_llegada);
+            $cantidad_cerdos = $peso_promedio = $edad_promedio = $fecha_llegada = $etapa_alimentacion = "N/A";
 
-                    // Si la etapa calculada es diferente a la almacenada, actualizar en BD
-                    if ($etapa_calculada !== $etapa_actual) {
-                        $update_query = "UPDATE casetas SET etapa_alimentacion = '$etapa_calculada' WHERE id = $i";
-                        $conexion->query($update_query);
-                    }
+            if ($resultado && $fila = $resultado->fetch_assoc()) {
+                $cantidad_cerdos = $fila['num_cerdos'];
+                $peso_promedio = $fila['peso_promedio'];
+                $edad_promedio = $fila['edad_promedio'];
+                $fecha_llegada = $fila['fecha_llegada'];
+                $etapa_actual = $fila['etapa_alimentacion'];
 
-                    $etapa_alimentacion = $etapa_calculada; // Mostrar la nueva etapa
+                $etapa_calculada = calcularEtapa($fecha_llegada);
 
-                                    }
-            ?>
-                <div class="caseta">
-                    <div class="titulo-caseta" onclick="toggleCorrales(<?php echo $i; ?>)">
-                        Caseta <?php echo $i; ?> <span id="flecha-<?php echo $i; ?>">▼</span>
-                    </div>
-                    <div class="atributos">
-                        <span><strong>Cantidad Inicial:</strong> <?php echo $cantidad_cerdos; ?></span>
-                        <span><strong>Fecha:</strong> <?php echo $fecha_llegada; ?></span>
-                        <span><strong>Peso Promedio:</strong> <?php echo $peso_promedio; ?> kg</span>
-                        <span><strong>Edad Promedio:</strong> <?php echo $edad_promedio; ?> semanas</span>
-                        <span><strong>Etapa:</strong> <?php echo $etapa_alimentacion; ?></span>
-                    </div>
-                    <div>
+                if ($etapa_calculada !== $etapa_actual) {
+                    $update_query = "UPDATE casetas SET etapa_alimentacion = '$etapa_calculada' WHERE id = $i";
+                    $conexion->query($update_query);
+                }
+
+                $etapa_alimentacion = $etapa_calculada;
+            }
+        ?>
+
+        <div class="caseta">
+            <div class="titulo-caseta" onclick="toggleCorrales(<?php echo $i; ?>)">
+                Caseta <?php echo $i; ?> <span id="flecha-<?php echo $i; ?>">▼</span>
+            </div>
+
+            <div class="atributos">
+                <span><strong>Cantidad Inicial:</strong> <?php echo $cantidad_cerdos; ?></span>
+                <span><strong>Fecha:</strong> <?php echo $fecha_llegada; ?></span>
+                <span><strong>Peso Promedio:</strong> <?php echo $peso_promedio; ?> kg</span>
+                <span><strong>Edad Promedio:</strong> <?php echo $edad_promedio; ?> semanas</span>
+                <span><strong>Etapa:</strong> <?php echo $etapa_alimentacion; ?></span>
+            </div>
+
+            <div>
                 <div class="d-flex gap-2">
-                    <!-- Agregar Registro -->
-                    <button class="btn btn-success rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Agregar Registro"
+
+                    <!-- Agregar -->
+                    <button class="btn btn-success rounded-circle"
+                        data-bs-toggle="tooltip" data-bs-title="Agregar Registro"
                         onclick="location.href='add_cerdos.php?caseta=<?php echo $i; ?>'">
                         <i class="fas fa-plus"></i>
                     </button>
 
-                    <!-- Venta de Cerdos -->
-                    <button class="btn btn-warning rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Venta de Cerdos"
+                    <!-- Venta -->
+                    <button class="btn btn-warning rounded-circle"
+                        data-bs-toggle="tooltip" data-bs-title="Venta de Cerdos"
                         onclick="location.href='elim_cerdosVenta.php?caseta=<?php echo $i; ?>'">
                         <i class="fa-solid fa-dollar-sign"></i>
                     </button>
 
-                    <!-- Muerte de Cerdos -->
-                    <button class="btn btn-dark rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Muerte de Cerdos"
+                    <!-- Muerte -->
+                    <button class="btn btn-dark rounded-circle"
+                        data-bs-toggle="tooltip" data-bs-title="Muerte de Cerdos"
                         onclick="location.href='elim_cerdosMuerte.php?caseta=<?php echo $i; ?>'">
                         <i class="fa-solid fa-skull"></i>
                     </button>
 
-                    <!-- Vaciar Caseta -->
-                    <button class="btn btn-danger rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Vaciar Caseta"
-                        onclick="vaciarCaseta(<?php echo $i; ?>)">
+                    <!-- Vaciar -->
+                    <button class="btn btn-danger rounded-circle"
+                        data-bs-toggle="tooltip" data-bs-title="Vaciar Caseta"
+                        onclick="abrirModalVaciar(<?php echo $i; ?>)">
                         <i class="fas fa-trash"></i>
                     </button>
+
                 </div>
-                    </div>
-                    <div id="corrales-<?php echo $i; ?>" class="corrales" style="display: none;">
-                        <?php
-                        // Obtener el total de cerdos en la caseta
-                        $query_total_cerdos = "SELECT SUM(num_cerdos) AS total_cerdos FROM corrales WHERE caseta_id = $i";
-                        $resultado_total = $conexion->query($query_total_cerdos);
-                        $fila_total = $resultado_total->fetch_assoc();
-                        $total_cerdos = $fila_total['total_cerdos'] ?? 0; // Si no hay cerdos, mostrar 0
-                        ?>
+            </div>
 
-                        <!-- Mostrar total de cerdos fuera de la tabla -->
-                        <div style="margin-bottom: 10px; font-size: 18px; font-weight: bold; color: #333;">
-                            Total de Cerdos en la Caseta: <span style="color: #28a745;"><?php echo $total_cerdos; ?></span>
-                        </div>
+            <div id="corrales-<?php echo $i; ?>" class="corrales" style="display: none;">
+                <?php
+                $query_total = "SELECT SUM(num_cerdos) AS total_cerdos FROM corrales WHERE caseta_id = $i";
+                $resultado_total = $conexion->query($query_total);
+                $fila_total = $resultado_total->fetch_assoc();
+                $total_cerdos = $fila_total['total_cerdos'] ?? 0;
+                ?>
 
-                        <table>
-                            <tr>
-                                <th>Corral</th>
-                                <th>Número de Cerdos</th>
-                            </tr>
-                            <?php
-                            // Consulta para obtener los corrales de la caseta actual ordenados del 1 al 30
-                            $query_corrales = "SELECT numero_corral, num_cerdos FROM corrales WHERE caseta_id = $i ORDER BY numero_corral ASC";
-                            $resultado_corrales = $conexion->query($query_corrales);
-
-                            while ($corral = $resultado_corrales->fetch_assoc()) {
-                                echo "<tr><td>Corral " . $corral['numero_corral'] . "</td><td>" . $corral['num_cerdos'] . "</td></tr>";
-                            }
-                            ?>
-                        </table>
-                    </div>
+                <div style="margin-bottom: 10px; font-size: 18px; font-weight: bold;">
+                    Total de Cerdos en la Caseta: 
+                    <span style="color: #28a745;"><?php echo $total_cerdos; ?></span>
                 </div>
-            <?php } ?>
+
+                <table>
+                    <tr>
+                        <th>Corral</th>
+                        <th>Número de Cerdos</th>
+                    </tr>
+
+                    <?php
+                    $query_corrales = "SELECT numero_corral, num_cerdos 
+                                       FROM corrales 
+                                       WHERE caseta_id = $i ORDER BY numero_corral ASC";
+
+                    $resultado_corrales = $conexion->query($query_corrales);
+
+                    while ($corral = $resultado_corrales->fetch_assoc()) {
+                        echo "<tr><td>Corral " . $corral['numero_corral'] . "</td><td>" . $corral['num_cerdos'] . "</td></tr>";
+                    }
+                    ?>
+                </table>
+            </div>
+
         </div>
 
-        <script>
-            function vaciarCaseta(casetaId) {
-                if (confirm("¿Estás seguro de que deseas vaciar la caseta " + casetaId + "?")) {
-                    // Realiza la solicitud al archivo PHP para vaciar la caseta
-                    fetch("vaciar_caseta.php?caseta=" + casetaId)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                alert("Caseta vaciada correctamente.");
-                                location.reload(); // Recargar la página para actualizar los datos
-                            } else {
-                                alert("Error al vaciar la caseta: " + data.message);
-                            }
-                        })
-                        .catch(error => {
-                            alert("Ocurrió un error: " + error);
-                        });
-                }
-            }
-            function toggleCorrales(id) {
-                const corrales = document.getElementById(`corrales-${id}`);
-                const flecha = document.getElementById(`flecha-${id}`);
-                if (corrales.style.display === 'none' || corrales.style.display === '') {
-                    corrales.style.display = 'block';
-                    flecha.textContent = '▲'; // Flecha hacia arriba
-                } else {
-                    corrales.style.display = 'none';
-                    flecha.textContent = '▼'; // Flecha hacia abajo
-                }
-            }
-        </script>
+        <?php } ?>
     </div>
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-        [...tooltipTriggerList].map(el => new bootstrap.Tooltip(el));
-    });
+</div>
+
+
+<div class="modal fade" id="modalVaciarCaseta" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">
+          <i class="fas fa-exclamation-triangle"></i> Confirmar acción
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        ¿Seguro que deseas vaciar esta caseta? 
+        Esta acción vaciara todos los registros de cerdos en los corrales dentro de esta caseta.
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button id="btnConfirmVaciar" class="btn btn-danger">Sí, vaciar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+let casetaSeleccionada = null;
+
+// Abrir modal
+function abrirModalVaciar(id) {
+    casetaSeleccionada = id;
+    let modal = new bootstrap.Modal(document.getElementById('modalVaciarCaseta'));
+    modal.show();
+}
+
+// Confirmar vaciado
+document.getElementById("btnConfirmVaciar").addEventListener("click", function () {
+
+    fetch("vaciar_caseta.php?caseta=" + casetaSeleccionada)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Caseta vaciada",
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => location.reload());
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: data.message
+                });
+            }
+        });
+
+    let modal = bootstrap.Modal.getInstance(document.getElementById("modalVaciarCaseta"));
+    modal.hide();
+});
+
+// Toggle corrales
+function toggleCorrales(id) {
+    const corrales = document.getElementById(`corrales-${id}`);
+    const flecha = document.getElementById(`flecha-${id}`);
+
+    if (corrales.style.display === 'none') {
+        corrales.style.display = 'block';
+        flecha.textContent = '▲';
+    } else {
+        corrales.style.display = 'none';
+        flecha.textContent = '▼';
+    }
+}
+
+// Activar tooltips
+document.addEventListener("DOMContentLoaded", function () {
+    [...document.querySelectorAll('[data-bs-toggle="tooltip"]')].map(el => new bootstrap.Tooltip(el));
+});
 </script>
+
 </body>
 </html>

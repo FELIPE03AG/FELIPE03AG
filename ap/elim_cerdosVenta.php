@@ -78,7 +78,7 @@ echo $rol;
 
                     <div class="mb-3">
                         <label for="fecha_venta" class="form-label">Fecha de Venta:</label>
-                        <input type="datetime-local" name="fecha_venta" id="fecha_venta" class="form-control" required>
+                        <input type="date" name="fecha_venta" id="fecha_venta" class="form-control" required>
                     </div>
 
                     <div class="mb-3">
