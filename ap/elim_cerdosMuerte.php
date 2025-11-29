@@ -62,13 +62,7 @@ echo $rol;
 <body>
 
         <!-- Navbar -->
-        <div class="navbar">
-            <h1>GestAP</h1>
-            <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="cerdos.php">Regresar</a>
-            </li>
-        </div>
-
+        <?php include 'Navbar.php'; ?>
         <!-- Sidebar -->
         <?php include 'sidebar.php'; ?>
 
@@ -77,21 +71,27 @@ echo $rol;
         <div class="card-header bg-danger text-white">
             <h4 class="mb-0"><i class="fas fa-skull-crossbones"></i> Eliminar Cerdos por Muerte</h4>
         </div>
-        <div class="card-body">
-            <form action="eliminar_cerdos.php" method="POST">
-                <input type="hidden" name="tipo_eliminacion" value="muerte">
-                <input type="hidden" name="num_caseta_muerte" value=" <?php echo htmlspecialchars($id_caseta); ?>">
 
+        <div class="card-body">
+            <form action="eliminar_cerdos.php" method="POST" class="form-muerte">
+
+                <!-- Campos ocultos -->
+                <input type="hidden" name="tipo_eliminacion" value="muerte">
+                <input type="hidden" name="num_caseta_muerte" value="<?php echo htmlspecialchars($id_caseta); ?>">
+
+                <!-- Fecha -->
                 <div class="mb-3">
                     <label for="fecha_muerte" class="form-label">Fecha de Muerte:</label>
                     <input type="datetime-local" name="fecha_muerte" id="fecha_muerte" class="form-control" required>
                 </div>
 
+                <!-- Corral -->
                 <div class="mb-3">
                     <label for="num_corral_muerte" class="form-label">Número de Corral:</label>
-                    <input type="number" name="num_corral_muerte" id="num_corral_muerte" class="form-control" required>
+                    <input type="number" name="num_corral_muerte" id="num_corral_muerte" class="form-control" min="1" required>
                 </div>
 
+                <!-- Causa -->
                 <div class="mb-3">
                     <label for="causa_muerte" class="form-label">Causa de Muerte:</label>
                     <select name="causa_muerte" id="causa_muerte" class="form-select" required>
@@ -104,9 +104,21 @@ echo $rol;
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-danger w-100">
-                    <i class="fas fa-trash-alt"></i> Eliminar por Muerte
-                </button>
+                <!-- Botones -->
+                <div class="row">
+                    <div class="col-6">
+                        <a href="cerdos.php" class="btn btn-secondary w-100">
+                            <i class="fas fa-arrow-left"></i> Regresar
+                        </a>
+                    </div>
+
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-danger w-100">
+                            <i class="fas fa-trash-alt"></i> Eliminar por Muerte
+                        </button>
+                    </div>
+                </div>
+
             </form>
         </div>
     </div>

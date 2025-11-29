@@ -68,11 +68,11 @@ echo $rol;
 
     <div class="content d-flex justify-content-center align-items-center" style="margin-left: 200px;">
         <div class="card shadow-sm mt-5" style="min-width: 400px; width: 100%; max-width: 600px;">
-            <div class="card-header bg-danger text-white">
+            <div class="card-header bg-warning text-black">
                 <h4 class="mb-0"><i class="fas fa-piggy-bank"></i> Eliminar Cerdos por Venta</h4>
             </div>
             <div class="card-body">
-                <form action="eliminar_cerdos.php" method="POST">
+                <form action="eliminar_cerdos.php" method="POST" class="form-venta">
                     <input type="hidden" name="tipo_eliminacion" value="venta">
                     <input type="hidden" name="num_caseta_venta" value="<?php echo htmlspecialchars($id_caseta); ?>">
 
@@ -99,7 +99,7 @@ echo $rol;
                         </div>
 
                         <div class="col-6">
-                            <button type="submit" class="btn btn-danger w-100">
+                            <button type="submit" class="btn btn-warning w-100">
                                 <i class="fas fa-trash-alt"></i> Eliminar por Venta
                             </button>
                         </div>
@@ -109,6 +109,6 @@ echo $rol;
             </div>
         </div>
     </div>
-
+    
 </body>
 </html>

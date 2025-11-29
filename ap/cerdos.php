@@ -78,7 +78,7 @@ function calcularEtapa($fecha_llegada) {
         });
     </script>
 
- <!-- Nav bar -->
+    <!-- Nav bar -->
     <?php include 'navbar.php'; ?>
 
     <!-- Sidebar -->
@@ -104,17 +104,17 @@ function calcularEtapa($fecha_llegada) {
                     $edad_promedio = $fila['edad_promedio'];
                     $fecha_llegada = $fila['fecha_llegada'];
                     $etapa_actual = $fila['etapa_alimentacion'];
-$etapa_calculada = calcularEtapa($fecha_llegada);
+                    $etapa_calculada = calcularEtapa($fecha_llegada);
 
-// Si la etapa calculada es diferente a la almacenada, actualizar en BD
-if ($etapa_calculada !== $etapa_actual) {
-    $update_query = "UPDATE casetas SET etapa_alimentacion = '$etapa_calculada' WHERE id = $i";
-    $conexion->query($update_query);
-}
+                    // Si la etapa calculada es diferente a la almacenada, actualizar en BD
+                    if ($etapa_calculada !== $etapa_actual) {
+                        $update_query = "UPDATE casetas SET etapa_alimentacion = '$etapa_calculada' WHERE id = $i";
+                        $conexion->query($update_query);
+                    }
 
-$etapa_alimentacion = $etapa_calculada; // Mostrar la nueva etapa
+                    $etapa_alimentacion = $etapa_calculada; // Mostrar la nueva etapa
 
-                }
+                                    }
             ?>
                 <div class="caseta">
                     <div class="titulo-caseta" onclick="toggleCorrales(<?php echo $i; ?>)">
@@ -207,7 +207,6 @@ $etapa_alimentacion = $etapa_calculada; // Mostrar la nueva etapa
                         });
                 }
             }
-
             function toggleCorrales(id) {
                 const corrales = document.getElementById(`corrales-${id}`);
                 const flecha = document.getElementById(`flecha-${id}`);
