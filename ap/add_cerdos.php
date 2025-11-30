@@ -145,6 +145,19 @@ document.getElementById('num_cerdos').addEventListener('change', function() {
         document.getElementById('corral_' + i).value = promedio + (i <= resto ? 1 : 0);
     }
 });
+
+// Recalcular total si el usuario modifica manualmente los corrales
+for (let i = 1; i <= 30; i++) {
+    document.getElementById('corral_' + i).addEventListener('input', function() {
+
+        let suma = 0;
+        for (let j = 1; j <= 30; j++) {
+            suma += parseInt(document.getElementById('corral_' + j).value) || 0;
+        }
+
+        document.getElementById('num_cerdos').value = suma;
+    });
+}
 </script>
 
 <?php if (isset($_GET['success'])) { ?>
