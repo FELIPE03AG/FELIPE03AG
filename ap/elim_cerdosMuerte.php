@@ -28,6 +28,7 @@ echo $rol;
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Eliminacion de Cerdos</title>
     <link rel="icon" href="img/cerdo.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="styles/style_navbar.css">
@@ -88,7 +89,8 @@ echo $rol;
                 <!-- Corral -->
                 <div class="mb-3">
                     <label for="num_corral_muerte" class="form-label">Número de Corral:</label>
-                    <input type="number" name="num_corral_muerte" id="num_corral_muerte" class="form-control" min="1" required>
+                    <input type="number" name="num_corral_muerte" id="num_corral_muerte" class="form-control" required>
+                    <small class="text-muted">Ingrese corral entre 1-30</small>
                 </div>
 
                 <!-- Causa -->
@@ -123,6 +125,42 @@ echo $rol;
         </div>
     </div>
 </div>
+
+<?php if (isset($_GET['error']) && $_GET['error'] == 'corral_invalido'): ?>
+<script>
+Swal.fire({
+    icon: "error",
+    title: "Corral inválido",
+    text: "El número de corral debe estar entre 1 y 30.",
+    confirmButtonText: "Aceptar"
+});
+</script>
+<?php endif; ?>
+
+<?php if (isset($_GET['error']) && $_GET['error'] == 'vacio'): ?>
+<script>
+Swal.fire({
+    icon: 'warning',
+    title: 'Corral vacío',
+    text: 'No hay cerdos en este corral.'
+});
+</script>
+<?php endif; ?>
+
+<?php if (isset($_GET['success'])): ?>
+<script>
+Swal.fire({
+    title: "¡Operación exitosa!",
+    text: "Eliminación de cerdo fue actualizado correctamente.",
+    icon: "success",
+    showConfirmButton: false,
+    timer: 1800,
+    timerProgressBar: true
+}).then(() => {
+    window.location.href = "cerdos.php";
+});
+</script>
+<?php endif; ?>
 
 </body>
 </html>

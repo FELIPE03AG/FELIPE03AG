@@ -108,7 +108,7 @@ echo $rol;
 
                     <div class="mb-3">
                         <label for="num_corral_venta" class="form-label">Número de Corral:</label>
-                        <input type="number" name="num_corral_venta" id="num_corral_venta" class="form-control" min="1" max="30" required>
+                        <input type="number" name="num_corral_venta" id="num_corral_venta" class="form-control" required>
                         <small class="text-muted">Ingrese corral entre 1-30</small>
                     </div>
 
@@ -138,6 +138,21 @@ echo $rol;
 
     </div>
 
+<?php if (isset($_GET['success'])): ?>
+<script>
+Swal.fire({
+    title: "¡Operación exitosa!",
+    text: "Eliminación de cerdo fue actualizado correctamente.",
+    icon: "success",
+    showConfirmButton: false,
+    timer: 1800,
+    timerProgressBar: true
+}).then(() => {
+    window.location.href = "cerdos.php";
+});
+</script>
+<?php endif; ?>
+
 <?php if (isset($_GET['error']) && $_GET['error'] == 'vacio'): ?>
 <script>
 Swal.fire({
@@ -153,7 +168,18 @@ Swal.fire({
 Swal.fire({
     icon: 'error',
     title: 'Cantidad inválida',
-    text: 'La cantidad a eliminar es mayor a los cerdos existentes.'
+    text: 'La cantidad a vender es mayor a los cerdos existentes.'
+});
+</script>
+<?php endif; ?>
+
+<?php if (isset($_GET['error']) && $_GET['error'] == 'corral_invalido'): ?>
+<script>
+Swal.fire({
+    icon: "error",
+    title: "Corral inválido",
+    text: "El número de corral debe estar entre 1 y 30.",
+    confirmButtonText: "Aceptar"
 });
 </script>
 <?php endif; ?>
