@@ -1,12 +1,15 @@
 <?php
 ob_start();
-
 session_start();
+
+// Verifica sesión
 if (!isset($_SESSION['nombre'])) {
     header('location:index.php');
 }
+
 include("config.php");
 
+// Manejo de caseta en sesión / GET
 if (isset($_GET['caseta'])) {
     $_SESSION['caseta_id'] = $_GET['caseta'];
 } elseif (!isset($_SESSION['caseta_id'])) {
@@ -16,6 +19,7 @@ if (isset($_GET['caseta'])) {
 $id_caseta = $_SESSION['caseta_id'];
 $nombre = $_SESSION['nombre'];
 $rol = $_SESSION['rol'];
+
 echo $rol;
 ?>
 
@@ -24,31 +28,43 @@ echo $rol;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font_awesome/css/all.min.css" rel="stylesheet">
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/snippets.js"></script>
-    <title>Venta de Cerdos</title>
-    <link rel="icon" href="img/cerdo.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="styles/style_navbar.css">
     <link rel="stylesheet" href="styles/style_sidebar.css">
     <link rel="stylesheet" href="styles/style_elim_cerdosVenta_Muerte.css">
 
+    <!-- JS -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/snippets.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <title>Venta de Cerdos</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="img/cerdo.ico" type="image/x-icon">
+
+    <!-- Script Sidebar -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const sidebarLinks = document.querySelectorAll(".sidebar a");
-            const currentPath = window.location.pathname.split("/").pop(); // Obtiene el archivo actual
 
-            // Configura las páginas relacionadas para cada enlace
+            const sidebarLinks = document.querySelectorAll(".sidebar a");
+            const currentPath = window.location.pathname.split("/").pop();
+
             const relatedPages = {
-                "cerdos.php": ["cerdos.php", "add_cerdos.php", "elim_cerdosVenta.php", "elim_cerdosMuerte.php"] // Páginas relacionadas con "Cerdos"
-                
+                "cerdos.php": [
+                    "cerdos.php",
+                    "add_cerdos.php",
+                    "elim_cerdosVenta.php",
+                    "elim_cerdosMuerte.php"
+                ]
             };
 
             sidebarLinks.forEach(link => {
                 const href = link.getAttribute("href");
 
-                // Comprueba si la página actual está en las relacionadas
                 if (relatedPages[href] && relatedPages[href].includes(currentPath)) {
                     link.classList.add("active");
                 } else {
@@ -60,19 +76,28 @@ echo $rol;
 
 </head>
 <body>
-        <!-- Navbar -->
-        <?php include 'navbar.php'; ?>
 
-        <!-- Sidebar -->
-        <?php include 'sidebar.php'; ?>
+    <!-- Navbar -->
+    <?php include 'navbar.php'; ?>
 
+    <!-- Sidebar -->
+    <?php include 'sidebar.php'; ?>
+
+    <!-- Contenido -->
     <div class="content d-flex justify-content-center align-items-center" style="margin-left: 200px;">
+
         <div class="card shadow-sm mt-5" style="min-width: 400px; width: 100%; max-width: 600px;">
+
             <div class="card-header bg-warning text-black">
-                <h4 class="mb-0"><i class="fas fa-piggy-bank"></i> Eliminar Cerdos por Venta</h4>
+                <h4 class="mb-0">
+                    <i class="fas fa-piggy-bank"></i> Eliminar Cerdos por Venta
+                </h4>
             </div>
+
             <div class="card-body">
+
                 <form action="eliminar_cerdos.php" method="POST" class="form-venta">
+
                     <input type="hidden" name="tipo_eliminacion" value="venta">
                     <input type="hidden" name="num_caseta_venta" value="<?php echo htmlspecialchars($id_caseta); ?>">
 
@@ -83,7 +108,8 @@ echo $rol;
 
                     <div class="mb-3">
                         <label for="num_corral_venta" class="form-label">Número de Corral:</label>
-                        <input type="number" name="num_corral_venta" id="num_corral_venta" class="form-control" required>
+                        <input type="number" name="num_corral_venta" id="num_corral_venta" class="form-control" min="1" max="30" required>
+                        <small class="text-muted">Ingrese corral entre 1-30</small>
                     </div>
 
                     <div class="mb-3">
@@ -107,8 +133,30 @@ echo $rol;
 
                 </form>
             </div>
+
         </div>
+
     </div>
-    
+
+<?php if (isset($_GET['error']) && $_GET['error'] == 'vacio'): ?>
+<script>
+Swal.fire({
+    icon: 'warning',
+    title: 'Corral vacío',
+    text: 'No hay cerdos en este corral.'
+});
+</script>
+<?php endif; ?>
+
+<?php if (isset($_GET['error']) && $_GET['error'] == 'exceso'): ?>
+<script>
+Swal.fire({
+    icon: 'error',
+    title: 'Cantidad inválida',
+    text: 'La cantidad a eliminar es mayor a los cerdos existentes.'
+});
+</script>
+<?php endif; ?>
+
 </body>
 </html>

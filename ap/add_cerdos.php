@@ -119,7 +119,7 @@ include("config.php");
                 <?php for ($i = 1; $i <= 30; $i++) { ?>
                     <div class="corral-item">
                         <label for="corral_<?php echo $i; ?>">Corral <?php echo $i; ?></label>
-                        <input type="number" name="corral_<?php echo $i; ?>" id="corral_<?php echo $i; ?>" min="0" required>
+                        <input type="number" name="corral_<?php echo $i; ?>" id="corral_<?php echo $i; ?>" min="0" max="30" required>
                     </div>
                 <?php } ?>
             </div>
