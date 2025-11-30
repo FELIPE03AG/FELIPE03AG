@@ -125,13 +125,14 @@ include("config.php");
             </div>
         </div>
 
+        <a href="cerdos.php" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+
         <button type="submit" class="btn-save">
             <i class="fas fa-save"></i> Guardar Registro
         </button>
 
-        <a href="cerdos.php" class="btn-back">
-            <i class="fas fa-arrow-left"></i> Volver
-        </a>
     </form>
 </div>
 

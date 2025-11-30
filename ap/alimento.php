@@ -216,7 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <?= date("d/m/Y", strtotime($fila['fecha'])) ?>
                     </td>
                     <td><?= $fila['num_caseta'] ?></td>
-                    <td><?= $fila['cantidad'] ?></td>
+                    <td><?= intval($fila['cantidad']) ?> toneladas</td>
                     <td><?= $fila['etapa'] ?></td>
 
                     <td class="d-flex justify-content-center align-items-center" style="height: 50px;">
