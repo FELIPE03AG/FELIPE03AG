@@ -111,31 +111,31 @@ function abrirModalVaciar() {
 
 
                     <!-- Modal para confirmar vaciado -->
-<div class="modal fade" id="modalVaciar" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+            <div class="modal fade" id="modalVaciar" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
 
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">Vaciar Historial</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title">Vaciar Historial</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <p>¿Estás seguro de vaciar todo el historial? Esta acción no se puede deshacer.</p>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+
+                            <!-- Acción de vaciado -->
+                            <a href="vaciar_historial.php" class="btn btn-danger">
+                                Vaciar Todo
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-
-            <div class="modal-body">
-                <p>¿Estás seguro de vaciar todo el historial? Esta acción no se puede deshacer.</p>
-            </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-
-                <!-- Acción de vaciado -->
-                <a href="vaciar_historial.php" class="btn btn-danger">
-                    Vaciar Todo
-                </a>
-            </div>
-
-        </div>
-    </div>
-</div>
 
 
 
