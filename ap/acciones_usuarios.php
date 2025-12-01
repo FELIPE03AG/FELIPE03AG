@@ -96,6 +96,56 @@ $result_historial = $conexion->query($sql_historial);
     <div class="content">
         <h2>Historial de Acciones</h2>
 
+        <!-- Vaciar -->
+                    <button class="btn btn-danger rounded-circle"
+    data-bs-toggle="tooltip" data-bs-title="Vaciar Registro Permanentemente"
+    onclick="abrirModalVaciar()">
+    <i class="fas fa-trash"></i>
+                    </button>
+<script>
+function abrirModalVaciar() {
+    const modal = new bootstrap.Modal(document.getElementById("modalVaciar"));
+    modal.show();
+}
+</script>
+
+
+                    <!-- Modal para confirmar vaciado -->
+<div class="modal fade" id="modalVaciar" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Vaciar Historial</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <p>¿Estás seguro de vaciar todo el historial? Esta acción no se puede deshacer.</p>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+
+                <!-- Acción de vaciado -->
+                <a href="vaciar_historial.php" class="btn btn-danger">
+                    Vaciar Todo
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-title]');
+    tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
+});
+</script>
+
         <!-- Tabla de acciones -->
         <table class="table table-bordered">
             <thead class="table-dark">
